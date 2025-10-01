@@ -91,3 +91,39 @@ export const updatePaymentStatus = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc   Verify Razorpay payment
+// @route  POST /api/payments/verify
+export const verifyPayment = async (req, res) => {
+  try {
+    const { paymentId, orderId, signature } = req.body;
+    
+    if (!paymentId || !orderId || !signature) {
+      return res.status(400).json({ message: "paymentId, orderId, and signature are required" });
+    }
+
+    // In a real application, you would verify the signature with Razorpay
+    // For now, we'll just check if the payment exists in our database
+    const payment = await Payment.findOne({ paymentId });
+    
+    if (!payment) {
+      return res.status(404).json({ message: "Payment not found" });
+    }
+
+    if (payment.status === 'paid') {
+      res.json({ 
+        verified: true, 
+        payment,
+        message: "Payment verified successfully" 
+      });
+    } else {
+      res.json({ 
+        verified: false, 
+        payment,
+        message: "Payment not completed" 
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -1,10 +1,13 @@
 import { useCart } from "../context/CartContext";
+import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import OrderConfirmationPopup from "../components/OrderConfirmationPopup";
+import api from "../api/axios";
 
 function CheckoutPage() {
   const { cartItems, checkout } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState("");
@@ -90,13 +93,57 @@ function CheckoutPage() {
         currency: "INR",
         name: "TIROS Store",
         description: "Order Payment",
+        prefill: {
+          name: address.name,
+          email: user?.email || 'customer@tiros.com',
+          contact: address.phone || '9999999999'
+        },
+        notes: {
+          address: `${address.street}, ${address.city}, ${address.zip}, ${address.country}`,
+          order_total: totalAmount.toString()
+        },
         handler: async (response) => {
           try{
-            await checkout({ address, payment: { paymentId: response.razorpay_payment_id, status: 'paid', method: 'razorpay', amount: totalAmount } });
-            setShowOrderConfirmation(true);
-          }catch(e){ setError('Failed to finalize order'); }
+            console.log('Payment successful:', response);
+            
+            // Verify payment with backend
+            const verifyResponse = await api.post('/payments/verify', {
+              paymentId: response.razorpay_payment_id,
+              orderId: response.razorpay_order_id,
+              signature: response.razorpay_signature
+            });
+            
+            if (verifyResponse.data.verified) {
+              // Create order with verified payment
+              await checkout({ 
+                address, 
+                payment: { 
+                  paymentId: response.razorpay_payment_id, 
+                  status: 'paid', 
+                  method: 'razorpay', 
+                  amount: totalAmount 
+                } 
+              });
+              setShowOrderConfirmation(true);
+            } else {
+              throw new Error('Payment verification failed');
+            }
+          }catch(e){ 
+            console.error('Payment processing error:', e);
+            setError('Failed to finalize order: ' + (e?.response?.data?.message || e.message));
+            setPlacing(false);
+          }
         },
-        theme: { color: "#000000" }
+        modal: {
+          ondismiss: function() {
+            console.log('Payment modal dismissed');
+            setPlacing(false);
+          }
+        },
+        theme: { 
+          color: "#000000",
+          backdrop_color: "rgba(0,0,0,0.5)"
+        }
       });
       rzp.open();
     }catch(err){
