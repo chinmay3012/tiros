@@ -55,7 +55,7 @@ export const createProduct = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl;
     if (req.file) {
-      image = `http://localhost:3001/uploads/products/${req.file.filename}`;
+      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/products/${req.file.filename}`;
     }
     
     const product = await Product.create({
@@ -186,12 +186,12 @@ export const updateProduct = async (req, res) => {
     if (req.file) {
       // Delete old image file if it exists and is not a URL
       if (product.image && product.image.includes('/uploads/')) {
-        const oldImagePath = product.image.replace('http://localhost:3001', '');
+        const oldImagePath = product.image.replace(process.env.BASE_URL || 'https://tiros-backend.onrender.com', '');
         if (fs.existsSync(oldImagePath.substring(1))) {
           fs.unlinkSync(oldImagePath.substring(1));
         }
       }
-      image = `http://localhost:3001/uploads/products/${req.file.filename}`;
+      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/products/${req.file.filename}`;
     }
     
     if (name) product.name = name;

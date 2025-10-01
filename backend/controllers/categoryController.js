@@ -51,7 +51,7 @@ export const createCategory = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl;
     if (req.file) {
-      image = `http://localhost:3001/uploads/categories/${req.file.filename}`;
+      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/categories/${req.file.filename}`;
     }
     
     const category = await Category.create({
@@ -145,12 +145,12 @@ export const updateCategory = async (req, res) => {
     if (req.file) {
       // Delete old image file if it exists and is not a URL
       if (category.image && category.image.includes('/uploads/')) {
-        const oldImagePath = category.image.replace('http://localhost:3001', '');
+        const oldImagePath = category.image.replace(process.env.BASE_URL || 'https://tiros-backend.onrender.com', '');
         if (fs.existsSync(oldImagePath.substring(1))) {
           fs.unlinkSync(oldImagePath.substring(1));
         }
       }
-      image = `http://localhost:3001/uploads/categories/${req.file.filename}`;
+      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/categories/${req.file.filename}`;
     }
     if (image) category.image = image;
     

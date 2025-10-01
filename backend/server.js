@@ -10,6 +10,7 @@ import orderRoutes from "./routes/orderRoutes.js";
 import inventoryRoutes from "./routes/inventoryRoutes.js";
 import dashboardRoutes from "./routes/dashboardRoutes.js";
 import publicRoutes from "./routes/publicRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -63,6 +64,9 @@ app.use("/api/admin/dashboard", dashboardRoutes);
 
 // Public Routes for user-frontend
 app.use("/api", publicRoutes);
+
+// Payment Routes
+app.use("/api/payments", paymentRoutes);
 
 app.get("/", (req, res) => {
   res.json({ 
