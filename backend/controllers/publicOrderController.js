@@ -1,4 +1,6 @@
 import Order from "../models/order.js";
+import Payment from "../models/payment.js";
+import Product from "../models/product.js";
 
 export const createOrder = async (req, res) => {
   try {
@@ -16,6 +18,42 @@ export const createOrder = async (req, res) => {
       paymentMethod: paymentMethod || "cash",
       payment: payment || { status: 'created', amount: totalAmount },
     });
+
+    // Create payment receipt if payment was successful
+    if (payment && payment.status === 'paid' && payment.paymentId) {
+      try {
+        // Get product details for receipt
+        const productDetails = await Product.find({
+          _id: { $in: items.map(it => it.product || it.productId || it.product?._id || it.id) }
+        });
+
+        const receiptItems = items.map(item => {
+          const product = productDetails.find(p => 
+            p._id.toString() === (item.product || item.productId || item.product?._id || item.id).toString()
+          );
+          return {
+            productName: product?.name || 'Unknown Product',
+            quantity: item.quantity || 1,
+            price: item.price || product?.price || 0
+          };
+        });
+
+        await Payment.create({
+          userId,
+          orderId: order._id,
+          paymentId: payment.paymentId,
+          amount: totalAmount,
+          status: 'paid',
+          method: payment.method || 'razorpay',
+          items: receiptItems,
+          shippingAddress: shippingAddress || "N/A",
+        });
+      } catch (paymentError) {
+        console.error('Error creating payment receipt:', paymentError);
+        // Don't fail the order creation if payment receipt creation fails
+      }
+    }
+
     res.status(201).json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });

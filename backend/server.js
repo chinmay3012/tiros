@@ -29,7 +29,7 @@ const allowedOrigins = [
   'http://localhost:5179',
   // Production frontend URLs
   'https://tiros-user.onrender.com',
-  'https://tiros-admin.onrender.com', // Add this when you deploy admin frontend
+  'https://tiros.onrender.com', // Admin frontend URL
   process.env.ADMIN_FRONTEND_URL,
   process.env.USER_FRONTEND_URL,
 ].filter(Boolean); // Remove undefined values
