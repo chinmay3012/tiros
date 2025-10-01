@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
@@ -28,9 +28,8 @@ const ProtectedRoute = ({ children }) => {
 
 function App() {
   return (
-    <BrowserRouter>
-      <div className="min-h-screen">
-        <Navbar />
+    <div className="min-h-screen">
+      <Navbar />
 
         <React.Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
         <Routes>
@@ -52,7 +51,6 @@ function App() {
 
         <Footer />
       </div>
-    </BrowserRouter>
   );
 }
 
