@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: tiros-admin
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://tiros-backend.onrender.com
+      - key: NODE_ENV
+        value: production

@@ -27,6 +27,9 @@ function App() {
         <Router>
           <div className="min-h-screen bg-gray-50">
             <Routes>
+              {/* Root redirect to admin login */}
+              <Route path="/" element={<AdminLogin />} />
+              
               {/* Admin Routes */}
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={
