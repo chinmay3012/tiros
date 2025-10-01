@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Apply Kode Mono font to the entire user-frontend */
+body {
+  font-family: 'Kode Mono', monospace;
+}
+
+/* Ensure all elements inherit the font */
+* {
+  font-family: inherit;
+}
