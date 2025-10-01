@@ -16,12 +16,36 @@ connectDB();
 
 const app = express();
 
+// CORS Configuration - Support both development and production
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:5176',
+  'http://localhost:5177',
+  'http://localhost:5178',
+  'http://localhost:5179',
+  process.env.ADMIN_FRONTEND_URL,
+  process.env.USER_FRONTEND_URL,
+].filter(Boolean); // Remove undefined values
+
 const corsOptions = {
-  origin: ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176', 'http://localhost:5177', 'http://localhost:5178', 'http://localhost:5179'], // Support dev ports
-  credentials: true, // Allow credentials (cookies, authorization headers)
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allow common HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'], // Allow common headers
-  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      console.log('⚠️ Blocked by CORS:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+  optionsSuccessStatus: 200
 };
 
 app.use(cors(corsOptions));
@@ -41,7 +65,17 @@ app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api", publicRoutes);
 
 app.get("/", (req, res) => {
-  res.send("API is running...");
+  res.json({ 
+    message: "TIROS API is running...",
+    version: "1.0.0",
+    status: "healthy",
+    environment: process.env.NODE_ENV || 'development'
+  });
+});
+
+// Health check endpoint for Railway/Render
+app.get("/health", (req, res) => {
+  res.json({ status: "OK", timestamp: new Date().toISOString() });
 });
 
 // Test CORS endpoint
