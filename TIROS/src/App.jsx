@@ -1,8 +1,8 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
 
 // Admin Context Provider
-import { AuthProvider as AdminAuthProvider } from './admin/AuthProvider';
+import { AuthProvider as AdminAuthProvider, useAuth } from './admin/AuthProvider';
 
 // Admin Components
 import AdminLayout from './admin/AdminLayout';
@@ -19,6 +19,31 @@ import Reports from './admin/pages/Reports';
 // Admin Protected Route
 import AdminProtectedRoute from './admin/ProtectedRoute';
 import ErrorBoundary from './ErrorBoundary';
+
+// Admin redirect component
+function AdminRedirect() {
+  const { token, admin, loading } = useAuth();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!loading) {
+      if (token && admin) {
+        navigate('/admin/dashboard', { replace: true });
+      } else {
+        navigate('/admin/login', { replace: true });
+      }
+    }
+  }, [token, admin, loading, navigate]);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Redirecting...</p>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
@@ -77,6 +102,9 @@ function App() {
                   <AdminLayout><Reports /></AdminLayout>
                 </AdminProtectedRoute>
               } />
+              
+              {/* Catch-all route for admin - redirect to dashboard if authenticated, login if not */}
+              <Route path="/admin/*" element={<AdminRedirect />} />
             </Routes>
           </div>
         </Router>

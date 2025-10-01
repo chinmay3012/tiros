@@ -105,7 +105,7 @@ export function AuthProvider({ children }) {
     localStorage.removeItem("adminToken");
     localStorage.removeItem("adminInfo");
     dispatch({ type: "LOGOUT" });
-    window.location.href = "/admin/login";
+    window.location.href = "/";
   };
 
   return (
