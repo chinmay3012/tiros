@@ -1,9 +1,11 @@
 import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
+  const navigate = useNavigate();
   const [token, setToken] = useState(() => window.localStorage.getItem("token") || "");
   const [user, setUser] = useState(() => {
     try {
@@ -68,7 +70,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setToken("");
     setUser(null);
-    window.location.href = "/login";
+    navigate("/");
   };
 
   const clearAuthData = () => {
