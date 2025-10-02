@@ -20,7 +20,7 @@ import Reports from './admin/pages/Reports';
 import AdminProtectedRoute from './admin/ProtectedRoute';
 import ErrorBoundary from './ErrorBoundary';
 
-// Admin redirect component
+// Admin redirect component for unknown routes
 function AdminRedirect() {
   const { token, admin, loading } = useAuth();
   const navigate = useNavigate();
@@ -28,12 +28,32 @@ function AdminRedirect() {
   useEffect(() => {
     if (!loading) {
       if (token && admin) {
-        navigate('/admin/dashboard', { replace: true });
+        // Redirect unknown routes to admin dashboard
+        navigate('/admin', { replace: true });
       } else {
         navigate('/admin/login', { replace: true });
       }
     }
   }, [token, admin, loading, navigate]);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="text-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+        <p className="mt-4 text-gray-600">Redirecting...</p>
+      </div>
+    </div>
+  );
+}
+
+// Not found component for non-admin routes
+function NotFound() {
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    // Redirect any unknown route to admin login
+    navigate('/admin/login', { replace: true });
+  }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -103,8 +123,11 @@ function App() {
                 </AdminProtectedRoute>
               } />
               
-              {/* Catch-all route for admin - redirect to dashboard if authenticated, login if not */}
+              {/* Catch-all route for unknown admin routes */}
               <Route path="/admin/*" element={<AdminRedirect />} />
+              
+              {/* Catch-all route for any other unknown routes */}
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </div>
         </Router>
