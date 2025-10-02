@@ -2,6 +2,7 @@ import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import React from "react";
+import { getImageUrl } from "../utils/imageUtils";
 
 
 function CartPage() {
@@ -29,7 +30,7 @@ function CartPage() {
         <div className="grid gap-4 max-w-xl mx-auto">
           {cartItems.map((item, index) => (
             <div key={item.id || index} className="flex items-center gap-4 border p-4 rounded shadow">
-              <img src={item.image} alt={item.alt} className="w-20 h-20 object-cover rounded" />
+              <img src={getImageUrl(item.image) || "https://placehold.co/80x80"} alt={item.alt} className="w-20 h-20 object-cover rounded" />
               <div>
                 <h3 className="font-semibold text-lg">{item.title}</h3>
                 <p>{item.price}</p>

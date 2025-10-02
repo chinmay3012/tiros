@@ -91,7 +91,7 @@ function HomePage(){
                             >
                                 <ProductsCard 
                                     id={p._id}
-                                    image={p.image || "https://placehold.co/400x533"}
+                                    image={p.image}
                                     alt={p.name}
                                     title={p.name}
                                     price={`Rs. ${p.price}`}

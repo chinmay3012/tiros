@@ -47,7 +47,7 @@ function CategoryPage(){
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((p)=> (
           <div key={p._id} onClick={()=> navigate(`/products/${p._id}`)} className="cursor-pointer">
-            <ProductsCard id={p._id} image={p.image || "https://placehold.co/400x533"} alt={p.name} title={p.name} price={`Rs. ${p.price}`} />
+            <ProductsCard id={p._id} image={p.image} alt={p.name} title={p.name} price={`Rs. ${p.price}`} />
           </div>
         ))}
       </div>

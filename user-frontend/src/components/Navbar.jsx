@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { getImageUrl } from "../utils/imageUtils";
 
 import LoginButton from "./LoginButton";
 import LogoutButton from "./LogoutButton";
@@ -266,7 +267,7 @@ function Navbar(){
                       className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 flex items-center space-x-3"
                     >
                       <img 
-                        src={product.image || "https://placehold.co/50x50"} 
+                        src={getImageUrl(product.image) || "https://placehold.co/50x50"} 
                         alt={product.name}
                         className="w-10 h-10 object-cover rounded"
                       />

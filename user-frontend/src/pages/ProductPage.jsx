@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import ProductsCard from "../components/ProductsCard";
 import api from "../api/axios";
+import { getImageUrl } from "../utils/imageUtils";
 
 function ProductPage(){
   const { id } = useParams();
@@ -64,7 +65,7 @@ function ProductPage(){
   const handleAddToCart = () => {
     addToCart({ 
       id: product._id, 
-      image: product.image, 
+      image: getImageUrl(product.image), 
       alt: product.name, 
       title: product.name, 
       price: `Rs. ${product.price}` 
@@ -87,7 +88,7 @@ function ProductPage(){
       clearCart();
       addToCart({ 
         id: product._id, 
-        image: product.image, 
+        image: getImageUrl(product.image), 
         alt: product.name, 
         title: product.name, 
         price: `Rs. ${product.price}` 
@@ -110,7 +111,7 @@ function ProductPage(){
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <img src={product.image || "https://placehold.co/600x600"} alt={product.name} className="w-full object-cover rounded" />
+        <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className="w-full object-cover rounded" />
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
           <p className="text-2xl font-semibold text-green-600 mb-2">Rs. {product.price}</p>
@@ -200,7 +201,7 @@ function ProductPage(){
                 >
                   <ProductsCard 
                     id={suggestedProduct._id}
-                    image={suggestedProduct.image || "https://placehold.co/400x533"}
+                    image={suggestedProduct.image}
                     alt={suggestedProduct.name}
                     title={suggestedProduct.name}
                     price={`Rs. ${suggestedProduct.price}`}

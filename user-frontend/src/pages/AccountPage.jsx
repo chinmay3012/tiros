@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { getImageUrl } from "../utils/imageUtils";
 
 function AccountPage(){
   const { user } = useAuth();
@@ -129,7 +130,7 @@ function AccountPage(){
                           onClick={() => navigate(`/products/${product.productId._id}`)}
                         >
                           <img
-                            src={product.productId.image || "https://placehold.co/200x200?text=No+Image"}
+                            src={getImageUrl(product.productId.image) || "https://placehold.co/200x200?text=No+Image"}
                             alt={product.productId.name}
                             className="w-full h-full object-cover"
                           />
