@@ -1,36 +1,5 @@
 import Category from "../models/category.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-
-// Multer configuration for category images
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadPath = 'uploads/categories';
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-    cb(null, uploadPath);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, 'category-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed'), false);
-  }
-};
-
-export const upload = multer({
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
+import { uploadCategory as upload } from "../config/cloudinaryCategory.js";
 
 // @desc   Create category
 // @route  POST /api/admin/categories
@@ -51,7 +20,8 @@ export const createCategory = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl;
     if (req.file) {
-      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/categories/${req.file.filename}`;
+      // Cloudinary automatically provides the full URL in req.file.path
+      image = req.file.path;
     }
     
     const category = await Category.create({
@@ -143,14 +113,9 @@ export const updateCategory = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl || category.image;
     if (req.file) {
-      // Delete old image file if it exists and is not a URL
-      if (category.image && category.image.includes('/uploads/')) {
-        const oldImagePath = category.image.replace(process.env.BASE_URL || 'https://tiros-backend.onrender.com', '');
-        if (fs.existsSync(oldImagePath.substring(1))) {
-          fs.unlinkSync(oldImagePath.substring(1));
-        }
-      }
-      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/categories/${req.file.filename}`;
+      // With Cloudinary, we don't need to delete old files manually
+      // Cloudinary automatically provides the full URL in req.file.path
+      image = req.file.path;
     }
     if (image) category.image = image;
     
