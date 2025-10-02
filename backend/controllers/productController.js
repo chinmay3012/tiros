@@ -22,6 +22,7 @@ export const createProduct = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl;
     if (req.file) {
+      console.log('Cloudinary upload result:', req.file);
       // Cloudinary automatically provides the full URL in req.file.path
       image = req.file.path;
     }
@@ -40,6 +41,16 @@ export const createProduct = async (req, res) => {
     
     res.status(201).json(populatedProduct);
   } catch (error) {
+    console.error('Product creation error:', error);
+    
+    // Check if it's a Cloudinary error
+    if (error.message && error.message.includes('cloudinary')) {
+      return res.status(500).json({ 
+        message: "Image upload failed. Please check Cloudinary configuration.",
+        error: error.message 
+      });
+    }
+    
     res.status(500).json({ message: error.message });
   }
 };
