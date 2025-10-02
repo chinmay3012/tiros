@@ -4,9 +4,9 @@ import {
   getAllProducts, 
   getProductById, 
   updateProduct, 
-  deleteProduct,
-  upload
+  deleteProduct
 } from "../controllers/productController.js";
+import { upload } from "../config/cloudinary.js";
 import { protectAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
