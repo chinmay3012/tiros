@@ -1,39 +1,6 @@
 import Product from "../models/product.js";
 import Category from "../models/category.js";
-import multer from "multer";
-import path from "path";
-import fs from "fs";
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    const uploadDir = 'uploads/products';
-    if (!fs.existsSync(uploadDir)) {
-      fs.mkdirSync(uploadDir, { recursive: true });
-    }
-    cb(null, uploadDir);
-  },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const fileFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
-  } else {
-    cb(new Error('Only image files are allowed!'), false);
-  }
-};
-
-export const upload = multer({ 
-  storage: storage,
-  fileFilter: fileFilter,
-  limits: {
-    fileSize: 5 * 1024 * 1024 // 5MB limit
-  }
-});
+import { upload } from "../config/cloudinary.js";
 
 // @desc   Create new product
 // @route  POST /api/admin/products
@@ -55,7 +22,8 @@ export const createProduct = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl;
     if (req.file) {
-      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/products/${req.file.filename}`;
+      // Cloudinary automatically provides the full URL in req.file.path
+      image = req.file.path;
     }
     
     const product = await Product.create({
@@ -184,14 +152,9 @@ export const updateProduct = async (req, res) => {
     // Handle image - either uploaded file or URL
     let image = imageUrl || product.image;
     if (req.file) {
-      // Delete old image file if it exists and is not a URL
-      if (product.image && product.image.includes('/uploads/')) {
-        const oldImagePath = product.image.replace(process.env.BASE_URL || 'https://tiros-backend.onrender.com', '');
-        if (fs.existsSync(oldImagePath.substring(1))) {
-          fs.unlinkSync(oldImagePath.substring(1));
-        }
-      }
-      image = `${process.env.BASE_URL || 'https://tiros-backend.onrender.com'}/uploads/products/${req.file.filename}`;
+      // With Cloudinary, we don't need to delete old files manually
+      // Cloudinary automatically provides the full URL in req.file.path
+      image = req.file.path;
     }
     
     if (name) product.name = name;
