@@ -15,6 +15,11 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 dotenv.config();
 connectDB();
 
+// Required Environment Variables:
+// CLOUDINARY_CLOUD_NAME=
+// CLOUDINARY_API_KEY=
+// CLOUDINARY_API_SECRET=
+
 const app = express();
 
 // CORS Configuration - Support both development and production
