@@ -7,7 +7,7 @@ export default function PendingOrders(){
 useEffect(()=> {
     (async ()=>{
         try {
-            const { data } = await api.get("/api/admin/orders?status=pending");
+            const { data } = await api.get("/admin/orders?status=pending");
             setOrders(data.orders || data);
         } catch(err){ console.error(err); }
     })();
@@ -15,7 +15,7 @@ useEffect(()=> {
 
 const markShipped = async (id) => {
     try {
-        await api.put(`/api/admin/orders/${id}/status`, { status: "shipped" });
+        await api.put(`/admin/orders/${id}/status`, { status: "shipped" });
         setOrders(prev => prev.filter(o => o._id !== id));
     } catch { alert("Failed"); }
 };

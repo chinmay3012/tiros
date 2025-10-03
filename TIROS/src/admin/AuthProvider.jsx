@@ -69,7 +69,7 @@ export function AuthProvider({ children }) {
   const login = async (email, password) => {
     dispatch({ type: "LOGIN_START" });
     try {
-      const { data } = await api.post("/api/admin/login", { email, password });
+      const { data } = await api.post("/admin/login", { email, password });
       
       if (data && data.token) {
         localStorage.setItem("adminToken", data.token);

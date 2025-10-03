@@ -54,7 +54,7 @@ export default function Inventory() {
   const fetchInventoryData = async () => {
     try {
       setLoading(true);
-      const response = await api.get(`/api/admin/inventory?threshold=${threshold}`);
+      const response = await api.get(`/admin/inventory?threshold=${threshold}`);
       setInventoryData(response.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch inventory data');
@@ -75,7 +75,7 @@ export default function Inventory() {
   const handleSubmitStockUpdate = async (e) => {
     e.preventDefault();
     try {
-      await api.put(`/api/admin/inventory/${selectedProduct._id}`, {
+      await api.put(`/admin/inventory/${selectedProduct._id}`, {
         stock: parseInt(stockUpdate.value),
         operation: stockUpdate.operation
       });

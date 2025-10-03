@@ -32,7 +32,7 @@ export default function Reports() {
       if (dateRange.endDate) salesParams.append('endDate', dateRange.endDate);
       salesParams.append('groupBy', groupBy);
       
-      const salesResponse = await api.get(`/api/admin/dashboard/sales-report?${salesParams}`);
+      const salesResponse = await api.get(`/admin/dashboard/sales-report?${salesParams}`);
       setSalesReport(salesResponse.data);
 
       // Fetch users report
@@ -41,7 +41,7 @@ export default function Reports() {
       if (dateRange.endDate) usersParams.append('endDate', dateRange.endDate);
       usersParams.append('groupBy', groupBy);
       
-      const usersResponse = await api.get(`/api/admin/dashboard/users-report?${usersParams}`);
+      const usersResponse = await api.get(`/admin/dashboard/users-report?${usersParams}`);
       setUsersReport(usersResponse.data);
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to fetch reports');

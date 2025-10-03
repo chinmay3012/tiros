@@ -50,7 +50,7 @@ export default function Products() {
       if (searchTerm) params.append('search', searchTerm);
       if (categoryFilter) params.append('category', categoryFilter);
 
-      const response = await api.get(`/api/admin/products?${params}`);
+      const response = await api.get(`/admin/products?${params}`);
       setProducts(response.data.products);
       setTotalPages(response.data.pagination.totalPages);
     } catch (err) {
@@ -62,7 +62,7 @@ export default function Products() {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/api/admin/categories');
+      const response = await api.get('/admin/categories');
       setCategories(response.data.categories || []);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
@@ -104,7 +104,7 @@ export default function Products() {
 
   const handleViewProduct = async (productId) => {
     try {
-      const response = await api.get(`/api/admin/products/${productId}`);
+      const response = await api.get(`/admin/products/${productId}`);
       setSelectedProduct(response.data);
       setShowProductDetailsModal(true);
     } catch (err) {
@@ -142,13 +142,13 @@ export default function Products() {
       }
 
       if (editingProduct) {
-        await api.put(`/api/admin/products/${editingProduct._id}`, formDataToSend, {
+        await api.put(`/admin/products/${editingProduct._id}`, formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await api.post('/api/admin/products', formDataToSend, {
+        await api.post('/admin/products', formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -165,7 +165,7 @@ export default function Products() {
   const handleDeleteProduct = async (productId) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       try {
-        await api.delete(`/api/admin/products/${productId}`);
+        await api.delete(`/admin/products/${productId}`);
         fetchProducts();
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to delete product');

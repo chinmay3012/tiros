@@ -35,7 +35,7 @@ export default function Users() {
       if (searchTerm) params.append('search', searchTerm);
       if (blockedFilter) params.append('blocked', blockedFilter);
 
-      const response = await api.get(`/api/admin/users?${params}`);
+      const response = await api.get(`/admin/users?${params}`);
       setUsers(response.data.users);
       setTotalPages(response.data.pagination.totalPages);
     } catch (err) {
@@ -47,7 +47,7 @@ export default function Users() {
 
   const handleBlockToggle = async (userId, currentStatus) => {
     try {
-      await api.put(`/api/admin/users/${userId}/block`, {
+      await api.put(`/admin/users/${userId}/block`, {
         isBlocked: !currentStatus
       });
       fetchUsers(); // Refresh the list
@@ -59,7 +59,7 @@ export default function Users() {
   const handleDeleteUser = async (userId) => {
     if (window.confirm('Are you sure you want to delete this user?')) {
       try {
-        await api.delete(`/api/admin/users/${userId}`);
+        await api.delete(`/admin/users/${userId}`);
         fetchUsers(); // Refresh the list
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to delete user');
@@ -69,7 +69,7 @@ export default function Users() {
 
   const handleViewUser = async (userId) => {
     try {
-      const response = await api.get(`/api/admin/users/${userId}`);
+      const response = await api.get(`/admin/users/${userId}`);
       setSelectedUser(response.data);
       setShowUserModal(true);
     } catch (err) {

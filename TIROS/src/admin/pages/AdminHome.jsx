@@ -10,7 +10,7 @@ export default function AdminHome(){
   useEffect(()=>{
     (async ()=>{
       try {
-        const { data } = await api.get("/api/admin/dashboard/summary");
+        const { data } = await api.get("/admin/dashboard/summary");
         setSummary(data);
       } catch(err){
         setError(err?.response?.data?.message || err.message);

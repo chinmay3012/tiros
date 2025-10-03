@@ -41,7 +41,7 @@ export default function Categories() {
       if (searchTerm) params.append('search', searchTerm);
       if (activeFilter) params.append('active', activeFilter);
 
-      const response = await api.get(`/api/admin/categories?${params}`);
+      const response = await api.get(`/admin/categories?${params}`);
       setCategories(response.data.categories);
       setTotalPages(response.data.pagination.totalPages);
     } catch (err) {
@@ -101,13 +101,13 @@ export default function Categories() {
       }
 
       if (editingCategory) {
-        await api.put(`/api/admin/categories/${editingCategory._id}`, formDataToSend, {
+        await api.put(`/admin/categories/${editingCategory._id}`, formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
       } else {
-        await api.post('/api/admin/categories', formDataToSend, {
+        await api.post('/admin/categories', formDataToSend, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -124,7 +124,7 @@ export default function Categories() {
   const handleDeleteCategory = async (categoryId) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       try {
-        await api.delete(`/api/admin/categories/${categoryId}`);
+        await api.delete(`/admin/categories/${categoryId}`);
         fetchCategories();
       } catch (err) {
         setError(err.response?.data?.message || 'Failed to delete category');
@@ -134,7 +134,7 @@ export default function Categories() {
 
   const handleToggleActive = async (categoryId, currentStatus) => {
     try {
-      await api.put(`/api/admin/categories/${categoryId}`, {
+      await api.put(`/admin/categories/${categoryId}`, {
         isActive: !currentStatus
       });
       fetchCategories();
