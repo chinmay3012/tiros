@@ -22,13 +22,12 @@ function HomePage(){
             let isMounted = true;
             (async ()=>{
                 try{
-                    const res = await api.get("/products");
+                    const q = (params.get('q')||'').toLowerCase();
+                    const res = await api.get("/products", { params: { search: q || undefined, limit: 48 } });
                     if(isMounted){
                         const data = res.data;
                         const list = Array.isArray(data) ? data : (data?.products || []);
-                        const q = (params.get('q')||'').toLowerCase();
-                        const filtered = q ? list.filter(p => (p.name||'').toLowerCase().includes(q)) : list;
-                        setProducts(filtered);
+                        setProducts(list);
                     }
                 }catch(err){
                     setError("Failed to load products");

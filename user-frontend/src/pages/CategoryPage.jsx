@@ -17,7 +17,7 @@ function CategoryPage(){
       try{
         const [catRes, productsRes] = await Promise.all([
           api.get(`/categories`),
-          api.get(`/products`),
+          api.get(`/products`, { params: { category: id, limit: 48 } }),
         ]);
         const catData = catRes.data;
         const categories = Array.isArray(catData) ? catData : (catData?.categories || []);
@@ -26,8 +26,7 @@ function CategoryPage(){
           setCategory(current || null);
           const pData = productsRes.data;
           const list = Array.isArray(pData) ? pData : (pData?.products || []);
-          const filtered = list.filter((p)=> String(p?.category?._id || p?.category) === String(id));
-          setProducts(filtered);
+          setProducts(list);
         }
       }catch(err){
         setError("Failed to load category/products");

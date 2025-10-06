@@ -3,7 +3,26 @@ import Category from "../models/category.js";
 
 export const listProducts = async (req, res) => {
   try {
-    const products = await Product.find({ isActive: { $ne: false } }).populate("category", "name");
+    const { search, category, limit } = req.query;
+    const findQuery = { isActive: { $ne: false } };
+    if (search) {
+      findQuery.$or = [
+        { name: { $regex: search, $options: "i" } },
+        { description: { $regex: search, $options: "i" } }
+      ];
+    }
+    if (category) {
+      findQuery.category = category;
+    }
+    const limitNum = Math.min(parseInt(limit || '50', 10), 100);
+
+    const products = await Product.find(findQuery)
+      .select("name price image category section")
+      .populate("category", "name")
+      .sort({ createdAt: -1 })
+      .limit(limitNum)
+      .lean();
+
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
