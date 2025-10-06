@@ -1,8 +1,14 @@
 // src/api/axios.js
 import axios from "axios";
 
+// Resolve baseURL robustly for both local dev and production
+const envBaseUrl = import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL;
+const localBaseUrl = "http://localhost:3001/api";
+const prodFallbackBaseUrl = "https://tiros-backend.onrender.com/api";
+const resolvedBaseUrl = envBaseUrl || (typeof window !== "undefined" && window.location.hostname === "localhost" ? localBaseUrl : prodFallbackBaseUrl);
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "https://tiros-backend.onrender.com/api",
+  baseURL: resolvedBaseUrl,
   headers: {
     "Content-Type": "application/json",
   },
