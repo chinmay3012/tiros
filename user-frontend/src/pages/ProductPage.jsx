@@ -172,7 +172,7 @@ function ProductPage(){
                 </div>
               ) : (
                 <img
-                  src={getImageUrl("uploads/products/BUTTON copy.png")}
+                  src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
                   alt="Buy Now"
                   className="h-12 w-auto mx-auto pointer-events-none"
                 />
