@@ -142,16 +142,7 @@ function Navbar(){
         `}
       </style>
         <nav className="mt-6 flex sticky items-center justify-between px-4 mb-1 top-0 z-20 bg-white">
-        {isLoading ? (
-                      <p>Loading...</p>
-                    ) : isAuthenticated ? (
-                      <div className="flex items-center md:gap-4 gap-2">
-                        <LogoutMobile />
-                      </div>
-                    ) : (
-                      <LoginMobile />
-                    )}
-            <div className="ml-2">
+            <div className="ml-0">
                 <a href="/" className="transition-colors duration-300 ease-in-out 
                 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-red-500 hover:to-green-500"
                 style={{
@@ -192,6 +183,16 @@ function Navbar(){
             </svg>
           </button>
 
+            {isLoading ? (
+                      <p>Loading...</p>
+                    ) : isAuthenticated ? (
+                      <div className="flex items-center md:gap-4 gap-2">
+                        <LogoutMobile />
+                      </div>
+                    ) : (
+                      <LoginMobile />
+                    )}
+
           {/* TODO: UI polish */}
           
           {/* <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer">
@@ -203,11 +204,13 @@ function Navbar(){
               {isLoading ? (
                       <p>Loading...</p>
                     ) : isAuthenticated ? (
-                      <div className="flex items-center md:gap-4 gap-2">
+                      <div className="hidden md:flex items-center md:gap-4 gap-2">
                         <LogoutButton />
                       </div>
                     ) : (
-                      <LoginButton />
+                      <div className="hidden md:flex">
+                        <LoginButton />
+                      </div>
                     )}
 
 
