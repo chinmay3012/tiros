@@ -299,6 +299,29 @@ export default function Users() {
                           {new Date(selectedUser.createdAt).toLocaleString()}
                         </p>
                       </div>
+                      {selectedUser.address && (
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Address</label>
+                          <div className="mt-1 text-sm text-gray-900 space-y-0.5">
+                            {selectedUser.address.name && (
+                              <p className="text-gray-900">{selectedUser.address.name}</p>
+                            )}
+                            <p className="text-gray-700">
+                              {[selectedUser.address.street, selectedUser.address.city]
+                                .filter(Boolean)
+                                .join(", ")}
+                            </p>
+                            <p className="text-gray-700">
+                              {[selectedUser.address.zip, selectedUser.address.country]
+                                .filter(Boolean)
+                                .join(", ")}
+                            </p>
+                            {selectedUser.address.phone && (
+                              <p className="text-gray-700">Phone: {selectedUser.address.phone}</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
