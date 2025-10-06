@@ -183,15 +183,8 @@ function Navbar(){
             </svg>
           </button>
 
-            {isLoading ? (
-                      <p>Loading...</p>
-                    ) : isAuthenticated ? (
-                      <div className="flex items-center md:gap-4 gap-2">
-                        <LogoutMobile />
-                      </div>
-                    ) : (
-                      <LoginMobile />
-                    )}
+            {/* Mobile auth buttons removed; logout now lives inside the side menu */}
+            {/* Mobile auth buttons removed; use side menu instead */}
 
           {/* TODO: UI polish */}
           

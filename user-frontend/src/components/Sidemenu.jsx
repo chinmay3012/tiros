@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import HamburgerIcon from '../assets/hamburger';
 import CloseButton from '../assets/cross';
 import api from '../api/axios';
+import { useAuth } from '../context/AuthContext';
 
 function Sidemenu(){
     const navigate = useNavigate();
+    const { isAuthenticated, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
     useEffect(()=>{ (async()=>{ try{ const { data } = await api.get('/categories'); setCategories(Array.isArray(data)?data:(data?.categories||[])); }catch{} })(); },[]);
@@ -48,6 +50,11 @@ function Sidemenu(){
                                 {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
                               </div>
                             </div>
+                            {isAuthenticated && (
+                              <button onClick={() => { logout(); setIsMenuOpen(false); }} className="text-gray-800 hover:text-blue-600 text-left mt-4">
+                                Log Out
+                              </button>
+                            )}
                         </div>
                     </div>
                 )}
