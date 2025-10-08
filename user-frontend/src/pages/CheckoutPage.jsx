@@ -139,7 +139,7 @@ function CheckoutPage() {
         description: "Order Payment",
         prefill: {
           name: address.name,
-          email: user?.email || 'customer@topshot.com',
+          email: user?.email || 'customer@tiros.com',
           contact: address.phone || '9999999999'
         },
         notes: {

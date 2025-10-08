@@ -82,7 +82,7 @@ TOPSHOT/
    ```env
    NODE_ENV=development
    PORT=3001
-   MONGODB_URI=mongodb://localhost:27017/topshot
+   MONGODB_URI=mongodb://localhost:27017/tiros
    JWT_SECRET=your_jwt_secret_key_here
    ```
 

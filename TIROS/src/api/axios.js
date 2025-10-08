@@ -4,7 +4,7 @@ import axios from "axios";
 // Resolve baseURL robustly for both local dev and production
 const envBaseUrl = import.meta.env.VITE_ADMIN_API_URL || import.meta.env.VITE_API_URL;
 const localBaseUrl = "http://localhost:3001/api";
-const prodBackendFallback = "https://topshot-backend.onrender.com/api";
+const prodBackendFallback = "https://tiros-backend.onrender.com/api";
 
 function normalizeApiBase(url) {
   if (!url) return url;
