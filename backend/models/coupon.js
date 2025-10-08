@@ -73,8 +73,7 @@ const couponSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Index for faster coupon code lookups
-couponSchema.index({ code: 1 });
+// Index for faster queries (code already indexed via unique: true)
 couponSchema.index({ isActive: 1, validFrom: 1, validUntil: 1 });
 
 const Coupon = mongoose.model("Coupon", couponSchema);
