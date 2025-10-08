@@ -47,6 +47,11 @@ export default function Coupons() {
 
   const handleCreateCoupon = () => {
     setEditingCoupon(null);
+    // Set validFrom to current date/time by default
+    const now = new Date();
+    now.setSeconds(0, 0); // Remove seconds and milliseconds for cleaner datetime
+    const defaultValidFrom = now.toISOString().slice(0, 16);
+    
     setFormData({
       code: '',
       description: '',
@@ -56,7 +61,7 @@ export default function Coupons() {
       maxDiscountAmount: '',
       usageLimit: '',
       usagePerUser: '1',
-      validFrom: '',
+      validFrom: defaultValidFrom,
       validUntil: '',
       isActive: true,
     });

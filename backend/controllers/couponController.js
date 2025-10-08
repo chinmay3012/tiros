@@ -49,7 +49,7 @@ export const createCoupon = async (req, res) => {
       maxDiscountAmount,
       usageLimit,
       usagePerUser: usagePerUser || 1,
-      validFrom: validFrom || Date.now(),
+      validFrom: (validFrom && validFrom.trim() !== '') ? new Date(validFrom) : new Date(),
       validUntil,
       isActive: isActive !== undefined ? isActive : true,
     });
@@ -162,8 +162,8 @@ export const updateCoupon = async (req, res) => {
     if (maxDiscountAmount !== undefined) coupon.maxDiscountAmount = maxDiscountAmount;
     if (usageLimit !== undefined) coupon.usageLimit = usageLimit;
     if (usagePerUser !== undefined) coupon.usagePerUser = usagePerUser;
-    if (validFrom) coupon.validFrom = validFrom;
-    if (validUntil) coupon.validUntil = validUntil;
+    if (validFrom && validFrom.trim() !== '') coupon.validFrom = new Date(validFrom);
+    if (validUntil && validUntil.trim() !== '') coupon.validUntil = new Date(validUntil);
     if (isActive !== undefined) coupon.isActive = isActive;
 
     const updatedCoupon = await coupon.save();
