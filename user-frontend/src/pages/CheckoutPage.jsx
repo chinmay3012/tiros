@@ -18,6 +18,10 @@ function CheckoutPage() {
       return raw ? JSON.parse(raw) : { name:"", street:"", city:"", zip:"", country:"", phone:"" };
     }catch{return { name:"", street:"", city:"", zip:"", country:"", phone:"" }}
   });
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponError, setCouponError] = useState("");
+  const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   const getCartTotal = () => {
     return cartItems.reduce((sum, item) => {
@@ -26,6 +30,46 @@ function CheckoutPage() {
       );
       return sum + price * item.quantity;
     }, 0);
+  };
+
+  const getFinalTotal = () => {
+    const total = getCartTotal();
+    if (appliedCoupon) {
+      return appliedCoupon.finalAmount;
+    }
+    return total;
+  };
+
+  const handleApplyCoupon = async () => {
+    if (!couponCode.trim()) {
+      setCouponError("Please enter a coupon code");
+      return;
+    }
+
+    setValidatingCoupon(true);
+    setCouponError("");
+
+    try {
+      const response = await api.post('/coupons/validate', {
+        code: couponCode,
+        userId: user?._id,
+        orderAmount: getCartTotal(),
+      });
+
+      setAppliedCoupon(response.data);
+      setCouponError("");
+    } catch (err) {
+      setCouponError(err.response?.data?.message || 'Invalid coupon code');
+      setAppliedCoupon(null);
+    } finally {
+      setValidatingCoupon(false);
+    }
+  };
+
+  const handleRemoveCoupon = () => {
+    setCouponCode("");
+    setAppliedCoupon(null);
+    setCouponError("");
   };
 
   const handleOrderConfirmationClose = () => {
@@ -86,7 +130,7 @@ function CheckoutPage() {
       // Razorpay flow
       const loaded = await loadRazorpay("https://checkout.razorpay.com/v1/checkout.js");
       if(!loaded){ throw new Error('Failed to load Razorpay'); }
-      const totalAmount = getCartTotal();
+      const totalAmount = getFinalTotal();
       const rzp = new window.Razorpay({
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: totalAmount * 100,
@@ -121,8 +165,9 @@ function CheckoutPage() {
                   paymentId: response.razorpay_payment_id, 
                   status: 'paid', 
                   method: 'razorpay', 
-                  amount: totalAmount 
-                } 
+                  amount: getFinalTotal() 
+                },
+                couponCode: appliedCoupon ? appliedCoupon.coupon.code : undefined
               });
               setShowOrderConfirmation(true);
             } else {
@@ -164,9 +209,76 @@ function CheckoutPage() {
       <h1 className="text-4xl font-bold mb-6 text-center">Checkout</h1>
       <div className="max-w-xl mx-auto border p-6 rounded shadow space-y-4">
         <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
-        <div className="flex justify-between py-2 border-b">
-          <span>Total:</span>
-          <span>Rs. {getCartTotal().toFixed(2)}</span>
+        <div className="space-y-2">
+          <div className="flex justify-between py-2">
+            <span>Subtotal:</span>
+            <span>Rs. {getCartTotal().toFixed(2)}</span>
+          </div>
+          
+          {/* Coupon Section */}
+          <div className="py-3 border-t border-b">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Have a coupon code?
+            </label>
+            {!appliedCoupon ? (
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={couponCode}
+                  onChange={(e) => {
+                    setCouponCode(e.target.value.toUpperCase());
+                    setCouponError("");
+                  }}
+                  placeholder="Enter coupon code"
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-md uppercase"
+                  disabled={validatingCoupon}
+                />
+                <button
+                  onClick={handleApplyCoupon}
+                  disabled={validatingCoupon}
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                >
+                  {validatingCoupon ? "Applying..." : "Apply"}
+                </button>
+              </div>
+            ) : (
+              <div className="bg-green-50 border border-green-200 rounded-md p-3">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <div className="font-medium text-green-800">
+                      {appliedCoupon.coupon.code} Applied!
+                    </div>
+                    {appliedCoupon.coupon.description && (
+                      <div className="text-sm text-green-600">
+                        {appliedCoupon.coupon.description}
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleRemoveCoupon}
+                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                  >
+                    Remove
+                  </button>
+                </div>
+              </div>
+            )}
+            {couponError && (
+              <p className="text-red-600 text-sm mt-2">{couponError}</p>
+            )}
+          </div>
+
+          {appliedCoupon && (
+            <div className="flex justify-between py-2 text-green-600">
+              <span>Discount:</span>
+              <span>- Rs. {appliedCoupon.discountAmount.toFixed(2)}</span>
+            </div>
+          )}
+
+          <div className="flex justify-between py-2 font-semibold text-lg border-t">
+            <span>Total:</span>
+            <span>Rs. {getFinalTotal().toFixed(2)}</span>
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-3">
           <h3 className="text-lg font-semibold">Shipping Address <span className="text-red-500">*</span></h3>

@@ -1,22 +1,46 @@
 import Order from "../models/order.js";
 import Payment from "../models/payment.js";
 import Product from "../models/product.js";
+import { applyCouponToOrder } from "./couponController.js";
 
 export const createOrder = async (req, res) => {
   try {
-    const { userId, items, totalAmount, shippingAddress, paymentMethod, payment } = req.body;
+    const { userId, items, totalAmount, shippingAddress, paymentMethod, payment, couponCode } = req.body;
     if (!userId || !Array.isArray(items) || items.length === 0 || !totalAmount) {
       return res.status(400).json({ message: "userId, items, and totalAmount are required" });
     }
+    
     // Convert items -> products schema
     const products = items.map((it) => ({ productId: it.product || it.productId || it.product?._id || it.id, quantity: it.quantity || 1 }));
+    
+    // Handle coupon if provided
+    let finalAmount = totalAmount;
+    let couponDetails = null;
+    
+    if (couponCode) {
+      try {
+        const couponResult = await applyCouponToOrder(couponCode, userId, totalAmount);
+        finalAmount = couponResult.finalAmount;
+        couponDetails = {
+          code: couponResult.couponDetails.code,
+          discountType: couponResult.couponDetails.discountType,
+          discountValue: couponResult.couponDetails.discountValue,
+          discountAmount: couponResult.discountAmount,
+        };
+      } catch (couponError) {
+        return res.status(400).json({ message: couponError.message });
+      }
+    }
+    
     const order = await Order.create({
       userId,
       products,
       totalAmount,
+      coupon: couponDetails,
+      finalAmount: finalAmount,
       shippingAddress: shippingAddress || "N/A",
       paymentMethod: paymentMethod || "cash",
-      payment: payment || { status: 'created', amount: totalAmount },
+      payment: payment || { status: 'created', amount: finalAmount },
     });
 
     // Create payment receipt if payment was successful
@@ -42,7 +66,7 @@ export const createOrder = async (req, res) => {
           userId,
           orderId: order._id,
           paymentId: payment.paymentId,
-          amount: totalAmount,
+          amount: finalAmount,
           status: 'paid',
           method: payment.method || 'razorpay',
           items: receiptItems,

@@ -59,7 +59,7 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = () => setCartItems([]);
 
-  const checkout = async ({ address, payment } = {}) => {
+  const checkout = async ({ address, payment, couponCode } = {}) => {
     // Build simple order payload
     const items = cartItems.map((item) => ({
       product: item.id,
@@ -73,6 +73,7 @@ export const CartProvider = ({ children }) => {
       totalAmount: total,
       shippingAddress: address ? `${address.name}, ${address.street}, ${address.city}, ${address.zip}, ${address.country}, ${address.phone}` : undefined,
       payment,
+      couponCode: couponCode || undefined,
     };
     const res = await api.post("/orders", payload);
     clearCart();

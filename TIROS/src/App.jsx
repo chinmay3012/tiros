@@ -15,6 +15,7 @@ import Products from './admin/pages/Products';
 import Users from './admin/pages/Users';
 import Inventory from './admin/pages/Inventory';
 import Reports from './admin/pages/Reports';
+import Coupons from './admin/pages/Coupons';
 
 // Admin Protected Route
 import AdminProtectedRoute from './admin/ProtectedRoute';
@@ -120,6 +121,11 @@ function App() {
               <Route path="/admin/reports" element={
                 <AdminProtectedRoute>
                   <AdminLayout><Reports /></AdminLayout>
+                </AdminProtectedRoute>
+              } />
+              <Route path="/admin/coupons" element={
+                <AdminProtectedRoute>
+                  <AdminLayout><Coupons /></AdminLayout>
                 </AdminProtectedRoute>
               } />
               

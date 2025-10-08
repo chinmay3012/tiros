@@ -9,6 +9,7 @@ import {
   ClipboardDocumentListIcon,
   CubeIcon,
   ChartBarIcon,
+  TicketIcon,
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
@@ -22,6 +23,7 @@ const navigation = [
   { name: 'Categories', href: '/admin/categories', icon: TagIcon },
   { name: 'Orders', href: '/admin/orders', icon: ClipboardDocumentListIcon },
   { name: 'Inventory', href: '/admin/inventory', icon: CubeIcon },
+  { name: 'Coupons', href: '/admin/coupons', icon: TicketIcon },
   { name: 'Reports', href: '/admin/reports', icon: ChartBarIcon },
 ];
 
