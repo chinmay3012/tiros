@@ -73,11 +73,11 @@ function CartPage() {
       )}
 
         <div className="flex justify-center">
-          <button
+          {/* <button
             onClick={() => navigate("/")}
             className="mt-4 p-2.5 bg-blue-500 text-white rounded hover:bg-blue-600">
             Continue Shopping
-          </button>
+          </button> */}
         </div>
     </div>
   );
