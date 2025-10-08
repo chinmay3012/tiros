@@ -135,11 +135,11 @@ function CheckoutPage() {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: totalAmount * 100,
         currency: "INR",
-        name: "TIROS Store",
+        name: "TOPSHOT Store",
         description: "Order Payment",
         prefill: {
           name: address.name,
-          email: user?.email || 'customer@tiros.com',
+          email: user?.email || 'customer@topshot.com',
           contact: address.phone || '9999999999'
         },
         notes: {

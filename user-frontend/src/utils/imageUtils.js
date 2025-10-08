@@ -5,7 +5,7 @@
  */
 export const getImageUrl = (imageUrl) => {
   if (!imageUrl) return null;
-  const productionBackend = 'https://tiros-backend.onrender.com';
+  const productionBackend = 'https://topshot-backend.onrender.com';
 
   // If the URL is already absolute, return as is
   if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {

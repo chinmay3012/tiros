@@ -19,8 +19,8 @@ const Admin = mongoose.model("Admin", adminSchema);
 async function addAdmin(name, email, password) {
   try {
     // Connect to MongoDB
-    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/tiros", {
-      dbName: 'tiros'
+    await mongoose.connect(process.env.MONGO_URI || "mongodb://localhost:27017/topshot", {
+      dbName: 'topshot'
     });
     console.log("Connected to MongoDB");
 

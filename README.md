@@ -1,4 +1,4 @@
-# TIROS - E-commerce Platform
+# TOPSHOT - E-commerce Platform
 
 A modern, full-stack e-commerce platform built with MERN stack, featuring a React frontend with Tailwind CSS and a Node.js/Express backend with MongoDB.
 
@@ -44,14 +44,14 @@ A modern, full-stack e-commerce platform built with MERN stack, featuring a Reac
 ## Project Structure
 
 ```
-TIROS/
+TOPSHOT/
 ├── backend/
 │   ├── controllers/          # API route controllers
 │   ├── models/              # MongoDB models
 │   ├── routes/              # API routes
 │   ├── middlewares/         # Authentication and other middleware
 │   └── server.js            # Express server setup
-├── TIROS/                   # React frontend
+├── TOPSHOT/                   # React frontend
 │   ├── src/
 │   │   ├── components/      # Reusable React components
 │   │   ├── pages/          # Page components
@@ -82,7 +82,7 @@ TIROS/
    ```env
    NODE_ENV=development
    PORT=3001
-   MONGODB_URI=mongodb://localhost:27017/tiros
+   MONGODB_URI=mongodb://localhost:27017/topshot
    JWT_SECRET=your_jwt_secret_key_here
    ```
 
@@ -96,7 +96,7 @@ TIROS/
 
 1. **Navigate to Frontend Directory**
    ```bash
-   cd TIROS
+   cd TOPSHOT
    ```
 
 2. **Install Dependencies**
@@ -190,7 +190,7 @@ node add-admin.js
 ### Frontend (Netlify/Vercel)
 1. Build the frontend:
    ```bash
-   cd TIROS
+   cd TOPSHOT
    npm run build
    ```
 
@@ -215,4 +215,4 @@ This project is licensed under the MIT License.
 
 ## Support
 
-For support, email support@tiros.com or create an issue in the repository.
+For support, email support@topshot.com or create an issue in the repository.

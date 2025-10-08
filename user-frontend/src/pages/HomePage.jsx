@@ -343,11 +343,11 @@ function HomePage(){
                                 letterSpacing: '0%',
                                 textAlign: 'center',
                                 textTransform: 'uppercase',
-                                color: '#201A15'
-                            }}
-                        >
-                            @TIROS
-                        </p>
+                            color: '#201A15'
+                        }}
+                    >
+                        @TOPSHOT
+                    </p>
                     </div>
                 </div>
                 

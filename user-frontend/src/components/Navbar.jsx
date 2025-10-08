@@ -152,7 +152,7 @@ function Navbar(){
                     fontSize: '24px',
                     letterSpacing: '0%',
                     textAlign: 'center'
-                }}>TIROS</a>
+                }}>TOPSHOT</a>
             </div>
             <div className="relative hidden md:flex text-sm" ref={topGearRef}>
             <button 

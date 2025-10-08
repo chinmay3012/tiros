@@ -30,8 +30,8 @@ const allowedOrigins = [
   'http://localhost:5178',
   'http://localhost:5179',
   // Production frontend URLs
-  'https://tiros-user.onrender.com',
-  'https://tiros.onrender.com', // Admin frontend URL
+  'https://topshot-user.onrender.com',
+  'https://topshot.onrender.com', // Admin frontend URL
   process.env.ADMIN_FRONTEND_URL,
   process.env.USER_FRONTEND_URL,
 ].filter(Boolean); // Remove undefined values
@@ -79,7 +79,7 @@ app.use("/api/coupons", couponRoutes);
 
 app.get("/", (req, res) => {
   res.json({ 
-    message: "TIROS API is running...",
+    message: "TOPSHOT API is running...",
     version: "1.0.0",
     status: "healthy",
     environment: process.env.NODE_ENV || 'development'

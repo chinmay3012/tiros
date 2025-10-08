@@ -1,7 +1,7 @@
 # Coupon System Implementation Guide
 
 ## Overview
-A complete coupon code system has been implemented for the TIROS e-commerce platform. This allows admins to create and manage discount coupons, and users to apply them during checkout.
+A complete coupon code system has been implemented for the TOPSHOT e-commerce platform. This allows admins to create and manage discount coupons, and users to apply them during checkout.
 
 ---
 
@@ -68,18 +68,18 @@ A complete coupon code system has been implemented for the TIROS e-commerce plat
 
 #### Admin Panel:
 
-1. **`TIROS/src/admin/pages/Coupons.jsx`** (New)
+1. **`TOPSHOT/src/admin/pages/Coupons.jsx`** (New)
    - Beautiful card-based coupon display
    - Create/Edit coupon modal
    - Delete functionality
    - Status badges (Active/Inactive/Expired)
    - Visual discount display
 
-2. **`TIROS/src/App.jsx`**
+2. **`TOPSHOT/src/App.jsx`**
    - Added Coupons page route
    - Imported Coupons component
 
-3. **`TIROS/src/admin/AdminLayout.jsx`**
+3. **`TOPSHOT/src/admin/AdminLayout.jsx`**
    - Added "Coupons" to navigation menu with TicketIcon
 
 #### User Frontend:

@@ -13,7 +13,7 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'tiros/products', // Folder name in Cloudinary
+    folder: 'topshot/products', // Folder name in Cloudinary
     allowed_formats: ['jpg', 'jpeg', 'png', 'gif', 'webp'],
     transformation: [
       { width: 800, height: 800, crop: 'limit' }, // Resize images

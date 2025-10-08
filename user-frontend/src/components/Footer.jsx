@@ -7,9 +7,9 @@ function Footer(){
             <div className="container mx-auto px-4">
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-sm">
                     <div className="col-span-1 mb-6 md:mb-0">
-                        <h2 className="text-2xl font-bold font-['system-ui'] mb-4 text-white">TIROS</h2>
+                        <h2 className="text-2xl font-bold font-['system-ui'] mb-4 text-white">TOPSHOT</h2>
                         <p className="text-xs text-white">
-                            © 2025 TIROS. ALL RIGHTS RESERVED.
+                            © 2025 TOPSHOT. ALL RIGHTS RESERVED.
                         </p>
                     </div>
                     <div className="col-span-1">

@@ -6,7 +6,7 @@ function HeroSection() {
                 alt="Hero Image" 
                 className="w-full h-full object-cover object-center"
             />
-            {/* TIROS Logo Overlay */}
+            {/* TOPSHOT Logo Overlay */}
             <div className="absolute inset-0 flex items-center justify-center z-10">
                 <h1 
                     className="text-white font-medium text-center"
@@ -21,7 +21,7 @@ function HeroSection() {
                         textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
                     }}
                 >
-                    TIROS
+                    TOPSHOT
                 </h1>
             </div>
         </section>

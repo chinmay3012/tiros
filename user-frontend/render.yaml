@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: tiros-user-frontend
+    name: topshot-user-frontend
     env: static
     buildCommand: npm install && npm run build
     staticPublishPath: ./dist
@@ -10,7 +10,7 @@ services:
         destination: /index.html
     envVars:
       - key: VITE_API_URL
-        value: https://tiros-backend.onrender.com
+        value: https://topshot-backend.onrender.com
       - key: NODE_ENV
         value: production
 

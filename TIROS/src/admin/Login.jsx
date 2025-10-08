@@ -138,7 +138,7 @@ export default function AdminLogin() {
           {/* Footer */}
           <div className="mt-8 text-center">
             <p className="text-white/50 text-sm">
-              Secure admin access to TIROS management system
+              Secure admin access to TOPSHOT management system
             </p>
             <p className="text-white/30 text-xs mt-2">
               Contact system administrator for account access
