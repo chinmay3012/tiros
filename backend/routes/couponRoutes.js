@@ -7,16 +7,16 @@ import {
   deleteCoupon,
   validateCoupon,
 } from "../controllers/couponController.js";
-import { protect } from "../middlewares/authMiddleware.js";
+import { protectAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 // Admin routes (protected)
-router.post("/", protect, createCoupon);
-router.get("/", protect, getAllCoupons);
-router.get("/:id", protect, getCouponById);
-router.put("/:id", protect, updateCoupon);
-router.delete("/:id", protect, deleteCoupon);
+router.post("/", protectAdmin, createCoupon);
+router.get("/", protectAdmin, getAllCoupons);
+router.get("/:id", protectAdmin, getCouponById);
+router.put("/:id", protectAdmin, updateCoupon);
+router.delete("/:id", protectAdmin, deleteCoupon);
 
 // Public routes (for users to validate coupons)
 router.post("/validate", validateCoupon);
