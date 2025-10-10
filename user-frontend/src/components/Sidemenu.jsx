@@ -34,7 +34,7 @@ function Sidemenu(){
     function Menu(){
         return (
             <>
-                <button onClick={toggleMenu} className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:bg-[#95C5F4]">
+                <button onClick={toggleMenu} className="p-2 rounded-full transition-colors hover:bg-[#95C5F4]">
                     <img src="/hamburger-icon.png" alt="Menu" className="w-8 h-8" />
                 </button>
                 {isMenuOpen && (

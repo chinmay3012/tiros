@@ -141,7 +141,7 @@ function Navbar(){
           
           {isAuthenticated && (
             <div className="relative">
-              <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer hover:bg-[#95C5F4]" onClick={()=>navigate("/cart")}>
+              <button className="p-2 rounded-full transition-colors hover:cursor-pointer hover:bg-[#95C5F4]" onClick={()=>navigate("/cart")}>
                 <img src="/cart-icon.png" alt="Cart" className="w-5 h-5" />
               </button>
               {cartItems?.length > 0 && (
@@ -196,7 +196,7 @@ function Navbar(){
             </div>
             
             <button 
-              className="ml-4 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-700 hover:bg-[#95C5F4]"
+              className="ml-4 p-2 rounded-full transition-colors text-gray-700 hover:bg-[#95C5F4]"
               onClick={handleSearch}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -205,7 +205,7 @@ function Navbar(){
             </button>
             
             <button 
-              className="ml-2 p-2 rounded-full hover:bg-gray-100 transition-colors text-gray-700 hover:bg-[#95C5F4]"
+              className="ml-2 p-2 rounded-full transition-colors text-gray-700 hover:bg-[#95C5F4]"
               onClick={() => { setSearchQuery(false); setSearchInput(""); setShowSuggestions(false); }}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
