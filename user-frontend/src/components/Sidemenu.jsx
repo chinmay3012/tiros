@@ -47,19 +47,19 @@ function Sidemenu(){
                                 <CloseButton/>
                             </button>
                             <div className="flex flex-col items-start p-6 space-y-4 mt-16 overflow-y-auto max-h-[90vh]">
-                                <button onClick={() => handleNavigation("/")} className="text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4]">Home</button>
-                                <button onClick={() => handleNavigation("/about")} className="text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4]">About us</button>
-                                <button onClick={() => handleNavigation("/contact")} className="text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4]">Contact us</button>
+                                <button onClick={() => handleNavigation("/")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Home</button>
+                                <button onClick={() => handleNavigation("/about")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
+                                <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
                                 
                                 {isAuthenticated && (
-                                    <button onClick={() => handleNavigation("/account")} className="text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4]">Account</button>
+                                    <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>
                                 )}
                                 
                                 <div className="pt-2 w-full border-t border-gray-200">
                                   <div className="text-sm font-semibold text-gray-700 mb-3">Categories</div>
                                   <div className="flex flex-col space-y-3 pl-2">
                                     {categories.map(c => (
-                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="text-gray-800 text-left hover:bg-[#95C5F4]">{c.name}</button>
+                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="w-full text-gray-800 text-left hover:bg-[#95C5F4] p-2 rounded">{c.name}</button>
                                     ))}
                                     {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
                                   </div>
@@ -68,11 +68,11 @@ function Sidemenu(){
                                 {/* Login/Logout Section */}
                                 <div className="pt-2 w-full border-t border-gray-200">
                                   {isAuthenticated ? (
-                                    <button onClick={handleLogout} className="text-red-600 hover:text-red-700 text-left font-medium text-base hover:bg-[#95C5F4]">
+                                    <button onClick={handleLogout} className="w-full text-red-600 hover:text-red-700 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">
                                       Log Out
                                     </button>
                                   ) : (
-                                    <button onClick={handleLogin} className="text-green-600 hover:text-green-700 text-left font-medium text-base hover:bg-[#95C5F4]">
+                                    <button onClick={handleLogin} className="w-full text-green-600 hover:text-green-700 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">
                                       Login
                                     </button>
                                   )}
