@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import SuccessNotification from "../components/SuccessNotification";
 
 function RegisterPage(){
   const { register, isLoading } = useAuth();
@@ -8,28 +9,35 @@ function RegisterPage(){
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [showNotification, setShowNotification] = useState(false);
   const navigate = useNavigate();
 
   const onSubmit = async (e) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
     const res = await register({ name, email, password });
     if(res.success){
-      setSuccess("Registered! You can login now.");
-      navigate("/login");
+      setShowNotification(true);
+      // Navigate to login after showing notification
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
     } else {
       setError(res.message || "Registration failed");
     }
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <form onSubmit={onSubmit} className="w-full max-w-sm border p-6 rounded shadow bg-white">
-        <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
-        {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
-        {success && <p className="text-green-600 text-sm mb-3">{success}</p>}
+    <>
+      <SuccessNotification 
+        message="Registered" 
+        show={showNotification} 
+        onClose={() => setShowNotification(false)} 
+      />
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <form onSubmit={onSubmit} className="w-full max-w-sm border p-6 rounded shadow bg-white">
+          <h1 className="text-2xl font-bold mb-4 text-center">Register</h1>
+          {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
         <label className="block mb-2 text-sm">Name</label>
         <input value={name} onChange={(e)=>setName(e.target.value)} type="text" required className="w-full border p-2 rounded mb-4" />
         <label className="block mb-2 text-sm">Email</label>
@@ -43,6 +51,7 @@ function RegisterPage(){
         {/* TODO: UI polish */}
       </form>
     </div>
+    </>
   );
 }
 
