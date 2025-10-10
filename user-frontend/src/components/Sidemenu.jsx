@@ -39,12 +39,6 @@ function Sidemenu(){
                 </button>
                 {isMenuOpen && (
                     <>
-                        {/* Backdrop */}
-                        <div 
-                            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
-                            onClick={toggleMenu}
-                        ></div>
-                        
                         {/* Menu Sidebar */}
                         <div className={`fixed top-0 left-0 w-[300px] md:w-[350px] transition-transform duration-500 h-full z-50 ease-in-out bg-white
                         shadow-2xl ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
