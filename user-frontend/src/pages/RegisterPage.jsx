@@ -4,7 +4,7 @@ import { useAuth } from "../context/AuthContext";
 import SuccessNotification from "../components/SuccessNotification";
 
 function RegisterPage(){
-  const { register, isLoading } = useAuth();
+  const { register, login, isLoading } = useAuth();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -18,10 +18,19 @@ function RegisterPage(){
     const res = await register({ name, email, password });
     if(res.success){
       setShowNotification(true);
-      // Navigate to login after showing notification
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+      // Automatically log in the user after registration
+      const loginRes = await login(email, password);
+      if(loginRes.success){
+        // Navigate to home page after showing notification
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      } else {
+        // If auto-login fails, navigate to login page
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
+      }
     } else {
       setError(res.message || "Registration failed");
     }
