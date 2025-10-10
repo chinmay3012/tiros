@@ -53,7 +53,7 @@ function RegisterPage(){
         <input value={email} onChange={(e)=>setEmail(e.target.value)} type="email" required className="w-full border p-2 rounded mb-4" />
         <label className="block mb-2 text-sm">Password</label>
         <input value={password} onChange={(e)=>setPassword(e.target.value)} type="password" required className="w-full border p-2 rounded mb-4" />
-        <button disabled={isLoading} className="w-full bg-black text-white py-2 rounded hover:bg-gray-800">
+        <button disabled={isLoading} className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 hover:bg-[#95C5F4]">
           {isLoading ? 'Submitting...' : 'Register'}
         </button>
         <p className="text-sm mt-3 text-center">Have an account? <Link to="/login" className="text-blue-600">Login</Link></p>

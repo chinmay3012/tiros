@@ -236,7 +236,7 @@ function CheckoutPage() {
                 <button
                   onClick={handleApplyCoupon}
                   disabled={validatingCoupon}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300"
+                  className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 hover:bg-[#95C5F4]"
                 >
                   {validatingCoupon ? "Applying..." : "Apply"}
                 </button>
@@ -256,7 +256,7 @@ function CheckoutPage() {
                   </div>
                   <button
                     onClick={handleRemoveCoupon}
-                    className="text-red-600 hover:text-red-800 text-sm font-medium"
+                    className="text-red-600 hover:text-red-800 text-sm font-medium hover:bg-[#95C5F4]"
                   >
                     Remove
                   </button>
@@ -342,7 +342,7 @@ function CheckoutPage() {
           </div>
         </div>
         {error && <p className="text-red-600 text-center">{error}</p>}
-        <button onClick={handlePlaceOrder} disabled={placing} className="mt-6 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600">
+        <button onClick={handlePlaceOrder} disabled={placing} className="mt-6 w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 hover:bg-[#95C5F4]">
           {placing ? "Placing..." : "Place Order"}
         </button>
       </div>

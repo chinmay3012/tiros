@@ -6,7 +6,7 @@ const LogoutMobile = () => {
   return (
     <>
     <button 
-    onClick={() => logout()} className="md:hidden text-sm text-black hover:cursor-pointer no-underline shadow-xl p-1.5 rounded font-semibold">
+    onClick={() => logout()} className="md:hidden text-sm text-black hover:cursor-pointer no-underline shadow-xl p-1.5 rounded font-semibold hover:bg-[#95C5F4]">
       Log Out
     </button>
     </>

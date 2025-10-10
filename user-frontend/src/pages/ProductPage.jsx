@@ -156,7 +156,7 @@ function ProductPage(){
             <button
               onClick={handleBuyNow}
               disabled={buyNowLoading || addedToCart}
-              className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 ${
+              className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 hover:bg-[#95C5F4] ${
                 buyNowLoading || addedToCart
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:opacity-90 active:opacity-80 cursor-pointer"

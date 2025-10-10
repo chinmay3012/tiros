@@ -45,9 +45,9 @@ function AccountPage(){
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-6">Account</h1>
       <div className="flex gap-3 border-b mb-6">
-        <button className={`px-3 py-2 ${tab==='profile'?'border-b-2 border-black':''}`} onClick={()=>setTab('profile')}>Profile</button>
-        <button className={`px-3 py-2 ${tab==='orders'?'border-b-2 border-black':''}`} onClick={()=>setTab('orders')}>Orders</button>
-        <button className={`px-3 py-2 ${tab==='payments'?'border-b-2 border-black':''}`} onClick={()=>setTab('payments')}>Payments</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='profile'?'border-b-2 border-black':''}`} onClick={()=>setTab('profile')}>Profile</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='orders'?'border-b-2 border-black':''}`} onClick={()=>setTab('orders')}>Orders</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='payments'?'border-b-2 border-black':''}`} onClick={()=>setTab('payments')}>Payments</button>
       </div>
 
       {tab==='profile' && (
@@ -76,7 +76,7 @@ function AccountPage(){
             </div>
           </div>
           {message && <div className="text-sm text-gray-600">{message}</div>}
-          <button disabled={saving} onClick={saveProfile} className="px-4 py-2 bg-black text-white rounded">
+          <button disabled={saving} onClick={saveProfile} className="px-4 py-2 bg-black text-white rounded hover:bg-[#95C5F4]">
             {saving? 'Saving...' : 'Save'}
           </button>
         </div>
@@ -91,7 +91,7 @@ function AccountPage(){
               <p className="text-gray-500 mb-6">Your order history will appear here</p>
               <button
                 onClick={() => navigate("/")}
-                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+                className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors hover:bg-[#95C5F4]"
               >
                 Start Shopping
               </button>

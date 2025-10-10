@@ -21,7 +21,7 @@ function CartPage() {
           <p className="text-gray-500 mb-6">Add some products to get started!</p>
           <button
             onClick={() => navigate("/")}
-            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors"
+            className="bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors hover:bg-[#95C5F4]"
           >
             Continue Shopping
           </button>
@@ -37,7 +37,7 @@ function CartPage() {
                 <p className="text-xs text-gray-500">Qty: {item.quantity}</p> 
                 <button
                   onClick={() => removeFromCart(item.id)}
-                  className="px-2 py-1 bg-black text-white rounded hover:bg-red-600 text-sm mt-1">
+                  className="px-2 py-1 bg-black text-white rounded hover:bg-red-600 text-sm mt-1 hover:bg-[#95C5F4]">
                   Remove
                 </button>
               </div>
@@ -57,7 +57,7 @@ function CartPage() {
           </div>
           <div>
           <button 
-            className="mt-4 w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 font-medium transition-colors" 
+            className="mt-4 w-full bg-green-500 text-white py-3 rounded-lg hover:bg-green-600 font-medium transition-colors hover:bg-[#95C5F4]" 
             onClick={() => {
               if (!isAuthenticated) {
                 navigate('/login');
