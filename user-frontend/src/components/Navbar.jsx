@@ -141,11 +141,11 @@ function Navbar(){
           
           {isAuthenticated && (
             <div className="relative">
-              <button className="p-1 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={()=>navigate("/cart")}>
-                <img src="/cart-icon.png" alt="Cart" className="w-[60px] h-[60px]" />
+              <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={()=>navigate("/cart")}>
+                <img src="/cart-icon.png" alt="Cart" className="w-5 h-5" />
               </button>
               {cartItems?.length > 0 && (
-                <span className="absolute top-1 right-1 bg-yellow-400 text-black text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
+                <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
                   {cartItems.reduce((sum, it)=> sum + (it.quantity||1), 0)}
                 </span>
               )}
