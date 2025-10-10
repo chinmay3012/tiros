@@ -24,7 +24,7 @@ function RegisterPage(){
         // Navigate to home page after showing notification
         setTimeout(() => {
           navigate("/");
-        }, 3000);
+        }, 2000);
       } else {
         // If auto-login fails, navigate to login page
         setTimeout(() => {
