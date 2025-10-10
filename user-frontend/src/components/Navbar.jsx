@@ -215,7 +215,7 @@ function Navbar(){
           </div>  
         )}
         
-        <hr style={{color : "lightgray"}} className="mt-5"></hr>
+        <hr style={{color : "lightgray"}} className="mt-0"></hr>
 
         <div className="bg-black text-white items-center font-normal flex p-1 mt-1">
         <Marquee className="space-x-2.5" ><span className="text-xs uppercase tracking-wider text-gray-200">NEW DROP - NOW LIVE !!</span></Marquee>
