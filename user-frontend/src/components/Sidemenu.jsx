@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import HamburgerIcon from '../assets/hamburger';
 import CloseButton from '../assets/cross';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
@@ -22,41 +21,71 @@ function Sidemenu(){
         setIsMenuOpen(false); // Close menu after navigation
     }
 
+    const handleLogout = () => {
+        logout();
+        setIsMenuOpen(false);
+    }
+
+    const handleLogin = () => {
+        navigate('/login');
+        setIsMenuOpen(false);
+    }
+
     function Menu(){
         return (
             <>
-                <button onClick={toggleMenu}>
-                    <HamburgerIcon/>
+                <button onClick={toggleMenu} className="p-1 rounded-full hover:bg-gray-100 transition-colors">
+                    <img src="/hamburger-icon.png" alt="Menu" className="w-[60px] h-[60px]" />
                 </button>
                 {isMenuOpen && (
-                    <div className={`fixed top-0 right-0 w-[55%] transition-transform duration-500 h-full z-50 ease-in-out bg-white
-                    rounded-lg ${isMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-                    >
-                        <button onClick={toggleMenu} className="absolute top-10 right-7">
-                            <CloseButton/></button>
-                        <div className="flex flex-col items-start p-4 space-y-5 mt-20 ">
-                            <button onClick={() => handleNavigation("/")} className="text-gray-800 hover:text-blue-600 text-left">Home</button>
-                            <button onClick={() => handleNavigation("/about")} className="text-gray-800 hover:text-blue-600 text-left">About</button>
-                            <button onClick={() => handleNavigation("/cart")} className="text-gray-800 hover:text-blue-600 text-left">Cart</button>
-                            <button onClick={() => handleNavigation("/orders")} className="text-gray-800 hover:text-blue-600 text-left">Orders</button>
-                            <button onClick={() => handleNavigation("/account")} className="text-gray-800 hover:text-blue-600 text-left">Account</button>
-                            <button onClick={() => handleNavigation("/checkout")} className="text-gray-800 hover:text-blue-600 text-left">Checkout</button>
-                            <div className="pt-2">
-                              <div className="text-xs text-gray-500 mb-1">Categories</div>
-                              <div className="flex flex-col space-y-2">
-                                {categories.map(c => (
-                                  <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="text-gray-800 hover:text-blue-600 text-left">{c.name}</button>
-                                ))}
-                                {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
-                              </div>
+                    <>
+                        {/* Backdrop */}
+                        <div 
+                            className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300"
+                            onClick={toggleMenu}
+                        ></div>
+                        
+                        {/* Menu Sidebar */}
+                        <div className={`fixed top-0 left-0 w-[300px] md:w-[350px] transition-transform duration-500 h-full z-50 ease-in-out bg-white
+                        shadow-2xl ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        >
+                            <button onClick={toggleMenu} className="absolute top-6 right-6">
+                                <CloseButton/>
+                            </button>
+                            <div className="flex flex-col items-start p-6 space-y-4 mt-16 overflow-y-auto max-h-[90vh]">
+                                <button onClick={() => handleNavigation("/")} className="text-gray-800 hover:text-green-600 text-left font-medium text-base">Home</button>
+                                <button onClick={() => handleNavigation("/about")} className="text-gray-800 hover:text-green-600 text-left font-medium text-base">About us</button>
+                                <button onClick={() => handleNavigation("/contact")} className="text-gray-800 hover:text-green-600 text-left font-medium text-base">Contact us</button>
+                                
+                                {isAuthenticated && (
+                                    <button onClick={() => handleNavigation("/account")} className="text-gray-800 hover:text-green-600 text-left font-medium text-base">Account</button>
+                                )}
+                                
+                                <div className="pt-2 w-full border-t border-gray-200">
+                                  <div className="text-sm font-semibold text-gray-700 mb-3">Categories</div>
+                                  <div className="flex flex-col space-y-3 pl-2">
+                                    {categories.map(c => (
+                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="text-gray-800 hover:text-green-600 text-left">{c.name}</button>
+                                    ))}
+                                    {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
+                                  </div>
+                                </div>
+                                
+                                {/* Login/Logout Section */}
+                                <div className="pt-2 w-full border-t border-gray-200">
+                                  {isAuthenticated ? (
+                                    <button onClick={handleLogout} className="text-red-600 hover:text-red-700 text-left font-medium text-base">
+                                      Log Out
+                                    </button>
+                                  ) : (
+                                    <button onClick={handleLogin} className="text-green-600 hover:text-green-700 text-left font-medium text-base">
+                                      Login
+                                    </button>
+                                  )}
+                                </div>
                             </div>
-                            {isAuthenticated && (
-                              <button onClick={() => { logout(); setIsMenuOpen(false); }} className="text-gray-800 hover:text-blue-600 text-left mt-4">
-                                Log Out
-                              </button>
-                            )}
                         </div>
-                    </div>
+                    </>
                 )}
             </>
         ) 

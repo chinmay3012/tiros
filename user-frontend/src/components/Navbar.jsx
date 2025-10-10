@@ -1,4 +1,4 @@
-import { useState , useEffect , useRef } from "react";
+import { useState , useEffect } from "react";
 import Marquee from "react-fast-marquee";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
@@ -6,12 +6,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { getImageUrl } from "../utils/imageUtils";
 
-import LoginButton from "./LoginButton";
-import LogoutButton from "./LogoutButton";
 import Sidemenu from "./Sidemenu";
-import LoginMobile from "./LoginMobile";
-import LogoutMobile from "./LogoutMobile";
-import CartPage from "../pages/CartPage";
 
 function Navbar(){
 
@@ -19,42 +14,20 @@ function Navbar(){
     const [searchInput, setSearchInput] = useState("");
     const [searchSuggestions, setSearchSuggestions] = useState([]);
     const [allProducts, setAllProducts] = useState([]);
-    const [categories, setCategories] = useState([]);
-    const [isTopGearOpen, setIsTopGearOpen] = useState(false);
     const [showSuggestions, setShowSuggestions] = useState(false);
 
-    const { isAuthenticated, user, isLoading } = useAuth();
+    const { isAuthenticated } = useAuth();
     const { cartItems } = useCart();
     const navigate = useNavigate();
-
-    // Refs for each dropdown to check for outside clicks
-  const topGearRef = useRef(null);
 
   useEffect(()=>{
     (async()=>{
       try{
-        const [categoriesRes, productsRes] = await Promise.all([
-          api.get('/categories'),
-          api.get('/products')
-        ]);
-        const categoriesList = Array.isArray(categoriesRes.data) ? categoriesRes.data : (categoriesRes.data?.categories || []);
+        const productsRes = await api.get('/products');
         const productsList = Array.isArray(productsRes.data) ? productsRes.data : (productsRes.data?.products || []);
-        setCategories(categoriesList);
         setAllProducts(productsList);
       }catch(e){ /* ignore */ }
     })();
-    const handleClicksOutside = (event)=> {
-        if(topGearRef.current && !topGearRef.current.contains(event.target)){
-            setIsTopGearOpen(false);
-        }
-    }
-    // Add event listener for clicks outside the dropdowns
-    window.addEventListener("click" , handleClicksOutside);
-
-    // Cleanup function to remove the event listener
-    return () => {
-        window.removeEventListener("click", handleClicksOutside);
-    }
   } , [])
 
   // Search suggestions effect
@@ -73,9 +46,6 @@ function Navbar(){
       setShowSuggestions(false);
     }
   }, [searchInput, allProducts]);
-
-    // Function to toggle dropdowns
-  const toggleDropdown = () => setIsTopGearOpen(!isTopGearOpen);
 
   // Search functions
   const handleSearch = (query = searchInput) => {
@@ -141,8 +111,14 @@ function Navbar(){
           }
         `}
       </style>
-        <nav className="mt-6 flex sticky items-center justify-between px-4 mb-1 top-0 z-20 bg-white">
-            <div className="ml-0">
+        <nav className="mt-2 flex sticky items-center justify-between px-4 py-2 top-0 z-20 bg-white">
+            {/* Hamburger Icon - Left Side */}
+            <div className="flex items-center">
+              <Sidemenu />
+            </div>
+
+            {/* TOPSHOT Logo - Center */}
+            <div className="absolute left-1/2 transform -translate-x-1/2">
                 <a href="/" className="transition-colors duration-300 ease-in-out 
                 hover:bg-clip-text hover:text-transparent hover:bg-gradient-to-r hover:from-red-500 hover:to-green-500"
                 style={{
@@ -154,86 +130,28 @@ function Navbar(){
                     textAlign: 'center'
                 }}>TOPSHOT</a>
             </div>
-            <div className="relative hidden md:flex text-sm" ref={topGearRef}>
-            <button 
-              className="flex items-center gap-1 focus:outline-none hover:text-green-600 transition-colors"
-              onClick={toggleDropdown}
-            >
-              CATEGORIES 
-              <svg className={`w-3 h-3 transition-transform duration-300 ${isTopGearOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {isTopGearOpen && (
-              <div className="absolute top-full mt-2 bg-white shadow-lg rounded-md border border-gray-100 z-10 w-48">
-                <ul className="py-2 text-gray-800">
-                  {categories.map(c=> (
-                    <li key={c._id}><button onClick={()=>{setIsTopGearOpen(false); navigate(`/categories/${c._id}`)}} className="block w-full text-left px-4 py-2 hover:bg-gray-100">{c.name}</button></li>
-                  ))}
-                  {categories.length===0 && (<li className="px-4 py-2 text-gray-400">No categories</li>)}
-                </ul>
-              </div>
-            )}
-          </div>
-            {/* Search Icon */}
+
+            {/* Right Side - Search and Cart */}
             <div className="flex items-center space-x-1">
             <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={()=>setSearchQuery(!searchQuery)}>
             <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
-
-            {/* Mobile auth buttons removed; logout now lives inside the side menu */}
-            {/* Mobile auth buttons removed; use side menu instead */}
-
-          {/* TODO: UI polish */}
-          
-          {/* <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer">
-            <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A5 5 0 017 15h10a5 5 0 011.879 2.804M15 11a3 3 0 10-6 0" />
-            </svg>
-          </button> */}
-
-              {isLoading ? (
-                      <p>Loading...</p>
-                    ) : isAuthenticated ? (
-                      <div className="hidden md:flex items-center md:gap-4 gap-2">
-                        <LogoutButton />
-                      </div>
-                    ) : (
-                      <div className="hidden md:flex">
-                        <LoginButton />
-                      </div>
-                    )}
-
-
           
           {isAuthenticated && (
             <div className="relative">
-              <button className="p-2 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={()=>navigate("/cart")}>
-                <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2a4 4 0 0 1 4 4v2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h2V6a4 4 0 0 1 4-4zM6 10v10h12V10H6zm6-6a2 2 0 0 0-2 2v2h4V6a2 2 0 0 0-2-2z" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
+              <button className="p-1 rounded-full hover:bg-gray-100 transition-colors hover:cursor-pointer" onClick={()=>navigate("/cart")}>
+                <img src="/cart-icon.png" alt="Cart" className="w-[60px] h-[60px]" />
               </button>
               {cartItems?.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] leading-none px-1.5 py-0.5 rounded-full">
+                <span className="absolute top-1 right-1 bg-yellow-400 text-black text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
                   {cartItems.reduce((sum, it)=> sum + (it.quantity||1), 0)}
                 </span>
               )}
             </div>
           )}
-          {isAuthenticated && (
-            <button className="p-2 rounded hover:bg-gray-100 hidden md:inline-flex" onClick={()=>navigate('/account')}>
-              <span className="text-sm">Account</span>
-            </button>
-          )}
             </div>
-
-
-          {/* Hamburger Menu for Mobile */}
-          <div className="md:hidden pt-1.5">
-            <Sidemenu />
-          </div>
         </nav>
 
         {/*Search Bar*/} 
