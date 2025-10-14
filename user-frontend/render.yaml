@@ -6,7 +6,7 @@ services:
     staticPublishPath: ./dist
     routes:
       - type: rewrite
-        source: /*
+        source: /(?!sitemap\.xml|robots\.txt).*
         destination: /index.html
     envVars:
       - key: VITE_API_URL
