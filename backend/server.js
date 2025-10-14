@@ -32,6 +32,9 @@ const allowedOrigins = [
   // Production frontend URLs
   'https://tiros-user.onrender.com',
   'https://tiros.onrender.com', // Admin frontend URL
+  // Custom domain for user frontend
+  'https://topshot.co',
+  'https://www.topshot.co',
   process.env.ADMIN_FRONTEND_URL,
   process.env.USER_FRONTEND_URL,
 ].filter(Boolean); // Remove undefined values
