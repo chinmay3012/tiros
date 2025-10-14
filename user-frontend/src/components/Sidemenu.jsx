@@ -47,23 +47,23 @@ function Sidemenu(){
                                 <CloseButton/>
                             </button>
                             <div className="flex flex-col items-start p-6 space-y-4 mt-16 overflow-y-auto max-h-[90vh]">
-                                <button onClick={() => handleNavigation("/")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Home</button>
-                                <button onClick={() => handleNavigation("/about")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
-                                <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
+                                <button onClick={() => handleNavigation("/")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Home</button>
                                 
                                 {isAuthenticated && (
-                                    <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-medium text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>
+                                    <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>
                                 )}
                                 
                                 <div className="pt-2 w-full border-t border-gray-200">
-                                  <div className="text-sm font-semibold text-gray-700 mb-3">Categories</div>
                                   <div className="flex flex-col space-y-3 pl-2">
                                     {categories.map(c => (
-                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="w-full text-gray-800 text-left hover:bg-[#95C5F4] p-2 rounded">{c.name}</button>
+                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="w-full text-gray-800 text-left font-bold hover:bg-[#95C5F4] p-2 rounded">{c.name}</button>
                                     ))}
                                     {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
                                   </div>
                                 </div>
+                                
+                                <button onClick={() => handleNavigation("/about")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
+                                <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
                                 
                                 {/* Login/Logout Section */}
                                 <div className="pt-2 w-full border-t border-gray-200">
