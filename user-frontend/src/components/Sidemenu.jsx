@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CloseButton from '../assets/cross';
 import api from '../api/axios';
@@ -9,7 +9,28 @@ function Sidemenu(){
     const { isAuthenticated, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
+    const menuRef = useRef(null);
+    
     useEffect(()=>{ (async()=>{ try{ const { data } = await api.get('/categories'); setCategories(Array.isArray(data)?data:(data?.categories||[])); }catch{} })(); },[]);
+
+    // Close menu when clicking outside
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setIsMenuOpen(false);
+            }
+        };
+
+        if (isMenuOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            document.addEventListener('touchstart', handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+            document.removeEventListener('touchstart', handleClickOutside);
+        };
+    }, [isMenuOpen]);
 
     const toggleMenu = () => {
         console.log("Button clicked");
@@ -39,9 +60,14 @@ function Sidemenu(){
                 </button>
                 {isMenuOpen && (
                     <>
+                        {/* Backdrop */}
+                        <div className="fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300" />
+                        
                         {/* Menu Sidebar */}
-                        <div className={`fixed top-0 left-0 w-[300px] md:w-[350px] transition-transform duration-500 h-full z-50 ease-in-out bg-white
-                        shadow-2xl ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
+                        <div 
+                            ref={menuRef}
+                            className={`fixed top-0 left-0 w-[300px] md:w-[350px] transition-transform duration-500 h-full z-50 ease-in-out bg-white
+                            shadow-2xl ${isMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}
                         >
                             <button onClick={toggleMenu} className="absolute top-6 right-6 hover:bg-[#95C5F4]">
                                 <CloseButton/>
