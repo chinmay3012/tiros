@@ -49,10 +49,6 @@ function Sidemenu(){
                             <div className="flex flex-col items-start p-6 space-y-4 mt-16 overflow-y-auto max-h-[90vh]">
                                 <button onClick={() => handleNavigation("/")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Home</button>
                                 
-                                {isAuthenticated && (
-                                    <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>
-                                )}
-                                
                                 <div className="pt-2 w-full border-t border-gray-200">
                                   <div className="flex flex-col space-y-3 pl-2">
                                     {categories.map(c => (
@@ -64,6 +60,10 @@ function Sidemenu(){
                                 
                                 <button onClick={() => handleNavigation("/about")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
                                 <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
+                                
+                                {isAuthenticated && (
+                                    <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>
+                                )}
                                 
                                 {/* Login/Logout Section */}
                                 <div className="pt-2 w-full border-t border-gray-200">
