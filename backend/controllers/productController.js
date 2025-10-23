@@ -6,7 +6,7 @@ import { upload } from "../config/cloudinary.js";
 // @route  POST /api/admin/products
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, imageUrl, section } = req.body;
+    const { name, description, price, stock, category, subcategory, imageUrl, section } = req.body;
     
     // Validate required fields
     if (!name || !price || !category) {
@@ -17,6 +17,16 @@ export const createProduct = async (req, res) => {
     const categoryExists = await Category.findById(category);
     if (!categoryExists) {
       return res.status(400).json({ message: "Category not found" });
+    }
+    
+    // Validate subcategory if provided
+    if (subcategory) {
+      const subcategoryExists = categoryExists.subcategories.find(
+        sub => sub.slug === subcategory && sub.isActive
+      );
+      if (!subcategoryExists) {
+        return res.status(400).json({ message: "Invalid subcategory" });
+      }
     }
     
     // Handle image - either uploaded file or URL
@@ -33,6 +43,7 @@ export const createProduct = async (req, res) => {
       image,
       stock: stock || 0,
       category,
+      subcategory: subcategory || null,
       section: section || "homepage_top"
     });
     
@@ -132,7 +143,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, isActive, imageUrl, section } = req.body;
+    const { name, description, price, stock, category, subcategory, isActive, imageUrl, section } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -147,6 +158,19 @@ export const updateProduct = async (req, res) => {
         return res.status(400).json({ message: "Category not found" });
       }
       product.category = category;
+      
+      // Validate subcategory if provided
+      if (subcategory) {
+        const subcategoryExists = categoryExists.subcategories.find(
+          sub => sub.slug === subcategory && sub.isActive
+        );
+        if (!subcategoryExists) {
+          return res.status(400).json({ message: "Invalid subcategory" });
+        }
+        product.subcategory = subcategory;
+      } else {
+        product.subcategory = null;
+      }
     }
     
     // Handle image - either uploaded file or URL

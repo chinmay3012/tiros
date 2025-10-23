@@ -12,6 +12,7 @@ import {
 export default function Products() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [subcategories, setSubcategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -28,6 +29,7 @@ export default function Products() {
     price: '',
     stock: '',
     category: '',
+    subcategory: '',
     image: '',
     section: 'homepage_top'
   });
@@ -70,6 +72,17 @@ export default function Products() {
     }
   };
 
+  const getSubcategoriesForCategory = (categoryId) => {
+    const category = categories.find(cat => cat._id === categoryId);
+    return category ? category.subcategories.filter(sub => sub.isActive) : [];
+  };
+
+  const handleCategoryChange = (categoryId) => {
+    setFormData({...formData, category: categoryId, subcategory: ''});
+    const subcats = getSubcategoriesForCategory(categoryId);
+    setSubcategories(subcats);
+  };
+
   const handleCreateProduct = () => {
     setEditingProduct(null);
     setFormData({
@@ -78,6 +91,7 @@ export default function Products() {
       price: '',
       stock: '',
       category: '',
+      subcategory: '',
       image: '',
       section: 'homepage_top'
     });
@@ -94,11 +108,18 @@ export default function Products() {
       price: product.price.toString(),
       stock: product.stock.toString(),
       category: product.category._id || product.category,
+      subcategory: product.subcategory || '',
       image: product.image || '',
       section: product.section || 'homepage_top'
     });
     setSelectedFile(null);
     setImagePreview(product.image || null);
+    
+    // Load subcategories for the selected category
+    const categoryId = product.category._id || product.category;
+    const subcats = getSubcategoriesForCategory(categoryId);
+    setSubcategories(subcats);
+    
     setShowProductModal(true);
   };
 
@@ -133,6 +154,7 @@ export default function Products() {
       formDataToSend.append('price', formData.price);
       formDataToSend.append('stock', formData.stock);
       formDataToSend.append('category', formData.category);
+      formDataToSend.append('subcategory', formData.subcategory);
       formDataToSend.append('section', formData.section);
       
       if (selectedFile) {
@@ -252,6 +274,9 @@ export default function Products() {
                   Category
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Subcategory
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -292,6 +317,15 @@ export default function Products() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {product.category?.name || 'N/A'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {product.subcategory ? (
+                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        {product.subcategory}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400">None</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     ${product.price}
@@ -462,7 +496,7 @@ export default function Products() {
                           <select
                             required
                             value={formData.category}
-                            onChange={(e) => setFormData({...formData, category: e.target.value})}
+                            onChange={(e) => handleCategoryChange(e.target.value)}
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                           >
                             <option value="">Select a category</option>
@@ -473,6 +507,23 @@ export default function Products() {
                             ))}
                           </select>
                         </div>
+                        {subcategories.length > 0 && (
+                          <div>
+                            <label className="block text-sm font-medium text-gray-700">Subcategory (Optional)</label>
+                            <select
+                              value={formData.subcategory}
+                              onChange={(e) => setFormData({...formData, subcategory: e.target.value})}
+                              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            >
+                              <option value="">No subcategory</option>
+                              {subcategories.map((subcategory) => (
+                                <option key={subcategory._id} value={subcategory.slug}>
+                                  {subcategory.name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        )}
                         <div>
                           <label className="block text-sm font-medium text-gray-700">Homepage Section</label>
                           <select
