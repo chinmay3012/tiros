@@ -16,6 +16,7 @@ const LoginPage = React.lazy(()=> import('./pages/LoginPage'));
 const RegisterPage = React.lazy(()=> import('./pages/RegisterPage'));
 const OrdersPage = React.lazy(()=> import('./pages/OrdersPage'));
 const CategoryPage = React.lazy(()=> import('./pages/CategoryPage'));
+const SubcategoryPage = React.lazy(()=> import('./pages/SubcategoryPage'));
 const AccountPage = React.lazy(()=> import('./pages/AccountPage'));
 
 const ProtectedRoute = ({ children }) => {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/about" element={<AboutPage />} />
           <Route path="/products/:id" element={<ProductPage />} />
           <Route path="/categories/:id" element={<CategoryPage />} />
+          <Route path="/categories/:categoryId/:subcategorySlug" element={<SubcategoryPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/login" element={<LoginPage />} />

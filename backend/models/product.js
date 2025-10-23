@@ -26,6 +26,10 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       required: true,
     },
+    subcategory: {
+      type: String, // subcategory slug
+      default: null,
+    },
     isActive: {
       type: Boolean,
       default: true,

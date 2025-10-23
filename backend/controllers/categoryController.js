@@ -154,3 +154,119 @@ export const deleteCategory = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// @desc   Add subcategory to category
+// @route  POST /api/admin/categories/:categoryId/subcategories
+export const addSubcategory = async (req, res) => {
+  try {
+    const { name } = req.body;
+    
+    if (!name) {
+      return res.status(400).json({ message: "Subcategory name is required" });
+    }
+    
+    const category = await Category.findById(req.params.categoryId);
+    
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    
+    // Generate slug from name
+    const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    
+    // Check if subcategory already exists
+    const existingSubcategory = category.subcategories.find(
+      sub => sub.name.toLowerCase() === name.toLowerCase()
+    );
+    
+    if (existingSubcategory) {
+      return res.status(400).json({ message: "Subcategory already exists" });
+    }
+    
+    // Add subcategory
+    category.subcategories.push({
+      name,
+      slug,
+      isActive: true
+    });
+    
+    const updatedCategory = await category.save();
+    
+    res.status(201).json(updatedCategory);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc   Update subcategory
+// @route  PUT /api/admin/categories/:categoryId/subcategories/:subcategoryId
+export const updateSubcategory = async (req, res) => {
+  try {
+    const { name, isActive } = req.body;
+    
+    const category = await Category.findById(req.params.categoryId);
+    
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    
+    const subcategory = category.subcategories.id(req.params.subcategoryId);
+    
+    if (!subcategory) {
+      return res.status(404).json({ message: "Subcategory not found" });
+    }
+    
+    // Check if name is being changed and if it already exists
+    if (name && name !== subcategory.name) {
+      const existingSubcategory = category.subcategories.find(
+        sub => sub.name.toLowerCase() === name.toLowerCase() && sub._id.toString() !== req.params.subcategoryId
+      );
+      
+      if (existingSubcategory) {
+        return res.status(400).json({ message: "Subcategory name already exists" });
+      }
+      
+      subcategory.name = name;
+      subcategory.slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    }
+    
+    if (isActive !== undefined) {
+      subcategory.isActive = isActive;
+    }
+    
+    const updatedCategory = await category.save();
+    
+    res.json(updatedCategory);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// @desc   Delete subcategory
+// @route  DELETE /api/admin/categories/:categoryId/subcategories/:subcategoryId
+export const deleteSubcategory = async (req, res) => {
+  try {
+    const category = await Category.findById(req.params.categoryId);
+    
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    
+    const subcategory = category.subcategories.id(req.params.subcategoryId);
+    
+    if (!subcategory) {
+      return res.status(404).json({ message: "Subcategory not found" });
+    }
+    
+    // Check if subcategory has products (you might want to add this check later)
+    // For now, we'll just remove the subcategory
+    
+    subcategory.deleteOne();
+    
+    const updatedCategory = await category.save();
+    
+    res.json({ message: "Subcategory deleted successfully", category: updatedCategory });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

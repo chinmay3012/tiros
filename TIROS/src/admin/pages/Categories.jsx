@@ -5,7 +5,10 @@ import {
   PlusIcon,
   PencilIcon,
   TrashIcon,
-  TagIcon
+  TagIcon,
+  ChevronDownIcon,
+  ChevronRightIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 
 export default function Categories() {
@@ -25,6 +28,13 @@ export default function Categories() {
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
+  const [expandedCategories, setExpandedCategories] = useState(new Set());
+  const [showSubcategoryModal, setShowSubcategoryModal] = useState(false);
+  const [editingSubcategory, setEditingSubcategory] = useState(null);
+  const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+  const [subcategoryFormData, setSubcategoryFormData] = useState({
+    name: ''
+  });
 
   useEffect(() => {
     fetchCategories();
@@ -143,6 +153,71 @@ export default function Categories() {
     }
   };
 
+  const toggleCategoryExpansion = (categoryId) => {
+    const newExpanded = new Set(expandedCategories);
+    if (newExpanded.has(categoryId)) {
+      newExpanded.delete(categoryId);
+    } else {
+      newExpanded.add(categoryId);
+    }
+    setExpandedCategories(newExpanded);
+  };
+
+  const handleAddSubcategory = (categoryId) => {
+    setSelectedCategoryId(categoryId);
+    setEditingSubcategory(null);
+    setSubcategoryFormData({ name: '' });
+    setShowSubcategoryModal(true);
+  };
+
+  const handleEditSubcategory = (categoryId, subcategory) => {
+    setSelectedCategoryId(categoryId);
+    setEditingSubcategory(subcategory);
+    setSubcategoryFormData({ name: subcategory.name });
+    setShowSubcategoryModal(true);
+  };
+
+  const handleSubcategorySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (editingSubcategory) {
+        await api.put(`/admin/categories/${selectedCategoryId}/subcategories/${editingSubcategory._id}`, {
+          name: subcategoryFormData.name
+        });
+      } else {
+        await api.post(`/admin/categories/${selectedCategoryId}/subcategories`, {
+          name: subcategoryFormData.name
+        });
+      }
+      setShowSubcategoryModal(false);
+      fetchCategories();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to save subcategory');
+    }
+  };
+
+  const handleDeleteSubcategory = async (categoryId, subcategoryId) => {
+    if (window.confirm('Are you sure you want to delete this subcategory?')) {
+      try {
+        await api.delete(`/admin/categories/${categoryId}/subcategories/${subcategoryId}`);
+        fetchCategories();
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to delete subcategory');
+      }
+    }
+  };
+
+  const handleToggleSubcategoryActive = async (categoryId, subcategoryId, currentStatus) => {
+    try {
+      await api.put(`/admin/categories/${categoryId}/subcategories/${subcategoryId}`, {
+        isActive: !currentStatus
+      });
+      fetchCategories();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to update subcategory status');
+    }
+  };
+
   if (loading && categories.length === 0) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -222,12 +297,82 @@ export default function Categories() {
                   )}
                 </div>
                 <div className="ml-4 flex-1">
-                  <h3 className="text-lg font-medium text-gray-900">{category.name}</h3>
+                  <div className="flex items-center justify-between">
+                    <h3 className="text-lg font-medium text-gray-900">{category.name}</h3>
+                    <button
+                      onClick={() => toggleCategoryExpansion(category._id)}
+                      className="text-gray-400 hover:text-gray-600"
+                    >
+                      {expandedCategories.has(category._id) ? (
+                        <ChevronDownIcon className="h-5 w-5" />
+                      ) : (
+                        <ChevronRightIcon className="h-5 w-5" />
+                      )}
+                    </button>
+                  </div>
                   <p className="text-sm text-gray-500 truncate">
                     {category.description || 'No description'}
                   </p>
                 </div>
               </div>
+              
+              {/* Subcategories Section */}
+              {expandedCategories.has(category._id) && (
+                <div className="mt-4 border-t border-gray-200 pt-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h4 className="text-sm font-medium text-gray-700">Subcategories</h4>
+                    <button
+                      onClick={() => handleAddSubcategory(category._id)}
+                      className="inline-flex items-center px-2 py-1 text-xs font-medium rounded text-blue-600 hover:text-blue-800 hover:bg-blue-50"
+                    >
+                      <PlusIcon className="h-3 w-3 mr-1" />
+                      Add Subcategory
+                    </button>
+                  </div>
+                  
+                  {category.subcategories && category.subcategories.length > 0 ? (
+                    <div className="space-y-2">
+                      {category.subcategories.map((subcategory) => (
+                        <div key={subcategory._id} className="flex items-center justify-between p-2 bg-gray-50 rounded">
+                          <div className="flex-1">
+                            <span className="text-sm text-gray-900">{subcategory.name}</span>
+                            <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                              subcategory.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+                            }`}>
+                              {subcategory.isActive ? 'Active' : 'Inactive'}
+                            </span>
+                          </div>
+                          <div className="flex space-x-1">
+                            <button
+                              onClick={() => handleEditSubcategory(category._id, subcategory)}
+                              className="text-blue-600 hover:text-blue-900"
+                            >
+                              <PencilIcon className="h-3 w-3" />
+                            </button>
+                            <button
+                              onClick={() => handleToggleSubcategoryActive(category._id, subcategory._id, subcategory.isActive)}
+                              className={`${
+                                subcategory.isActive ? 'text-red-600 hover:text-red-900' : 'text-green-600 hover:text-green-900'
+                              }`}
+                            >
+                              {subcategory.isActive ? 'Deactivate' : 'Activate'}
+                            </button>
+                            <button
+                              onClick={() => handleDeleteSubcategory(category._id, subcategory._id)}
+                              className="text-red-600 hover:text-red-900"
+                            >
+                              <TrashIcon className="h-3 w-3" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-sm text-gray-400">No subcategories yet</p>
+                  )}
+                </div>
+              )}
+              
               <div className="mt-4 flex items-center justify-between">
                 <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                   category.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
@@ -369,6 +514,56 @@ export default function Categories() {
                   <button
                     type="button"
                     onClick={() => setShowCategoryModal(false)}
+                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Subcategory Modal */}
+      {showSubcategoryModal && (
+        <div className="fixed inset-0 z-50 overflow-y-auto" style={{zIndex: 9999}}>
+          <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" onClick={() => setShowSubcategoryModal(false)} />
+            <div className="relative inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" style={{zIndex: 10000}}>
+              <form onSubmit={handleSubcategorySubmit}>
+                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                  <div className="sm:flex sm:items-start">
+                    <div className="mt-3 text-center sm:mt-0 sm:text-left w-full">
+                      <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                        {editingSubcategory ? 'Edit Subcategory' : 'Add New Subcategory'}
+                      </h3>
+                      <div className="space-y-4">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Name</label>
+                          <input
+                            type="text"
+                            required
+                            value={subcategoryFormData.name}
+                            onChange={(e) => setSubcategoryFormData({...subcategoryFormData, name: e.target.value})}
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                            placeholder="Enter subcategory name"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                  <button
+                    type="submit"
+                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  >
+                    {editingSubcategory ? 'Update Subcategory' : 'Create Subcategory'}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setShowSubcategoryModal(false)}
                     className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
                   >
                     Cancel

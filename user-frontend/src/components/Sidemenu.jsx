@@ -9,6 +9,7 @@ function Sidemenu(){
     const { isAuthenticated, logout } = useAuth();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [categories, setCategories] = useState([]);
+    const [expandedCategories, setExpandedCategories] = useState(new Set());
     const menuRef = useRef(null);
     
     useEffect(()=>{ (async()=>{ try{ const { data } = await api.get('/categories'); setCategories(Array.isArray(data)?data:(data?.categories||[])); }catch{} })(); },[]);
@@ -52,6 +53,21 @@ function Sidemenu(){
         setIsMenuOpen(false);
     }
 
+    const toggleCategoryExpansion = (categoryId) => {
+        const newExpanded = new Set(expandedCategories);
+        if (newExpanded.has(categoryId)) {
+            newExpanded.delete(categoryId);
+        } else {
+            newExpanded.add(categoryId);
+        }
+        setExpandedCategories(newExpanded);
+    }
+
+    const handleSubcategoryClick = (categoryId, subcategorySlug) => {
+        navigate(`/categories/${categoryId}/${subcategorySlug}`);
+        setIsMenuOpen(false);
+    }
+
     function Menu(){
         return (
             <>
@@ -73,9 +89,49 @@ function Sidemenu(){
                                 <button onClick={() => handleNavigation("/")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Home</button>
                                 
                                 <div className="pt-2 w-full border-t border-gray-200">
-                                  <div className="flex flex-col space-y-3 pl-2">
+                                  <div className="flex flex-col space-y-2 pl-2">
                                     {categories.map(c => (
-                                      <button key={c._id} onClick={() => handleNavigation(`/categories/${c._id}`)} className="w-full text-gray-800 text-left font-bold hover:bg-[#95C5F4] p-2 rounded">{c.name}</button>
+                                      <div key={c._id} className="w-full">
+                                        <div className="flex items-center justify-between">
+                                          <button 
+                                            onClick={() => handleNavigation(`/categories/${c._id}`)} 
+                                            className="flex-1 text-gray-800 text-left font-bold hover:bg-[#95C5F4] p-2 rounded"
+                                          >
+                                            {c.name}
+                                          </button>
+                                          {c.subcategories && c.subcategories.length > 0 && (
+                                            <button
+                                              onClick={() => toggleCategoryExpansion(c._id)}
+                                              className="p-1 hover:bg-[#95C5F4] rounded"
+                                            >
+                                              {expandedCategories.has(c._id) ? (
+                                                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                                                </svg>
+                                              ) : (
+                                                <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                                                </svg>
+                                              )}
+                                            </button>
+                                          )}
+                                        </div>
+                                        
+                                        {/* Subcategories Dropdown */}
+                                        {expandedCategories.has(c._id) && c.subcategories && c.subcategories.length > 0 && (
+                                          <div className="ml-4 mt-1 space-y-1">
+                                            {c.subcategories.filter(sub => sub.isActive).map(subcategory => (
+                                              <button
+                                                key={subcategory._id}
+                                                onClick={() => handleSubcategoryClick(c._id, subcategory.slug)}
+                                                className="w-full text-gray-600 text-left text-sm hover:bg-[#95C5F4] p-2 rounded pl-4"
+                                              >
+                                                {subcategory.name}
+                                              </button>
+                                            ))}
+                                          </div>
+                                        )}
+                                      </div>
                                     ))}
                                     {categories.length===0 && (<span className="text-gray-400 text-sm">No categories</span>)}
                                   </div>
