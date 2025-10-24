@@ -31,7 +31,8 @@ export default function Products() {
     category: '',
     subcategory: '',
     image: '',
-    section: 'homepage_top'
+    section: 'homepage_top',
+    status: 'available'
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -93,7 +94,8 @@ export default function Products() {
       category: '',
       subcategory: '',
       image: '',
-      section: 'homepage_top'
+      section: 'homepage_top',
+      status: 'available'
     });
     setSelectedFile(null);
     setImagePreview(null);
@@ -110,7 +112,8 @@ export default function Products() {
       category: product.category._id || product.category,
       subcategory: product.subcategory || '',
       image: product.image || '',
-      section: product.section || 'homepage_top'
+      section: product.section || 'homepage_top',
+      status: product.status || 'available'
     });
     setSelectedFile(null);
     setImagePreview(product.image || null);
@@ -156,6 +159,7 @@ export default function Products() {
       formDataToSend.append('category', formData.category);
       formDataToSend.append('subcategory', formData.subcategory);
       formDataToSend.append('section', formData.section);
+      formDataToSend.append('status', formData.status);
       
       if (selectedFile) {
         formDataToSend.append('image', selectedFile);
@@ -286,7 +290,10 @@ export default function Products() {
                   Section
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Status
+                  Product Status
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Active
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Actions
@@ -348,6 +355,19 @@ export default function Products() {
                        product.section === 'homepage_mid' ? 'Mid' :
                        product.section === 'homepage_bottom' ? 'Bottom' :
                        'Top'}
+                    </span>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                      product.status === 'available' ? 'bg-green-100 text-green-800' :
+                      product.status === 'coming_soon' ? 'bg-yellow-500 text-white' :
+                      product.status === 'sold_out' ? 'bg-red-600 text-white' :
+                      'bg-gray-100 text-gray-800'
+                    }`}>
+                      {product.status === 'available' ? '✅ Available' :
+                       product.status === 'coming_soon' ? '⏳ Coming Soon' :
+                       product.status === 'sold_out' ? '❌ Sold Out' :
+                       'Available'}
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
@@ -534,6 +554,18 @@ export default function Products() {
                             <option value="homepage_top">Top Section</option>
                             <option value="homepage_mid">Middle Section</option>
                             <option value="homepage_bottom">Bottom Section</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Product Status</label>
+                          <select
+                            value={formData.status}
+                            onChange={(e) => setFormData({...formData, status: e.target.value})}
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          >
+                            <option value="available">✅ Available</option>
+                            <option value="coming_soon">⏳ Coming Soon</option>
+                            <option value="sold_out">❌ Sold Out</option>
                           </select>
                         </div>
                         <div>

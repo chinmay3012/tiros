@@ -20,7 +20,7 @@ export const listProducts = async (req, res) => {
     const limitNum = Math.min(parseInt(limit || '50', 10), 100);
 
     const products = await Product.find(findQuery)
-      .select("name price image category subcategory section")
+      .select("name price image category subcategory section status")
       .populate("category", "name")
       .sort({ createdAt: -1 })
       .limit(limitNum)

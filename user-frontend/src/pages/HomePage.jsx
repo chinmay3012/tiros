@@ -94,6 +94,7 @@ function HomePage(){
                                     alt={p.name}
                                     title={p.name}
                                     price={`Rs. ${p.price}`}
+                                    status={p.status || 'available'}
                                 />
                             </div>
                         ))}

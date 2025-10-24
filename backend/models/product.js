@@ -43,6 +43,11 @@ const productSchema = new mongoose.Schema(
       enum: ["homepage_top", "homepage_mid", "homepage_bottom"],
       default: "homepage_top"
     },
+    status: {
+      type: String,
+      enum: ["available", "coming_soon", "sold_out"],
+      default: "available"
+    },
   },
   { timestamps: true }
 );

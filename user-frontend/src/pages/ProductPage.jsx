@@ -63,6 +63,9 @@ function ProductPage(){
   }, [id]);
 
   const handleAddToCart = () => {
+    // Disable for non-available products
+    if (product.status !== 'available') return;
+    
     addToCart({ 
       id: product._id, 
       image: getImageUrl(product.image), 
@@ -75,6 +78,9 @@ function ProductPage(){
   };
 
   const handleBuyNow = async () => {
+    // Disable for non-available products
+    if (product.status !== 'available') return;
+    
     // Check if user is authenticated
     if (!isAuthenticated) {
       navigate('/login');
@@ -103,6 +109,8 @@ function ProductPage(){
     }
   };
 
+  const isDisabled = product.status !== 'available';
+
   if(loading) return <div className="p-8 text-center">Loading...</div>;
   if(error) return <div className="p-8 text-center text-red-600">{error}</div>;
   if(!product) return null;
@@ -111,7 +119,19 @@ function ProductPage(){
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className="w-full object-cover rounded" />
+        <div className="relative">
+          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className={`w-full object-cover rounded ${product.status === 'sold_out' ? 'opacity-50' : ''}`} />
+          {/* Status Badge */}
+          {product.status !== 'available' && (
+            <div className="absolute top-4 left-4">
+              <span className={`inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg ${
+                product.status === 'coming_soon' ? 'bg-yellow-500' : 'bg-red-600'
+              }`}>
+                {product.status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out'}
+              </span>
+            </div>
+          )}
+        </div>
         <div>
           <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
           <p className="text-2xl font-semibold text-green-600 mb-2">Rs. {product.price}</p>
@@ -143,21 +163,23 @@ function ProductPage(){
           <div className="space-y-3">
             <button
               onClick={handleAddToCart}
-              disabled={addedToCart}
+              disabled={addedToCart || isDisabled}
               className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 ${
                 addedToCart 
                   ? "bg-green-500 text-white cursor-not-allowed" 
+                  : isDisabled
+                  ? "bg-gray-400 text-white cursor-not-allowed"
                   : "bg-gray-900 hover:bg-gray-800 text-white"
               }`}
             >
-              {addedToCart ? "✓ Added to Cart" : "Add to Cart"}
+              {addedToCart ? "✓ Added to Cart" : isDisabled ? (product.status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out') : "Add to Cart"}
             </button>
             
             <button
               onClick={handleBuyNow}
-              disabled={buyNowLoading || addedToCart}
+              disabled={buyNowLoading || addedToCart || isDisabled}
               className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 hover:bg-[#95C5F4] ${
-                buyNowLoading || addedToCart
+                buyNowLoading || addedToCart || isDisabled
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:opacity-90 active:opacity-80 cursor-pointer"
               } bg-transparent`}
@@ -209,6 +231,7 @@ function ProductPage(){
                     alt={suggestedProduct.name}
                     title={suggestedProduct.name}
                     price={`Rs. ${suggestedProduct.price}`}
+                    status={suggestedProduct.status || 'available'}
                   />
                 </div>
               ))}

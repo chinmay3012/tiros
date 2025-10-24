@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
 
-function ProductsCard({ id, image, alt, title, price }) {
+function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const { addToCart, clearCart } = useCart();
@@ -13,6 +13,9 @@ function ProductsCard({ id, image, alt, title, price }) {
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
+    // Disable for non-available products
+    if (status !== 'available') return;
+    
     addToCart({ id ,image, alt, title, price });
     setAdded(true);
     setTimeout(() => {
@@ -22,6 +25,9 @@ function ProductsCard({ id, image, alt, title, price }) {
 
   const handleBuyNow = async (e) => {
     e.stopPropagation();
+    
+    // Disable for non-available products
+    if (status !== 'available') return;
     
     // Check if user is authenticated
     if (!isAuthenticated) {
@@ -45,14 +51,26 @@ function ProductsCard({ id, image, alt, title, price }) {
     }
   };
 
+  const isDisabled = status !== 'available';
+
   return (
-    <div className="group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative">
+    <div className={`group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative ${isDisabled ? 'opacity-75' : ''}`}>
       <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
-          className="w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105"
+          className={`w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105 ${status === 'sold_out' ? 'opacity-50' : ''}`}
         />
+        {/* Status Badge */}
+        {status !== 'available' && (
+          <div className="absolute top-2 left-2 z-10">
+            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold text-white shadow-md ${
+              status === 'coming_soon' ? 'bg-yellow-500' : 'bg-red-600'
+            }`}>
+              {status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out'}
+            </span>
+          </div>
+        )}
       </div>
       <div className="p-2 text-center">
         <h3 className="font-semibold text-gray-900 text-base">{title}</h3>
@@ -61,19 +79,19 @@ function ProductsCard({ id, image, alt, title, price }) {
       <div className="space-y-1">
         <button
           onClick={handleAddToCart}
-          disabled={added}
+          disabled={added || isDisabled}
           className={`justify-center w-full py-2 px-2 rounded-t-lg flex items-center transition-colors text-sm ${
-            added ? "bg-green-500" : "bg-black hover:bg-gray-800"
-          } text-white cursor-pointer`}
+            added ? "bg-green-500" : isDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
+          } text-white`}
         >
-          {added ? "✓ Added to Cart" : "Add to Cart"}
+          {added ? "✓ Added to Cart" : isDisabled ? (status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out') : "Add to Cart"}
         </button>
         
         <button
           onClick={handleBuyNow}
-          disabled={buyNowLoading || added}
+          disabled={buyNowLoading || added || isDisabled}
           className={`justify-center w-full py-2 px-2 rounded-b-lg flex items-center transition-opacity text-sm font-medium ${
-            buyNowLoading || added 
+            buyNowLoading || added || isDisabled
               ? "opacity-50 cursor-not-allowed" 
               : "hover:opacity-90 active:opacity-80 cursor-pointer"
           } bg-transparent`}

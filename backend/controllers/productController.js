@@ -6,7 +6,7 @@ import { upload } from "../config/cloudinary.js";
 // @route  POST /api/admin/products
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, subcategory, imageUrl, section } = req.body;
+    const { name, description, price, stock, category, subcategory, imageUrl, section, status } = req.body;
     
     // Validate required fields
     if (!name || !price || !category) {
@@ -44,7 +44,8 @@ export const createProduct = async (req, res) => {
       stock: stock || 0,
       category,
       subcategory: subcategory || null,
-      section: section || "homepage_top"
+      section: section || "homepage_top",
+      status: status || "available"
     });
     
     const populatedProduct = await Product.findById(product._id).populate("category", "name");
@@ -143,7 +144,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, subcategory, isActive, imageUrl, section } = req.body;
+    const { name, description, price, stock, category, subcategory, isActive, imageUrl, section, status } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -188,6 +189,7 @@ export const updateProduct = async (req, res) => {
     if (stock !== undefined) product.stock = stock;
     if (isActive !== undefined) product.isActive = isActive;
     if (section !== undefined) product.section = section;
+    if (status !== undefined) product.status = status;
     
     const updatedProduct = await product.save();
     const populatedProduct = await Product.findById(updatedProduct._id).populate("category", "name");

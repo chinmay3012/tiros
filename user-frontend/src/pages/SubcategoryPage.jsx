@@ -79,7 +79,8 @@ function SubcategoryPage(){
               image={p.image} 
               alt={p.name} 
               title={p.name} 
-              price={`Rs. ${p.price}`} 
+              price={`Rs. ${p.price}`}
+              status={p.status || 'available'}
             />
           </div>
         ))}
