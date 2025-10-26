@@ -165,15 +165,6 @@ function HomePage(){
                 </>
                 )}
                 
-                {/* Frame Image Section */}
-                <div className="flex justify-center mt-8 md:mt-12 px-4">
-                    <img 
-                        src="/images/Frame 1686553381 copy.png" 
-                        alt="Frame Image" 
-                        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl object-contain"
-                    />
-                </div>
-                
                 {/* Second Frame Image Section - Full Width */}
                 <div className="w-full mt-6 md:mt-8">
                     <img 
