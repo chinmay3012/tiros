@@ -63,6 +63,9 @@ function ProductPage(){
   }, [id]);
 
   const handleAddToCart = () => {
+    // Ensure product exists before accessing its properties
+    if (!product) return;
+    
     // Disable for non-available products
     if (product.status !== 'available') return;
     
@@ -78,6 +81,9 @@ function ProductPage(){
   };
 
   const handleBuyNow = async () => {
+    // Ensure product exists before accessing its properties
+    if (!product) return;
+    
     // Disable for non-available products
     if (product.status !== 'available') return;
     
@@ -109,20 +115,20 @@ function ProductPage(){
     }
   };
 
-  const isDisabled = product.status !== 'available';
-
   if(loading) return <div className="p-8 text-center">Loading...</div>;
   if(error) return <div className="p-8 text-center text-red-600">{error}</div>;
   if(!product) return null;
+
+  const isDisabled = product.status && product.status !== 'available';
 
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         <div className="relative">
-          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className={`w-full object-cover rounded ${product.status === 'sold_out' ? 'opacity-50' : ''}`} />
+          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className={`w-full object-cover rounded ${(product.status && product.status === 'sold_out') ? 'opacity-50' : ''}`} />
           {/* Status Badge */}
-          {product.status !== 'available' && (
+          {product.status && product.status !== 'available' && (
             <div className="absolute top-4 left-4">
               <span className={`inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg ${
                 product.status === 'coming_soon' ? 'bg-yellow-500' : 'bg-red-600'
@@ -172,7 +178,7 @@ function ProductPage(){
                   : "bg-gray-900 hover:bg-gray-800 text-white"
               }`}
             >
-              {addedToCart ? "✓ Added to Cart" : isDisabled ? (product.status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out') : "Add to Cart"}
+              {addedToCart ? "✓ Added to Cart" : isDisabled ? (product.status === 'coming_soon' ? '⏳ Coming Soon' : (product.status === 'sold_out' ? '❌ Sold Out' : 'Unavailable')) : "Add to Cart"}
             </button>
             
             <button
