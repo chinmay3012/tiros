@@ -220,11 +220,7 @@ function ProductPage(){
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {suggestedProducts.map((suggestedProduct) => (
-                <div 
-                  key={suggestedProduct._id} 
-                  onClick={() => navigate(`/products/${suggestedProduct._id}`)} 
-                  className="cursor-pointer"
-                >
+                <div key={suggestedProduct._id}>
                   <ProductsCard 
                     id={suggestedProduct._id}
                     image={suggestedProduct.image}

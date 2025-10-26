@@ -83,11 +83,7 @@ function HomePage(){
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {productList.map((p) => (
-                            <div 
-                                key={p._id} 
-                                onClick={() => navigate(`/products/${p._id}`)} 
-                                className="cursor-pointer"
-                            >
+                            <div key={p._id}>
                                 <ProductsCard 
                                     id={p._id}
                                     image={p.image}

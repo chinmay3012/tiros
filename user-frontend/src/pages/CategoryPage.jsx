@@ -45,7 +45,7 @@ function CategoryPage(){
       <h1 className="text-3xl font-bold mb-6">{category?.name || 'Category'}</h1>
       <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((p)=> (
-          <div key={p._id} onClick={()=> navigate(`/products/${p._id}`)} className="cursor-pointer">
+          <div key={p._id}>
             <ProductsCard id={p._id} image={p.image} alt={p.name} title={p.name} price={`Rs. ${p.price}`} status={p.status || 'available'} />
           </div>
         ))}

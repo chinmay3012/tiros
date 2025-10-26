@@ -51,10 +51,18 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
     }
   };
 
+  const handleCardClick = () => {
+    // Navigate to product page when clicking on the card
+    navigate(`/products/${id}`);
+  };
+
   const isDisabled = status !== 'available';
 
   return (
-    <div className={`group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative ${isDisabled ? 'opacity-75' : ''}`}>
+    <div 
+      onClick={handleCardClick}
+      className={`group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative cursor-pointer ${isDisabled ? 'opacity-75' : ''}`}
+    >
       <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
