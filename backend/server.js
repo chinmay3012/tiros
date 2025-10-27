@@ -19,9 +19,6 @@ connectDB();
 
 const app = express();
 
-// Enable gzip compression for better performance
-app.use(express.json({ limit: '10mb' })); // for JSON body parsing
-
 // CORS Configuration - Support both development and production
 const allowedOrigins = [
   'http://localhost:3000',
@@ -48,6 +45,7 @@ const corsOptions = {
     if (!origin) return callback(null, true);
     
     if (allowedOrigins.indexOf(origin) !== -1) {
+      console.log('✅ Allowed by CORS:', origin);
       callback(null, true);
     } else {
       console.log('⚠️ Blocked by CORS:', origin);
@@ -55,13 +53,20 @@ const corsOptions = {
     }
   },
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  optionsSuccessStatus: 200
+  optionsSuccessStatus: 200,
+  preflightContinue: false
 };
 
+// Apply CORS middleware BEFORE anything else
 app.use(cors(corsOptions));
-app.use('/uploads', express.static('uploads')); // Serve uploaded files
+
+// Enable JSON body parsing
+app.use(express.json({ limit: '10mb' }));
+
+// Serve uploaded files
+app.use('/uploads', express.static('uploads'));
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);
