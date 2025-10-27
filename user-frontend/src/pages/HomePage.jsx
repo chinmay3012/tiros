@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import ProductsCard from "../components/ProductsCard";
+import SEO from "../components/SEO";
 import api from "../api/axios";
 
 function HomePage(){
@@ -102,6 +103,14 @@ function HomePage(){
 
         return(
      <>
+        <SEO 
+          title="TIROS | Official Paddle Store"
+          description="Shop the latest fashion trends at TIROS. Premium clothing, fast delivery, and secure checkout."
+          canonical="https://tiros.in/"
+          ogTitle="TIROS | Official Paddle Store"
+          ogDescription="Shop the latest fashion trends at TIROS. Premium clothing, fast delivery, and secure checkout."
+          ogUrl="https://tiros.in/"
+        />
         <div>
                     <HeroSection />
 

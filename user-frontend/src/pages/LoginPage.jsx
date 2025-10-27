@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import SEO from "../components/SEO";
 
 function LoginPage(){
   const { login, isLoading } = useAuth();
@@ -21,7 +22,13 @@ function LoginPage(){
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <>
+      <SEO 
+        title="Login | TOPSHOT"
+        description="Sign in to your TOPSHOT account"
+        robots="noindex, nofollow"
+      />
+      <div className="min-h-screen flex items-center justify-center p-4">
       <form onSubmit={onSubmit} className="w-full max-w-sm border p-6 rounded shadow bg-white">
         <h1 className="text-2xl font-bold mb-4 text-center">Login</h1>
         {error && <p className="text-red-600 text-sm mb-3">{error}</p>}
@@ -36,6 +43,7 @@ function LoginPage(){
         {/* TODO: UI polish */}
       </form>
     </div>
+    </>
   );
 }
 

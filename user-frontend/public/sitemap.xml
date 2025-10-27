@@ -1,16 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Home Page -->
+  <!-- Home Page - Highest Priority -->
   <url>
-    <loc>https://topshot.co</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>1.0</priority>
-  </url>
-  
-  <!-- Home Page Alternative -->
-  <url>
-    <loc>https://www.topshot.co</loc>
+    <loc>https://tiros.in/</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
@@ -18,7 +10,7 @@
   
   <!-- About Page -->
   <url>
-    <loc>https://topshot.co/about</loc>
+    <loc>https://tiros.in/about</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -26,33 +18,9 @@
   
   <!-- Contact Page -->
   <url>
-    <loc>https://topshot.co/contact</loc>
+    <loc>https://tiros.in/contact</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
-  </url>
-  
-  <!-- Login Page -->
-  <url>
-    <loc>https://topshot.co/login</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Register Page -->
-  <url>
-    <loc>https://topshot.co/register</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <!-- Cart Page -->
-  <url>
-    <loc>https://topshot.co/cart</loc>
-    <lastmod>2025-01-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
   </url>
 </urlset>
