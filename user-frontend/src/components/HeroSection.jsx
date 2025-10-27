@@ -15,11 +15,12 @@ function HeroSection() {
                 />
             </div>
             {/* Bottom Image - Mobile Only */}
-            <div className="absolute bottom-0 left-0 right-0 flex sm:hidden items-end justify-center z-15">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex sm:hidden items-end justify-center z-15">
                 <img 
                     src="/images/Exclude copy.png" 
                     alt="Bottom Image" 
-                    className="w-full h-auto object-contain"
+                    style={{ width: '240px', height: '240px' }}
+                    className="object-contain"
                 />
             </div>
             {/* TOPSHOT Logo Overlay */}
