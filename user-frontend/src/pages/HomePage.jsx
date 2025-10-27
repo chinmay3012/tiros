@@ -104,12 +104,12 @@ function HomePage(){
         return(
      <>
         <SEO 
-          title="TIROS | Official Paddle Store"
-          description="Shop the latest fashion trends at TIROS. Premium clothing, fast delivery, and secure checkout."
-          canonical="https://tiros.in/"
-          ogTitle="TIROS | Official Paddle Store"
-          ogDescription="Shop the latest fashion trends at TIROS. Premium clothing, fast delivery, and secure checkout."
-          ogUrl="https://tiros.in/"
+          title="TOPSHOT | Official Paddle Store"
+          description="Shop the latest fashion trends at TOPSHOT. Premium clothing, fast delivery, and secure checkout."
+          canonical="https://topshot.co/"
+          ogTitle="TOPSHOT | Official Paddle Store"
+          ogDescription="Shop the latest fashion trends at TOPSHOT. Premium clothing, fast delivery, and secure checkout."
+          ogUrl="https://topshot.co/"
         />
         <div>
                     <HeroSection />

@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 
 # Sitemap location
-Sitemap: https://tiros.in/sitemap.xml
+Sitemap: https://www.topshot.co/sitemap.xml
 
 # Block login and auth pages from indexing
 Disallow: /login
