@@ -6,6 +6,14 @@ function HeroSection() {
                 alt="Hero Image" 
                 className="w-full h-full object-cover object-center"
             />
+            {/* Left Border Image - Mobile Only */}
+            <div className="absolute left-0 top-0 h-full flex sm:hidden items-center z-5">
+                <img 
+                    src="/images/Image copy.png" 
+                    alt="Left Border Image" 
+                    className="h-full w-auto object-contain object-left"
+                />
+            </div>
             {/* TOPSHOT Logo Overlay */}
             <div className="absolute inset-0 flex items-center justify-center z-10">
                 <h1 
