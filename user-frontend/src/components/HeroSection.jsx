@@ -15,13 +15,25 @@ function HeroSection() {
                 />
             </div>
             {/* Bottom Image - Mobile Only */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex sm:hidden items-end justify-center z-15">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col sm:hidden items-center justify-center z-15 mb-2">
                 <img 
                     src="/images/Exclude copy.png" 
                     alt="Bottom Image" 
-                    style={{ width: '240px', height: '240px' }}
-                    className="object-contain"
+                    style={{ width: '60px', height: '80px' }}
+                    className="object-contain mb-1"
                 />
+                <p 
+                    className="text-white text-center"
+                    style={{
+                        fontFamily: 'Kode Mono, monospace',
+                        fontWeight: 150,
+                        fontStyle: 'normal',
+                        fontSize: '10px',
+                        letterSpacing: '0%'
+                    }}
+                >
+                    PICKLEBALL STORE
+                </p>
             </div>
             {/* TOPSHOT Logo Overlay */}
             <div className="absolute inset-0 flex items-center justify-center z-10">
