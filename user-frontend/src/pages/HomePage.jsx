@@ -23,7 +23,8 @@ function HomePage(){
             (async ()=>{
                 try{
                     const q = (params.get('q')||'').toLowerCase();
-                    const res = await api.get("/products", { params: { search: q || undefined, limit: 48 } });
+                    // Reduce limit to 30 for faster loading on free Render tier
+                    const res = await api.get("/products", { params: { search: q || undefined, limit: 30 } });
                     if(isMounted){
                         const data = res.data;
                         const list = Array.isArray(data) ? data : (data?.products || []);

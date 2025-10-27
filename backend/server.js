@@ -19,6 +19,9 @@ connectDB();
 
 const app = express();
 
+// Enable gzip compression for better performance
+app.use(express.json({ limit: '10mb' })); // for JSON body parsing
+
 // CORS Configuration - Support both development and production
 const allowedOrigins = [
   'http://localhost:3000',
@@ -58,7 +61,6 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.use(express.json()); // for JSON body parsing
 app.use('/uploads', express.static('uploads')); // Serve uploaded files
 
 // Admin Routes

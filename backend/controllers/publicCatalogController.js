@@ -19,13 +19,15 @@ export const listProducts = async (req, res) => {
     }
     const limitNum = Math.min(parseInt(limit || '50', 10), 100);
 
+    // Remove .populate() to avoid N+1 query problem - category info is not needed for list view
     const products = await Product.find(findQuery)
-      .select("name price image category subcategory section status")
-      .populate("category", "name")
+      .select("name price image category subcategory section status createdAt")
       .sort({ createdAt: -1 })
       .limit(limitNum)
       .lean();
 
+    // Set cache headers for better performance
+    res.set('Cache-Control', 'public, max-age=300'); // 5 minute cache
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
