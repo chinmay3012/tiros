@@ -176,12 +176,25 @@ function HomePage(){
                 )}
                 
                 {/* Vector 704 Image Section - Mobile Only */}
-                <div className="w-full mt-6 md:mt-8 md:hidden">
+                <div className="w-full mt-6 md:mt-8 md:hidden relative">
                     <img 
                         src="/images/Vector 704 copy.png" 
                         alt="Vector 704 Image" 
                         className="w-full h-auto object-cover"
                     />
+                    <div className="absolute inset-0 flex items-center justify-center p-6" style={{ zIndex: 10 }}>
+                        <p 
+                            className="text-white text-center"
+                            style={{
+                                fontFamily: 'Kode Mono, monospace',
+                                fontWeight: 400,
+                                fontSize: '16px',
+                                lineHeight: '24px'
+                            }}
+                        >
+                            Topshot represents the bold edge of pickleball — dynamic, disruptive, and unapologetically Futuristic. Whether you're on the court or on your feed, Topshot gives you the tools to make your mark
+                        </p>
+                    </div>
                 </div>
                 
                 {/* Second Frame Image Section - Full Width */}
