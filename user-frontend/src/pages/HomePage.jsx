@@ -175,6 +175,15 @@ function HomePage(){
                 </>
                 )}
                 
+                {/* Vector 704 Image Section */}
+                <div className="w-full mt-6 md:mt-8">
+                    <img 
+                        src="/images/Vector 704 copy.png" 
+                        alt="Vector 704 Image" 
+                        className="w-full h-auto object-cover"
+                    />
+                </div>
+                
                 {/* Second Frame Image Section - Full Width */}
                 <div className="w-full mt-6 md:mt-8">
                     <img 
