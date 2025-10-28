@@ -7,7 +7,7 @@ console.log("🔗 API Base URL:", apiUrl);
 const api = axios.create({
   baseURL: apiUrl,
   withCredentials: true, // Include credentials in requests
-  timeout: 10000, // 10 second timeout
+  timeout: 30000, // 30 second timeout for cold starts
 });
 
 api.interceptors.request.use(
@@ -26,14 +26,28 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Add response interceptor for debugging
+// Add response interceptor for debugging and retry logic
 api.interceptors.response.use(
   (response) => {
     console.log("✅ API Response:", response.config.url, response.status);
     return response;
   },
-  (error) => {
-    console.error("❌ API Error:", error.config?.url, error.message);
+  async (error) => {
+    const config = error.config;
+    
+    // Retry logic for timeout errors
+    const retryCount = config._retryCount || 0;
+    if (error.code === 'ECONNABORTED' && config && retryCount < 2) {
+      config._retryCount = retryCount + 1;
+      console.log(`🔄 Retrying request (${config._retryCount}/2):`, config.url);
+      
+      // Wait before retrying with exponential backoff
+      await new Promise(resolve => setTimeout(resolve, 1000 * config._retryCount));
+      
+      return api(config);
+    }
+    
+    console.error("❌ API Error:", config?.url, error.message);
     if (error.code === 'ECONNABORTED') {
       console.error("⏰ Request timeout");
     }
