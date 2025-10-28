@@ -175,8 +175,8 @@ function HomePage(){
                 </>
                 )}
                 
-                {/* Vector 704 Image Section */}
-                <div className="w-full mt-6 md:mt-8">
+                {/* Vector 704 Image Section - Mobile Only */}
+                <div className="w-full mt-6 md:mt-8 md:hidden">
                     <img 
                         src="/images/Vector 704 copy.png" 
                         alt="Vector 704 Image" 
