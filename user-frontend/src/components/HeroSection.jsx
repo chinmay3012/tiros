@@ -4,7 +4,7 @@ function HeroSection() {
             <img 
                 src="/images/Frame 1000004003-2 copy.png" 
                 alt="Hero Image" 
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-contain"
             />
             {/* Left Border Image - Mobile Only */}
             <div className="absolute left-0 top-0 h-full flex sm:hidden items-center z-5">
