@@ -197,11 +197,20 @@ function HomePage(){
                     </div>
                 </div>
                 
-                {/* Second Frame Image Section - Full Width */}
-                <div className="w-full mt-6 md:mt-8">
+                {/* Second Frame Image Section - Mobile Only */}
+                <div className="w-full mt-6 md:mt-8 md:hidden">
+                    <img 
+                        src="/images/Frame 1686553383-2 copy.png" 
+                        alt="Second Frame Image - Mobile" 
+                        className="w-full h-auto object-cover"
+                    />
+                </div>
+                
+                {/* Second Frame Image Section - Desktop */}
+                <div className="w-full mt-6 md:mt-8 hidden md:block">
                     <img 
                         src="/images/Frame 1686553383 copy.png" 
-                        alt="Second Frame Image" 
+                        alt="Second Frame Image - Desktop" 
                         className="w-full h-auto object-cover"
                     />
                 </div>
