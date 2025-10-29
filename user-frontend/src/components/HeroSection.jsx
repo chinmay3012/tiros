@@ -14,27 +14,12 @@ function HeroSection() {
                     className="h-full w-auto object-contain object-left"
                 />
             </div>
-            {/* Bottom Border - Mobile Only */}
-            <div className="absolute bottom-0 left-0 w-full sm:hidden z-10">
-                <div
-                    aria-hidden
-                    style={{
-                        backgroundImage: "url('/images/Exclude copy.png')",
-                        backgroundRepeat: 'repeat-x',
-                        backgroundPosition: 'center bottom',
-                        backgroundSize: 'contain',
-                        height: '64px',
-                        width: '100%'
-                    }}
-                />
-            </div>
-
-            {/* Bottom Center Emblem + Label - Mobile Only */}
+            {/* Bottom Image - Mobile Only */}
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col sm:hidden items-center justify-center z-15 mb-2">
                 <img 
                     src="/images/Exclude copy.png" 
                     alt="Bottom Image" 
-                    style={{ width: '80px', height: '96px' }}
+                    style={{ width: '60px', height: '80px' }}
                     className="object-contain mb-1"
                 />
                 <p 
@@ -43,7 +28,7 @@ function HeroSection() {
                         fontFamily: 'Kode Mono, monospace',
                         fontWeight: 150,
                         fontStyle: 'normal',
-                        fontSize: '11px',
+                        fontSize: '10px',
                         letterSpacing: '0%'
                     }}
                 >
