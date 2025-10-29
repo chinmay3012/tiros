@@ -215,6 +215,9 @@ function HomePage(){
                     />
                 </div>
                 
+                {/* Content sections hidden on mobile - Pro Sport Journey to Discover More */}
+                <div className="hidden md:block">
+                
                 {/* Pro Sport Journey Section */}
                 <div className="w-full mt-8 md:mt-12" style={{ backgroundColor: '#EDEDED' }}>
                     <div className="container mx-auto px-4 py-16 md:py-20">
@@ -384,6 +387,10 @@ function HomePage(){
                         <button className="text-blue-600 hover:text-blue-800 transition-colors font-medium">DISCOVER MORE &gt;</button>
                         {/* TODO: UI polish */}
                 </div>
+                
+                </div>
+                {/* End of content hidden on mobile */}
+                
             </section>
        </div>
        
