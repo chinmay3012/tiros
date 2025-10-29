@@ -1,10 +1,17 @@
 function HeroSection() {
     return (
-        <section className="relative w-full h-[40vh] sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
+        <section className="relative w-full h-[55vh] sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
+            {/* Mobile hero image: extend length (taller) without increasing width */}
+            <img 
+                src="/images/Frame 1000004003 copy.png" 
+                alt="Hero Image Mobile" 
+                className="w-full h-full object-cover sm:hidden"
+            />
+            {/* Desktop/Tablet hero image */}
             <img 
                 src="/images/Frame 1000004003-2 copy.png" 
                 alt="Hero Image" 
-                className="w-full h-full object-cover md:h-auto md:object-contain"
+                className="hidden sm:block w-full h-full object-cover md:h-auto md:object-contain"
             />
             {/* Left Border Image - Mobile Only */}
             <div className="absolute left-0 top-0 h-full flex sm:hidden items-center z-5">
