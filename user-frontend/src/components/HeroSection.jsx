@@ -2,7 +2,7 @@ function HeroSection() {
     return (
         <section className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] flex items-center justify-center bg-gray-100">
             <img 
-                src="/images/Frame 1000004003 copy.png" 
+                src="/images/Frame 1000004003-2 copy.png" 
                 alt="Hero Image" 
                 className="w-full h-full object-cover object-center"
             />
