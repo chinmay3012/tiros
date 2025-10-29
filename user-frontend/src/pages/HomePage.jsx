@@ -187,7 +187,7 @@ function HomePage(){
                             className="text-white text-center"
                             style={{
                                 fontFamily: 'Kode Mono, monospace',
-                                fontWeight: 400,
+                                fontWeight: 580,
                                 fontSize: '16px',
                                 lineHeight: '24px'
                             }}
