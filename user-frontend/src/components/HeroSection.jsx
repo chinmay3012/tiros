@@ -43,7 +43,7 @@ function HeroSection() {
                         fontFamily: 'Kode Mono, monospace',
                         fontWeight: 500,
                         fontStyle: 'normal',
-                        fontSize: 'clamp(60px, 9vw, 280px)',
+                        fontSize: 'clamp(60px, 15vw, 280px)',
                         lineHeight: '367.54px',
                         letterSpacing: '0%',
                         textAlign: 'center',
