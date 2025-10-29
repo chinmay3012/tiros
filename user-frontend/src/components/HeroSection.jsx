@@ -1,10 +1,10 @@
 function HeroSection() {
     return (
-        <section className="relative w-full h-[40vh] sm:h-[50vh] md:h-[60vh] lg:h-[70vh] flex items-center justify-center bg-gray-100">
+        <section className="relative w-full h-[40vh] sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
             <img 
                 src="/images/Frame 1000004003-2 copy.png" 
                 alt="Hero Image" 
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover md:h-auto md:object-contain"
             />
             {/* Left Border Image - Mobile Only */}
             <div className="absolute left-0 top-0 h-full flex sm:hidden items-center z-5">
@@ -43,7 +43,7 @@ function HeroSection() {
                         fontFamily: 'Kode Mono, monospace',
                         fontWeight: 500,
                         fontStyle: 'normal',
-                        fontSize: 'clamp(60px, 15vw, 280px)',
+                        fontSize: 'clamp(60px, 9vw, 280px)',
                         lineHeight: '367.54px',
                         letterSpacing: '0%',
                         textAlign: 'center',
