@@ -1,9 +1,9 @@
 function HeroSection() {
     return (
-        <section className="relative w-full h-[55vh] sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
-            {/* Mobile hero image: extend length (taller) without increasing width */}
+        <section className="relative w-full h-screen sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
+            {/* Mobile hero image: single full-screen image */}
             <img 
-                src="/images/Frame 1000004003 copy.png" 
+                src="/images/Frame 1686553400 copy.png" 
                 alt="Hero Image Mobile" 
                 className="w-full h-full object-cover sm:hidden"
             />
@@ -13,37 +13,8 @@ function HeroSection() {
                 alt="Hero Image" 
                 className="hidden sm:block w-full h-full object-cover md:h-auto md:object-contain"
             />
-            {/* Left Border Image - Mobile Only */}
-            <div className="absolute left-0 top-0 h-full flex sm:hidden items-center z-5">
-                <img 
-                    src="/images/Image copy.png" 
-                    alt="Left Border Image" 
-                    className="h-full w-auto object-contain object-left"
-                />
-            </div>
-            {/* Bottom Image - Mobile Only */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col sm:hidden items-center justify-center z-15 mb-2">
-                <img 
-                    src="/images/Exclude copy.png" 
-                    alt="Bottom Image" 
-                    style={{ width: '60px', height: '80px' }}
-                    className="object-contain mb-1"
-                />
-                <p 
-                    className="text-white text-center"
-                    style={{
-                        fontFamily: 'Kode Mono, monospace',
-                        fontWeight: 150,
-                        fontStyle: 'normal',
-                        fontSize: '10px',
-                        letterSpacing: '0%'
-                    }}
-                >
-                    PICKLEBALL STORE
-                </p>
-            </div>
-            {/* TOPSHOT Logo Overlay */}
-            <div className="absolute inset-0 flex items-center justify-center z-10">
+            {/* TOPSHOT Logo Overlay - hidden on mobile */}
+            <div className="hidden sm:flex absolute inset-0 items-center justify-center z-10">
                 <h1 
                     className="text-white font-medium text-center"
                     style={{
