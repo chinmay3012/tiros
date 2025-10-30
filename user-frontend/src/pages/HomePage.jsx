@@ -44,7 +44,7 @@ function HomePage(){
         useEffect(() => {
             const updateItemsPerView = () => {
                 if (window.innerWidth < 768) {
-                    setItemsPerView(2);
+                    setItemsPerView(1);
                 } else if (window.innerWidth < 1024) {
                     setItemsPerView(3);
                 } else {
@@ -83,7 +83,7 @@ function HomePage(){
                             </p>
                         )}
                     </div>
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {productList.map((p) => (
                             <div key={p._id}>
                                 <ProductsCard 
