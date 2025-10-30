@@ -109,7 +109,11 @@ function HomePage(){
                                     aria-label="Previous"
                                     disabled={start === 0}
                                 >
-                                    <span className="text-gray-700">‹</span>
+                                    <img
+                                        src={`data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>')}`}
+                                        alt="Prev"
+                                        className="w-4 h-4"
+                                    />
                                 </button>
                                 <button 
                                     className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
@@ -117,7 +121,11 @@ function HomePage(){
                                     aria-label="Next"
                                     disabled={start + itemsPerView >= productList.length}
                                 >
-                                    <span className="text-gray-700">›</span>
+                                    <img
+                                        src={`data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>')}`}
+                                        alt="Next"
+                                        className="w-4 h-4"
+                                    />
                                 </button>
                             </>
                         )}
@@ -136,20 +144,30 @@ function HomePage(){
                             ))}
                         </div>
                         {canSlide && (
-                            <div className="mt-4 flex md:hidden items-center justify-center space-x-4">
+                            <div className="mt-4 flex md:hidden items-center justify-center space-x-6">
                                 <button 
-                                    className="px-3 py-1 rounded-full border border-gray-300 text-sm disabled:opacity-50"
+                                    className="p-2 rounded-full border border-gray-300 disabled:opacity-50 bg-white"
                                     onClick={handlePrev}
                                     disabled={start === 0}
+                                    aria-label="Previous"
                                 >
-                                    Prev
+                                    <img
+                                        src={`data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>')}`}
+                                        alt="Prev"
+                                        className="w-5 h-5"
+                                    />
                                 </button>
                                 <button 
-                                    className="px-3 py-1 rounded-full border border-gray-300 text-sm disabled:opacity-50"
+                                    className="p-2 rounded-full border border-gray-300 disabled:opacity-50 bg-white"
                                     onClick={handleNext}
                                     disabled={start + itemsPerView >= productList.length}
+                                    aria-label="Next"
                                 >
-                                    Next
+                                    <img
+                                        src={`data:image/svg+xml;utf8,${encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%23666" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>')}`}
+                                        alt="Next"
+                                        className="w-5 h-5"
+                                    />
                                 </button>
                             </div>
                         )}
