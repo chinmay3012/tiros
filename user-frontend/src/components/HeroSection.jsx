@@ -1,6 +1,6 @@
 function HeroSection() {
     return (
-        <section className="relative w-full h-screen sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100">
+        <section className="relative w-full h-screen sm:h-[50vh] md:h-auto lg:h-auto flex items-center justify-center bg-gray-100 pt-5 sm:pt-0">
             {/* Mobile hero image: single full-screen image */}
             <img 
                 src="/images/Frame 1686553400 copy.png" 
