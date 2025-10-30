@@ -111,7 +111,7 @@ function Navbar(){
           }
         `}
       </style>
-        <nav className="mt-2 flex sticky items-center justify-between px-4 py-2 top-0 z-20 bg-white">
+        <nav className="mt-1 flex sticky items-center justify-between px-1 py-1 top-0 z-20 bg-white sm:mt-2 sm:px-4 sm:py-2">
             {/* Hamburger Icon - Left Side */}
             <div className="flex items-center">
               <Sidemenu />
