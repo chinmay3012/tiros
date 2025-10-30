@@ -64,12 +64,29 @@ function HomePage(){
             return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
         };
 
-        // Helper function to render product grid
+        // Helper function to render product grid with slider when overflowing
         const renderProductGrid = (productList, title) => {
             if (productList.length === 0) return null;
             
             const searchTerm = (params.get('q') || '').toLowerCase();
             const isSearchResults = searchTerm && title === "ALL PRODUCTS";
+            const canSlide = productList.length > itemsPerView;
+            const start = Math.min(currentIndex, Math.max(0, productList.length - itemsPerView));
+            const visibleProducts = canSlide 
+              ? productList.slice(start, Math.min(start + itemsPerView, productList.length))
+              : productList;
+
+            const handlePrev = () => {
+                setCurrentIndex((prev) => Math.max(0, prev - itemsPerView));
+            };
+
+            const handleNext = () => {
+                setCurrentIndex((prev) => {
+                    const nextIndex = prev + itemsPerView;
+                    const maxStart = Math.max(0, productList.length - itemsPerView);
+                    return Math.min(maxStart, nextIndex);
+                });
+            };
             
             return (
                 <div className="mb-12">
@@ -83,19 +100,59 @@ function HomePage(){
                             </p>
                         )}
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {productList.map((p) => (
-                            <div key={p._id}>
-                                <ProductsCard 
-                                    id={p._id}
-                                    image={p.image}
-                                    alt={p.name}
-                                    title={p.name}
-                                    price={`Rs. ${p.price}`}
-                                    status={p.status || 'available'}
-                                />
+                    <div className="relative">
+                        {canSlide && (
+                            <>
+                                <button 
+                                    className="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
+                                    onClick={handlePrev}
+                                    aria-label="Previous"
+                                    disabled={start === 0}
+                                >
+                                    <span className="text-gray-700">‹</span>
+                                </button>
+                                <button 
+                                    className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
+                                    onClick={handleNext}
+                                    aria-label="Next"
+                                    disabled={start + itemsPerView >= productList.length}
+                                >
+                                    <span className="text-gray-700">›</span>
+                                </button>
+                            </>
+                        )}
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {visibleProducts.map((p) => (
+                                <div key={p._id}>
+                                    <ProductsCard 
+                                        id={p._id}
+                                        image={p.image}
+                                        alt={p.name}
+                                        title={p.name}
+                                        price={`Rs. ${p.price}`}
+                                        status={p.status || 'available'}
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                        {canSlide && (
+                            <div className="mt-4 flex md:hidden items-center justify-center space-x-4">
+                                <button 
+                                    className="px-3 py-1 rounded-full border border-gray-300 text-sm disabled:opacity-50"
+                                    onClick={handlePrev}
+                                    disabled={start === 0}
+                                >
+                                    Prev
+                                </button>
+                                <button 
+                                    className="px-3 py-1 rounded-full border border-gray-300 text-sm disabled:opacity-50"
+                                    onClick={handleNext}
+                                    disabled={start + itemsPerView >= productList.length}
+                                >
+                                    Next
+                                </button>
                             </div>
-                        ))}
+                        )}
                     </div>
                 </div>
             );
