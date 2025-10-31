@@ -109,7 +109,7 @@ function HomePage(){
                                     aria-label="Previous"
                                     disabled={start === 0}
                                 >
-                                    <span className="text-gray-700">‹</span>
+                                    <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-4 h-4" />
                                 </button>
                                 <button 
                                     className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
@@ -117,7 +117,7 @@ function HomePage(){
                                     aria-label="Next"
                                     disabled={start + itemsPerView >= productList.length}
                                 >
-                                    <span className="text-gray-700">›</span>
+                                    <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-4 h-4" />
                                 </button>
 
                                 {/* Mobile arrows using provided images, centered vertically */}
