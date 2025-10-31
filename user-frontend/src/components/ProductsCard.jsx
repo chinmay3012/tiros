@@ -95,14 +95,14 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
           <img
             src="/images/BUTTON-2 copy.png"
             alt="Add to Cart"
-            className="h-10 md:h-12 w-auto mx-auto pointer-events-none"
+            className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
           />
         </button>
         
         <button
           onClick={handleBuyNow}
           disabled={buyNowLoading || added || isDisabled}
-          className={`justify-center w-full py-2 px-2 rounded-b-lg flex items-center transition-opacity text-sm font-medium ${
+          className={`justify-center w-full py-1 px-2 rounded-b-lg flex items-center transition-opacity text-sm font-medium ${
             buyNowLoading || added || isDisabled
               ? "opacity-50 cursor-not-allowed" 
               : "hover:opacity-90 active:opacity-80 cursor-pointer"
