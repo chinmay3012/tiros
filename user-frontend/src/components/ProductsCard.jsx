@@ -120,7 +120,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
             <img
               src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
               alt="Buy Now"
-              className="h-10 md:h-12 w-auto mx-auto pointer-events-none"
+              className="mx-auto pointer-events-none"
             />
           )}
         </button>
