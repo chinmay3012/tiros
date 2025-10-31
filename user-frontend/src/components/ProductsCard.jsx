@@ -77,7 +77,6 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
             }`}>
               {status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out'}
             </span>
-            
           </div>
         )}
       </div>
