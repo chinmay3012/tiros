@@ -88,7 +88,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
         <button
           onClick={handleAddToCart}
           disabled={added || isDisabled}
-          className={`justify-center w-full px-2 rounded-t-lg flex items-center transition-opacity ${
+          className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
             added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
           } bg-transparent`}
         >
