@@ -118,7 +118,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
             </>
           ) : (
             <img
-              src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
+              src="/images/BUTTON-3 copy.png"
               alt="Buy Now"
               className="mx-auto pointer-events-none"
             />
