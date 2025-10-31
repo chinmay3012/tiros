@@ -224,7 +224,7 @@ function ProductPage(){
               <p className="mt-2 text-gray-600">Loading suggestions...</p>
             </div>
           ) : (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {suggestedProducts.map((suggestedProduct) => (
                 <div key={suggestedProduct._id}>
                   <ProductsCard 
