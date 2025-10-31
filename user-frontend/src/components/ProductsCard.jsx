@@ -84,7 +84,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
         <h3 className="font-semibold text-gray-900 text-base">{title}</h3>
         <p className="text-base text-gray-700">{price}</p>
       </div>
-      <div className="space-y-1">
+      <div className="space-y-0">
         <button
           onClick={handleAddToCart}
           disabled={added || isDisabled}
