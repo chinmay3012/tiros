@@ -117,11 +117,18 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
               Processing...
             </>
           ) : (
-            <img
-              src="/images/BUTTON-3 copy.png"
-              alt="Buy Now"
-              className="mx-auto pointer-events-none"
-            />
+            <>
+              <img
+                src="/images/BUTTON-3 copy.png"
+                alt="Buy Now"
+                className="mx-auto pointer-events-none block sm:hidden"
+              />
+              <img
+                src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
+                alt="Buy Now"
+                className="mx-auto pointer-events-none hidden sm:block"
+              />
+            </>
           )}
         </button>
       </div>
