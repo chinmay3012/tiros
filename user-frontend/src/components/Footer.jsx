@@ -179,17 +179,13 @@ function Footer(){
                             © 2025 TOPSHOT. ALL RIGHTS RESERVED.
                         </p>
                         
-                        {/* Payment Method Badges */}
-                        <div className="flex flex-wrap items-center justify-center gap-2">
-                            {['AMEX', 'Apple Pay', 'Discover', 'Google Pay', 'Klarna', 'Mastercard', 'PayPal', 'Shop Pay', 'Visa', 'Afterpay', 'Cash App', 'Meta Pay', 'Venmo', 'Zelle'].map((method) => (
-                                <div 
-                                    key={method} 
-                                    className="px-3 py-1.5 rounded bg-white bg-opacity-10 hover:bg-opacity-20 transition-all"
-                                    style={{ color: 'hsl(0, 0%, 95%)' }}
-                                >
-                                    <span className="text-xs font-medium">{method}</span>
-                                </div>
-                            ))}
+                        {/* Payment Methods Image */}
+                        <div className="flex items-center justify-center">
+                            <img 
+                                src="/images/image 231 copy.png" 
+                                alt="Payment Methods" 
+                                className="h-auto max-w-full opacity-80 hover:opacity-100 transition-opacity"
+                            />
                         </div>
                     </div>
                 </div>
