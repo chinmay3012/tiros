@@ -88,11 +88,15 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
         <button
           onClick={handleAddToCart}
           disabled={added || isDisabled}
-          className={`justify-center w-full py-2 px-2 rounded-t-lg flex items-center transition-colors text-sm ${
-            added ? "bg-green-500" : isDisabled ? "bg-gray-400 cursor-not-allowed" : "bg-black hover:bg-gray-800"
-          } text-white`}
+          className={`justify-center w-full py-2 px-2 rounded-t-lg flex items-center transition-opacity ${
+            added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
+          } bg-transparent`}
         >
-          {added ? "✓ Added to Cart" : isDisabled ? (status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out') : "Add to Cart"}
+          <img
+            src="/images/BUTTON-2 copy.png"
+            alt="Add to Cart"
+            className="h-10 md:h-12 w-auto mx-auto pointer-events-none"
+          />
         </button>
         
         <button
