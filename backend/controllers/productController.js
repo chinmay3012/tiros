@@ -47,7 +47,7 @@ export const createProduct = async (req, res) => {
       subcategory: subcategory || null,
       section: section || "homepage_top",
       status: status || "available",
-      isHotSelling: isHotSelling || false
+      isHotSelling: isHotSelling === true || isHotSelling === 'true'
     });
     
     const populatedProduct = await Product.findById(product._id).populate("category", "name");
@@ -193,7 +193,7 @@ export const updateProduct = async (req, res) => {
     if (isActive !== undefined) product.isActive = isActive;
     if (section !== undefined) product.section = section;
     if (status !== undefined) product.status = status;
-    if (isHotSelling !== undefined) product.isHotSelling = isHotSelling;
+    if (isHotSelling !== undefined) product.isHotSelling = isHotSelling === true || isHotSelling === 'true';
     
     const updatedProduct = await product.save();
     const populatedProduct = await Product.findById(updatedProduct._id).populate("category", "name");
