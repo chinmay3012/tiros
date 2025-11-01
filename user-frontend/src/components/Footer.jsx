@@ -5,11 +5,11 @@ function Footer(){
         return (
             <footer className="mt-16 border-t border-gray-800" style={{ backgroundColor: 'hsl(220, 13%, 13%)', color: 'hsl(0, 0%, 95%)', fontFamily: 'Poppins, sans-serif' }}>
             <div className="container mx-auto px-4 py-12">
-                {/* Four-column layout - horizontal scroll on mobile */}
-                <div className="flex flex-row gap-8 text-sm overflow-x-auto pb-2 md:grid md:grid-cols-2 lg:grid-cols-4">
+                {/* Four-column layout */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 text-sm">
                     
                     {/* Brand Column */}
-                    <div className="flex-shrink-0 md:col-span-1" style={{ minWidth: '200px' }}>
+                    <div className="col-span-1">
                         <h2 className="text-3xl font-bold tracking-wider mb-6 text-white" style={{ fontFamily: 'Kode Mono, monospace' }}>TOPSHOT</h2>
                         
                         {/* Social Media Icons */}
@@ -66,7 +66,7 @@ function Footer(){
                     </div>
                     
                     {/* Story Column */}
-                    <div className="flex-shrink-0 md:col-span-1" style={{ minWidth: '200px' }}>
+                    <div className="col-span-1">
                         <h3 className="font-semibold mb-4 text-white">OUR STORY</h3>
                         <div className="space-y-3" style={{ color: 'hsl(0, 0%, 60%)' }}>
                             <p className="text-sm">
@@ -90,7 +90,7 @@ function Footer(){
                     </div>
                     
                     {/* Menu Column */}
-                    <div className="flex-shrink-0 md:col-span-1" style={{ minWidth: '200px' }}>
+                    <div className="col-span-1">
                         <h3 className="font-semibold mb-4 text-white">MENU</h3>
                         <ul className="space-y-3">
                             <li>
@@ -127,7 +127,7 @@ function Footer(){
                     </div>
                     
                     {/* Footer Menu Column */}
-                    <div className="flex-shrink-0 md:col-span-1" style={{ minWidth: '200px' }}>
+                    <div className="col-span-1">
                         <h3 className="font-semibold mb-4 text-white">FOOTER MENU</h3>
                         <ul className="space-y-3">
                             <li>
