@@ -87,7 +87,7 @@ function SignUpForDrops() {
                   <img 
                     src="/images/BUTTON-4 copy.png" 
                     alt="Save" 
-                    className="h-auto pointer-events-none"
+                    className="h-10 pointer-events-none"
                   />
                 </button>
               </div>
