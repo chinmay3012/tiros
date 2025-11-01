@@ -450,8 +450,7 @@ function HomePage(){
                 <img 
                     src="/images/Frame 1686553383 copy.png" 
                     alt="Second Frame Image - Desktop" 
-                    className="w-full object-cover"
-                    style={{ maxHeight: '500px', objectPosition: 'center top' }}
+                    className="w-full h-auto"
                 />
             </div>
 
