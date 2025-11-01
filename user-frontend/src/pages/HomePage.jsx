@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import ProductsCard from "../components/ProductsCard";
 import SEO from "../components/SEO";
+import SignUpForDrops from "../components/SignUpForDrops";
 import api from "../api/axios";
 
 function HomePage(){
@@ -454,6 +455,8 @@ function HomePage(){
             </div>
 
        </div>
+
+        <SignUpForDrops />
        
      </>
         )
