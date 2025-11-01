@@ -74,7 +74,7 @@ function SignUpForDrops() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your email"
+                  placeholder="E-mail address"
                   className="w-full px-4 pr-20 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                   disabled={loading}
