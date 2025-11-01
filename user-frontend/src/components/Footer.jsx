@@ -94,32 +94,32 @@ function Footer(){
                         <h3 className="font-semibold mb-4 text-white">MENU</h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link to="/categories/new" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/new" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     New
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories/best-sellers" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/best-sellers" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Best Sellers
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories/library" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/library" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Library
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories/beginner" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/beginner" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Beginner
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories/intermediate" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/intermediate" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Intermediate
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/categories/pro" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/categories/pro" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Pro
                                 </Link>
                             </li>
@@ -131,37 +131,37 @@ function Footer(){
                         <h3 className="font-semibold mb-4 text-white">FOOTER MENU</h3>
                         <ul className="space-y-2">
                             <li>
-                                <Link to="/reviews" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/reviews" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Reviews
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/join-community" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/join-community" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Join community
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/gift-cards" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/gift-cards" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Gift Cards
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/orders" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/orders" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Track Order
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/accessibility" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/accessibility" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Accessibility
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/shipping-returns" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/shipping-returns" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Shipping And Returns
                                 </Link>
                             </li>
                             <li>
-                                <Link to="/contact" className="block hover:translate-x-1 transition-transform" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <Link to="/contact" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
                                     Contact Us
                                 </Link>
                             </li>
