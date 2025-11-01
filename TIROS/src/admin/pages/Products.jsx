@@ -26,6 +26,7 @@ export default function Products() {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
+    displayDescription: '',
     price: '',
     stock: '',
     category: '',
@@ -89,6 +90,7 @@ export default function Products() {
     setFormData({
       name: '',
       description: '',
+      displayDescription: '',
       price: '',
       stock: '',
       category: '',
@@ -107,6 +109,7 @@ export default function Products() {
     setFormData({
       name: product.name,
       description: product.description || '',
+      displayDescription: product.displayDescription || '',
       price: product.price.toString(),
       stock: product.stock.toString(),
       category: product.category._id || product.category,
@@ -154,6 +157,7 @@ export default function Products() {
       const formDataToSend = new FormData();
       formDataToSend.append('name', formData.name);
       formDataToSend.append('description', formData.description);
+      formDataToSend.append('displayDescription', formData.displayDescription);
       formDataToSend.append('price', formData.price);
       formDataToSend.append('stock', formData.stock);
       formDataToSend.append('category', formData.category);
@@ -485,6 +489,16 @@ export default function Products() {
                             value={formData.description}
                             onChange={(e) => setFormData({...formData, description: e.target.value})}
                             rows={3}
+                            className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700">Display Description</label>
+                          <textarea
+                            value={formData.displayDescription}
+                            onChange={(e) => setFormData({...formData, displayDescription: e.target.value})}
+                            rows={2}
+                            placeholder="Short description shown on product cards"
                             className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                           />
                         </div>

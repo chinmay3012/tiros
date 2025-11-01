@@ -81,6 +81,7 @@ function SubcategoryPage(){
               title={p.name} 
               price={`Rs. ${p.price}`}
               status={p.status || 'available'}
+              displayDescription={p.displayDescription}
             />
           </div>
         ))}

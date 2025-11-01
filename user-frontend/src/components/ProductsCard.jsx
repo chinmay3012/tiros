@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
 
-function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
+function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const { addToCart, clearCart } = useCart();
@@ -83,6 +83,9 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
           <p className="text-base text-gray-700 ml-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
         </div>
+        {displayDescription && (
+          <p className="text-sm text-gray-600 mt-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+        )}
       </div>
       <div className="space-y-0">
         <button
