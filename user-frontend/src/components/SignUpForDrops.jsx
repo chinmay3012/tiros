@@ -57,41 +57,89 @@ function SignUpForDrops() {
       />
       <div className="bg-gray-100 py-16" style={{ backgroundColor: 'hsl(0, 0%, 98%)' }}>
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <h2 
-              className="text-3xl font-bold mb-4"
-              style={{ fontFamily: 'Kode Mono, monospace' }}
-            >
-              SIGN UP FOR DROPS
-            </h2>
-            <p className="text-gray-600 mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              Be the first to know about our new releases and exclusive drops.
-            </p>
-            
-            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center max-w-2xl mx-auto">
-              <div className="relative w-full">
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="E-mail address"
-                  className="w-full px-4 pr-20 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
-                  style={{ fontFamily: 'Poppins, sans-serif' }}
-                  disabled={loading}
-                />
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+          <div className="max-w-5xl mx-auto">
+            {/* Mobile layout: stacked */}
+            <div className="md:hidden text-center">
+              <h2 
+                className="text-3xl font-bold mb-4"
+                style={{ fontFamily: 'Kode Mono, monospace' }}
+              >
+                SIGN UP FOR DROPS
+              </h2>
+              <p className="text-gray-600 mb-8" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                Be the first to know about our new releases and exclusive drops.
+              </p>
+            </div>
+
+            {/* Desktop layout: horizontal */}
+            <div className="hidden md:flex items-center gap-8">
+              <div className="flex-1">
+                <h2 
+                  className="text-3xl font-bold mb-2"
+                  style={{ fontFamily: 'Kode Mono, monospace' }}
                 >
-                  <img 
-                    src="/images/BUTTON-4 copy.png" 
-                    alt="Save" 
-                    className="h-10 pointer-events-none"
-                  />
-                </button>
+                  SIGN UP FOR DROPS
+                </h2>
+                <p className="text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>
+                  Be the first to know about our new releases and exclusive drops.
+                </p>
               </div>
-            </form>
+              
+              <div className="flex-1">
+                <form onSubmit={handleSubmit}>
+                  <div className="relative">
+                    <input
+                      type="email"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="E-mail address"
+                      className="w-full px-4 pr-20 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
+                      style={{ fontFamily: 'Poppins, sans-serif' }}
+                      disabled={loading}
+                    />
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="absolute right-2 top-1/2 -translate-y-1/2 hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <img 
+                        src="/images/BUTTON-4 copy.png" 
+                        alt="Save" 
+                        className="h-10 pointer-events-none"
+                      />
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+
+            {/* Mobile form */}
+            <div className="md:hidden">
+              <form onSubmit={handleSubmit}>
+                <div className="relative w-full">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="E-mail address"
+                    className="w-full px-4 pr-20 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
+                    style={{ fontFamily: 'Poppins, sans-serif' }}
+                    disabled={loading}
+                  />
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <img 
+                      src="/images/BUTTON-4 copy.png" 
+                      alt="Save" 
+                      className="h-10 pointer-events-none"
+                    />
+                  </button>
+                </div>
+              </form>
+            </div>
 
             {error && (
               <p className="mt-4 text-red-600 text-sm" style={{ fontFamily: 'Poppins, sans-serif' }}>
