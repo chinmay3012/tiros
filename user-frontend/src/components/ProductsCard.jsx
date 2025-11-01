@@ -61,13 +61,13 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
   return (
     <div 
       onClick={handleCardClick}
-      className={`group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative cursor-pointer ${isDisabled ? 'opacity-75' : ''}`}
+      className="group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative cursor-pointer"
     >
       <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
-          className={`w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105 ${status === 'sold_out' ? 'opacity-50' : ''}`}
+          className="w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105"
         />
         {/* Status Badge - Only for coming_soon, removed for sold_out */}
         {status === 'coming_soon' && (

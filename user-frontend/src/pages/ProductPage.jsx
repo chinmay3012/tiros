@@ -126,14 +126,12 @@ function ProductPage(){
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
         <div className="relative">
-          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className={`w-full object-cover rounded ${(product.status && product.status === 'sold_out') ? 'opacity-50' : ''}`} />
-          {/* Status Badge */}
-          {product.status && product.status !== 'available' && (
+          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className="w-full object-cover rounded" />
+          {/* Status Badge - Only for coming_soon, removed for sold_out */}
+          {product.status === 'coming_soon' && (
             <div className="absolute top-4 left-4">
-              <span className={`inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg ${
-                product.status === 'coming_soon' ? 'bg-yellow-500' : 'bg-red-600'
-              }`}>
-                {product.status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out'}
+              <span className="inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg bg-yellow-500">
+                ⏳ Coming Soon
               </span>
             </div>
           )}
@@ -184,10 +182,10 @@ function ProductPage(){
             <button
               onClick={handleBuyNow}
               disabled={buyNowLoading || addedToCart || isDisabled}
-              className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 hover:bg-[#95C5F4] ${
+              className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 ${
                 buyNowLoading || addedToCart || isDisabled
                   ? "opacity-50 cursor-not-allowed"
-                  : "hover:opacity-90 active:opacity-80 cursor-pointer"
+                  : ""
               } bg-transparent`}
             >
               {buyNowLoading ? (
@@ -198,6 +196,12 @@ function ProductPage(){
                   </svg>
                   Processing...
                 </div>
+              ) : product.status === 'sold_out' ? (
+                <img
+                  src="/images/BUTTON-5 copy.png"
+                  alt="Sold Out"
+                  className="h-12 w-auto mx-auto pointer-events-none"
+                />
               ) : (
                 <img
                   src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
