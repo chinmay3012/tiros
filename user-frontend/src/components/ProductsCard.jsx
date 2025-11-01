@@ -79,6 +79,14 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
             </span>
           </div>
         )}
+        {/* Hot Selling Badge */}
+        {isHotSelling && (
+          <div className="absolute top-2 right-2 z-10">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-red-600 border-2 border-red-600 bg-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              HOT SELLING
+            </span>
+          </div>
+        )}
       </div>
       <div className="px-2 pt-1 pb-3">
         <div className="flex justify-between items-start">
@@ -90,15 +98,8 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
         {displayDescription && (
           <p className="text-sm text-gray-600 mt-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
         )}
-        {isHotSelling && (
-          <div className="mt-2 flex justify-end">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-red-600 border-2 border-red-600" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              HOT SELLING
-            </span>
-          </div>
-        )}
       </div>
-      <div className="space-y-0 pb-2">
+      <div className="space-y-0">
         <button
           onClick={handleAddToCart}
           disabled={added || isDisabled}
