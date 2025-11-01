@@ -137,8 +137,8 @@ function ProductPage(){
           )}
         </div>
         <div>
-          <h1 className="text-3xl font-bold mb-4">{product.name}</h1>
-          <p className="text-2xl font-semibold text-green-600 mb-2">Rs. {product.price}</p>
+          <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>{product.name}</h1>
+          <p className="text-2xl font-semibold text-green-600 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Rs. {product.price}</p>
           
           {/* Product Features */}
           <div className="mb-6">
@@ -148,18 +148,18 @@ function ProductPage(){
             </div>
             <div className="flex items-center mb-2">
               <span className="text-green-600 mr-2">✓</span>
-              <span className="text-sm text-gray-600">Easy returns within 7 days</span>
+              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Easy returns within 7 days</span>
             </div>
             <div className="flex items-center mb-4">
               <span className="text-green-600 mr-2">✓</span>
-              <span className="text-sm text-gray-600">Secure payment with Razorpay</span>
+              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Secure payment with Razorpay</span>
             </div>
           </div>
           
           {product.description && (
             <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2">Description</h3>
-              <p className="text-gray-600 leading-relaxed">{product.description}</p>
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Description</h3>
+              <p className="text-gray-600 leading-relaxed" style={{ fontFamily: 'Poppins, sans-serif' }}>{product.description}</p>
             </div>
           )}
           
