@@ -61,7 +61,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
   return (
     <div 
       onClick={handleCardClick}
-      className="group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative cursor-pointer"
+      className="group rounded-lg overflow-hidden bg-white relative cursor-pointer"
     >
       <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3 pb-2 md:pb-1">
         <img
