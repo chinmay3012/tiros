@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import SignUpForDrops from "./components/SignUpForDrops";
 
 import HomePage from "./pages/HomePage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
@@ -51,6 +52,7 @@ function App() {
         </Routes>
         </React.Suspense>
 
+        <SignUpForDrops />
         <Footer />
       </div>
   );

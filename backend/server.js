@@ -12,6 +12,8 @@ import dashboardRoutes from "./routes/dashboardRoutes.js";
 import publicRoutes from "./routes/publicRoutes.js";
 import paymentRoutes from "./routes/paymentRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
+import dropSignupRoutes from "./routes/dropSignupRoutes.js";
+import adminDropSignupRoutes from "./routes/adminDropSignupRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -76,9 +78,11 @@ app.use("/api/admin/categories", categoryRoutes);
 app.use("/api/admin/orders", orderRoutes);
 app.use("/api/admin/inventory", inventoryRoutes);
 app.use("/api/admin/dashboard", dashboardRoutes);
+app.use("/api/admin/dropsignups", adminDropSignupRoutes);
 
 // Public Routes for user-frontend
 app.use("/api", publicRoutes);
+app.use("/api/dropsignups", dropSignupRoutes);
 
 // Payment Routes
 app.use("/api/payments", paymentRoutes);

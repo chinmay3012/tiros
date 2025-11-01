@@ -13,7 +13,8 @@ import {
   Cog6ToothIcon,
   ArrowRightOnRectangleIcon,
   Bars3Icon,
-  XMarkIcon
+  XMarkIcon,
+  EnvelopeIcon
 } from '@heroicons/react/24/outline';
 
 const navigation = [
@@ -24,6 +25,7 @@ const navigation = [
   { name: 'Orders', href: '/admin/orders', icon: ClipboardDocumentListIcon },
   { name: 'Inventory', href: '/admin/inventory', icon: CubeIcon },
   { name: 'Coupons', href: '/admin/coupons', icon: TicketIcon },
+  { name: 'Drop Signups', href: '/admin/dropsignups', icon: EnvelopeIcon },
   { name: 'Reports', href: '/admin/reports', icon: ChartBarIcon },
 ];
 
