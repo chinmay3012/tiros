@@ -91,12 +91,12 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
         {isHotSelling && (
           <div className="mt-2 flex justify-end">
             <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-red-600 border-2 border-red-600" style={{ fontFamily: 'Poppins, sans-serif' }}>
-              🔥 HOT SELLING
+              HOT SELLING
             </span>
           </div>
         )}
       </div>
-      <div className="space-y-0">
+      <div className="space-y-0 pb-2">
         <button
           onClick={handleAddToCart}
           disabled={added || isDisabled}
