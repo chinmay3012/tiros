@@ -63,7 +63,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
       onClick={handleCardClick}
       className="group rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow bg-white relative cursor-pointer"
     >
-      <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3">
+      <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3 pb-2 md:pb-1">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
@@ -78,7 +78,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
           </div>
         )}
       </div>
-      <div className="p-2">
+      <div className="px-2 pt-1">
         <div className="flex justify-between items-center">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left">{title}</h3>
           <p className="text-base text-gray-700 ml-2">{price}</p>
