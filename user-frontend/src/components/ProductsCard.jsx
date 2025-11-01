@@ -11,6 +11,8 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
+  console.log('ProductsCard isHotSelling:', isHotSelling, 'for product:', title);
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
     // Disable for non-available products
