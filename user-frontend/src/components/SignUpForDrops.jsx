@@ -55,7 +55,7 @@ function SignUpForDrops() {
         show={showSuccess} 
         onClose={() => setShowSuccess(false)} 
       />
-      <div className="bg-gray-100 py-16" style={{ backgroundColor: 'hsl(0, 0%, 98%)' }}>
+      <div className="bg-gray-100 py-8" style={{ backgroundColor: 'hsl(0, 0%, 98%)' }}>
         <div className="container mx-auto px-4">
           <div className="max-w-5xl mx-auto">
             {/* Mobile layout: stacked */}
