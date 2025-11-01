@@ -66,7 +66,7 @@ function Footer(){
                     </div>
                     
                     {/* Story Column */}
-                    <div className="col-span-1">
+                    <div className="col-span-1 lg:mr-8">
                         <h3 className="font-semibold mb-4 text-white">OUR STORY</h3>
                         <div className="space-y-3" style={{ color: 'hsl(0, 0%, 60%)' }}>
                             <p className="text-sm">
