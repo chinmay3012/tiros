@@ -257,24 +257,6 @@ function HomePage(){
                     </div>
                 </div>
                 
-                {/* Second Frame Image Section - Mobile Only */}
-                <div className="w-full mt-6 md:mt-8 md:hidden">
-                    <img 
-                        src="/images/Frame 1686553383-2 copy.png" 
-                        alt="Second Frame Image - Mobile" 
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                
-                {/* Second Frame Image Section - Desktop */}
-                <div className="w-full mt-6 md:mt-8 hidden md:block">
-                    <img 
-                        src="/images/Frame 1686553383 copy.png" 
-                        alt="Second Frame Image - Desktop" 
-                        className="w-full h-auto object-cover"
-                    />
-                </div>
-                
                 {/* Content sections hidden on mobile - Pro Sport Journey to Discover More */}
                 <div className="hidden md:block">
                 
@@ -452,6 +434,26 @@ function HomePage(){
                 {/* End of content hidden on mobile */}
                 
             </section>
+
+            {/* Full-width Frame Images */}
+            {/* Second Frame Image Section - Mobile Only */}
+            <div className="w-full md:hidden">
+                <img 
+                    src="/images/Frame 1686553383-2 copy.png" 
+                    alt="Second Frame Image - Mobile" 
+                    className="w-full h-auto"
+                />
+            </div>
+            
+            {/* Second Frame Image Section - Desktop */}
+            <div className="w-full hidden md:block">
+                <img 
+                    src="/images/Frame 1686553383 copy.png" 
+                    alt="Second Frame Image - Desktop" 
+                    className="w-full h-auto"
+                />
+            </div>
+
        </div>
        
      </>
