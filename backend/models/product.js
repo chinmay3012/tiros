@@ -41,6 +41,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isHotSelling: {
+      type: Boolean,
+      default: false,
+    },
     section: {
       type: String,
       enum: ["homepage_top", "homepage_mid", "homepage_bottom"],

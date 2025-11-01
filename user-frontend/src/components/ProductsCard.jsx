@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
 
-function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription }) {
+function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription, isHotSelling = false }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const { addToCart, clearCart } = useCart();
@@ -85,6 +85,13 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
         </div>
         {displayDescription && (
           <p className="text-sm text-gray-600 mt-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+        )}
+        {isHotSelling && (
+          <div className="mt-2 flex justify-center">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-red-600 border-2 border-red-600" style={{ fontFamily: 'Poppins, sans-serif' }}>
+              HOT SELLING
+            </span>
+          </div>
         )}
       </div>
       <div className="space-y-0">

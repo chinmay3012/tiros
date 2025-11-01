@@ -33,7 +33,8 @@ export default function Products() {
     subcategory: '',
     image: '',
     section: 'homepage_top',
-    status: 'available'
+    status: 'available',
+    isHotSelling: false
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -97,7 +98,8 @@ export default function Products() {
       subcategory: '',
       image: '',
       section: 'homepage_top',
-      status: 'available'
+      status: 'available',
+      isHotSelling: false
     });
     setSelectedFile(null);
     setImagePreview(null);
@@ -116,7 +118,8 @@ export default function Products() {
       subcategory: product.subcategory || '',
       image: product.image || '',
       section: product.section || 'homepage_top',
-      status: product.status || 'available'
+      status: product.status || 'available',
+      isHotSelling: product.isHotSelling || false
     });
     setSelectedFile(null);
     setImagePreview(product.image || null);
@@ -164,6 +167,7 @@ export default function Products() {
       formDataToSend.append('subcategory', formData.subcategory);
       formDataToSend.append('section', formData.section);
       formDataToSend.append('status', formData.status);
+      formDataToSend.append('isHotSelling', formData.isHotSelling);
       
       if (selectedFile) {
         formDataToSend.append('image', selectedFile);
@@ -581,6 +585,18 @@ export default function Products() {
                             <option value="coming_soon">⏳ Coming Soon</option>
                             <option value="sold_out">❌ Sold Out</option>
                           </select>
+                        </div>
+                        <div>
+                          <label className="flex items-center">
+                            <input
+                              type="checkbox"
+                              checked={formData.isHotSelling}
+                              onChange={(e) => setFormData({...formData, isHotSelling: e.target.checked})}
+                              className="rounded border-gray-300 text-red-600 shadow-sm focus:border-red-500 focus:ring-red-500"
+                            />
+                            <span className="ml-2 block text-sm font-medium text-gray-700">🔥 Hot Selling</span>
+                          </label>
+                          <p className="mt-1 text-xs text-gray-500">Display "HOT SELLING" badge on product card</p>
                         </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700">Product Image</label>

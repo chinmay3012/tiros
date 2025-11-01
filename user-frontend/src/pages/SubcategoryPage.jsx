@@ -82,6 +82,7 @@ function SubcategoryPage(){
               price={`Rs. ${p.price}`}
               status={p.status || 'available'}
               displayDescription={p.displayDescription}
+              isHotSelling={p.isHotSelling}
             />
           </div>
         ))}

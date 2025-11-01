@@ -239,6 +239,7 @@ function ProductPage(){
                     price={`Rs. ${suggestedProduct.price}`}
                     status={suggestedProduct.status || 'available'}
                     displayDescription={suggestedProduct.displayDescription}
+                    isHotSelling={suggestedProduct.isHotSelling}
                   />
                 </div>
               ))}
