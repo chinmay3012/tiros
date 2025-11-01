@@ -6,7 +6,7 @@ import { upload } from "../config/cloudinary.js";
 // @route  POST /api/admin/products
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, subcategory, imageUrl, section, status } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, section, status } = req.body;
     
     // Validate required fields
     if (!name || !price || !category) {
@@ -39,6 +39,7 @@ export const createProduct = async (req, res) => {
     const product = await Product.create({
       name,
       description,
+      displayDescription,
       price,
       image,
       stock: stock || 0,
@@ -144,7 +145,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category, subcategory, isActive, imageUrl, section, status } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, section, status } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -184,6 +185,7 @@ export const updateProduct = async (req, res) => {
     
     if (name) product.name = name;
     if (description !== undefined) product.description = description;
+    if (displayDescription !== undefined) product.displayDescription = displayDescription;
     if (price !== undefined) product.price = price;
     if (image) product.image = image;
     if (stock !== undefined) product.stock = stock;
