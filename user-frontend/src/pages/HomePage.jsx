@@ -260,6 +260,15 @@ function HomePage(){
                 {/* Content sections hidden on mobile - Pro Sport Journey to Discover More */}
                 <div className="hidden md:block">
                 
+                {/* Desktop Frame Image above Pro Sport Journey */}
+                <div className="w-full">
+                    <img 
+                        src="/images/Frame 1686553383 copy.png" 
+                        alt="Frame Image - Desktop" 
+                        className="w-full h-auto"
+                    />
+                </div>
+                
                 {/* Pro Sport Journey Section */}
                 <div className="w-full mt-8 md:mt-12" style={{ backgroundColor: '#EDEDED' }}>
                     <div className="container mx-auto px-4 py-16 md:py-20">
@@ -435,21 +444,11 @@ function HomePage(){
                 
             </section>
 
-            {/* Full-width Frame Images */}
-            {/* Second Frame Image Section - Mobile Only */}
+            {/* Full-width Frame Image - Mobile Only */}
             <div className="w-full md:hidden">
                 <img 
                     src="/images/Frame 1686553383-2 copy.png" 
-                    alt="Second Frame Image - Mobile" 
-                    className="w-full h-auto"
-                />
-            </div>
-            
-            {/* Second Frame Image Section - Desktop */}
-            <div className="w-full hidden md:block">
-                <img 
-                    src="/images/Frame 1686553383 copy.png" 
-                    alt="Second Frame Image - Desktop" 
+                    alt="Frame Image - Mobile" 
                     className="w-full h-auto"
                 />
             </div>
