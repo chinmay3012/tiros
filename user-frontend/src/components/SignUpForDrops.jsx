@@ -68,26 +68,29 @@ function SignUpForDrops() {
               Be the first to know about our new releases and exclusive drops.
             </p>
             
-            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-              <div className="flex-1 w-full sm:max-w-md">
+            <form onSubmit={handleSubmit} className="flex flex-col items-center justify-center max-w-2xl mx-auto">
+              <div className="relative w-full">
                 <input
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
+                  className="w-full px-4 pr-20 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition-all"
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                   disabled={loading}
                 />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 hover:opacity-80 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <img 
+                    src="/images/BUTTON-4 copy.png" 
+                    alt="Save" 
+                    className="h-auto pointer-events-none"
+                  />
+                </button>
               </div>
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full sm:w-auto px-8 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed font-semibold whitespace-nowrap"
-                style={{ fontFamily: 'Poppins, sans-serif' }}
-              >
-                {loading ? "SAVING..." : "SAVE"}
-              </button>
             </form>
 
             {error && (
