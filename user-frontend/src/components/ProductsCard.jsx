@@ -78,7 +78,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
           </div>
         )}
       </div>
-      <div className="px-2 pt-1">
+      <div className="px-2 pt-1 pb-2">
         <div className="flex justify-between items-start">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
           <div className="ml-2 flex flex-col items-end">
