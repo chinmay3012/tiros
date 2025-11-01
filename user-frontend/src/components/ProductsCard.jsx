@@ -69,13 +69,11 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
           alt={alt}
           className={`w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105 ${status === 'sold_out' ? 'opacity-50' : ''}`}
         />
-        {/* Status Badge */}
-        {status !== 'available' && (
+        {/* Status Badge - Only for coming_soon, removed for sold_out */}
+        {status === 'coming_soon' && (
           <div className="absolute top-2 left-2 z-10">
-            <span className={`inline-flex items-center px-2 py-1 rounded text-xs font-semibold text-white shadow-md ${
-              status === 'coming_soon' ? 'bg-yellow-500' : 'bg-red-600'
-            }`}>
-              {status === 'coming_soon' ? '⏳ Coming Soon' : '❌ Sold Out'}
+            <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold text-white shadow-md bg-yellow-500">
+              ⏳ Coming Soon
             </span>
           </div>
         )}
@@ -115,6 +113,19 @@ function ProductsCard({ id, image, alt, title, price, status = 'available' }) {
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Processing...
+            </>
+          ) : status === 'sold_out' ? (
+            <>
+              <img
+                src="/images/BUTTON-5 copy.png"
+                alt="Sold Out"
+                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 block sm:hidden"
+              />
+              <img
+                src="/images/BUTTON-5 copy.png"
+                alt="Sold Out"
+                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 hidden sm:block"
+              />
             </>
           ) : (
             <>
