@@ -63,7 +63,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
       onClick={handleCardClick}
       className="group rounded-lg bg-white relative cursor-pointer border border-gray-100"
     >
-      <div className="relative h-50 p-1">
+      <div className="relative h-50 pt-1 pb-1 px-0.5">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
