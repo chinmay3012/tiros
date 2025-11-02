@@ -61,7 +61,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   return (
     <div 
       onClick={handleCardClick}
-      className="group rounded-lg bg-white relative cursor-pointer border border-gray-100"
+      className="group rounded-lg bg-white relative cursor-pointer"
     >
       <div className="relative h-50 pt-1 pb-1 px-0.5">
         <img
