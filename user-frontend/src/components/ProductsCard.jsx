@@ -11,8 +11,6 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
-  console.log('ProductsCard isHotSelling:', isHotSelling, 'for product:', title);
-
   const handleAddToCart = (e) => {
     e.stopPropagation();
     // Disable for non-available products
@@ -63,17 +61,17 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   return (
     <div 
       onClick={handleCardClick}
-      className="group rounded-lg overflow-hidden bg-white relative cursor-pointer"
+      className="group rounded-lg bg-white relative cursor-pointer border border-gray-100"
     >
-      <div className="relative overflow-hidden aspect-[3/4] p-4 md:p-3 pb-2 md:pb-1">
+      <div className="relative aspect-[3/4] p-3">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
-          className="w-full h-full object-contain transition-transform duration-300 transform scale-90 md:scale-100 group-hover:scale-95 md:group-hover:scale-105"
+          className="w-full h-full object-contain transition-transform duration-300"
         />
         {/* Status Badge - Only for coming_soon, removed for sold_out */}
         {status === 'coming_soon' && (
-          <div className="absolute top-2 left-2 z-10">
+          <div className="absolute top-2 left-2 z-20">
             <span className="inline-flex items-center px-2 py-1 rounded text-xs font-semibold text-white shadow-md bg-yellow-500">
               ⏳ Coming Soon
             </span>
@@ -81,22 +79,20 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
         )}
         {/* Hot Selling Badge */}
         {isHotSelling && (
-          <div className="absolute top-2 right-2 z-10">
-            <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-red-600 border-2 border-red-600 bg-white" style={{ fontFamily: 'Poppins, sans-serif' }}>
+          <div className="absolute top-2 right-2 z-20">
+            <span className="inline-block px-3 py-1 rounded-full text-xs font-bold text-white bg-red-600 shadow-lg" style={{ fontFamily: 'Poppins, sans-serif' }}>
               HOT SELLING
             </span>
           </div>
         )}
       </div>
-      <div className="px-2 pt-1 pb-3">
-        <div className="flex justify-between items-start">
+      <div className="px-3 pt-2 pb-3">
+        <div className="flex justify-between items-start mb-1">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
-          <div className="ml-2 flex flex-col items-end">
-            <p className="text-base text-gray-700" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
-          </div>
+          <p className="text-base text-gray-700 ml-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
         </div>
         {displayDescription && (
-          <p className="text-sm text-gray-600 mt-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+          <p className="text-sm text-gray-600 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
         )}
       </div>
       <div className="space-y-0">
