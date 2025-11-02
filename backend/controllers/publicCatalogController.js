@@ -21,7 +21,7 @@ export const listProducts = async (req, res) => {
 
     // Remove .populate() to avoid N+1 query problem - category info is not needed for list view
     const products = await Product.find(findQuery)
-      .select("name price image category subcategory section status createdAt")
+      .select("name price image category subcategory section status displayDescription isHotSelling createdAt")
       .sort({ createdAt: -1 })
       .limit(limitNum)
       .lean();
