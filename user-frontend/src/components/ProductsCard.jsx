@@ -86,13 +86,13 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
           </div>
         )}
       </div>
-      <div className="px-3 pt-2 pb-3 min-h-[120px]">
-        <div className="flex justify-between items-start mb-2">
+      <div className="px-3 pt-2 pb-2">
+        <div className="flex justify-between items-start mb-1">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
           <p className="text-base text-gray-700 ml-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
         </div>
         {displayDescription && (
-          <p className="text-sm text-gray-600 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+          <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
         )}
       </div>
       <div className="space-y-0">
