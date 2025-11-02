@@ -91,9 +91,9 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
           <p className="text-base text-gray-700 ml-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
         </div>
-        <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>
-          {displayDescription || 'No description available'}
-        </p>
+        {displayDescription && (
+          <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+        )}
       </div>
       <div className="space-y-0">
         <button
