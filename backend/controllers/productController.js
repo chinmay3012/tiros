@@ -8,6 +8,8 @@ export const createProduct = async (req, res) => {
   try {
     const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, section, status, isHotSelling } = req.body;
     
+    console.log('Creating product with displayDescription:', displayDescription);
+    
     // Validate required fields
     if (!name || !price || !category) {
       return res.status(400).json({ message: "Name, price, and category are required" });
