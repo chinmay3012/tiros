@@ -89,17 +89,25 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
       <div className="px-3 pt-2 pb-2">
         <div className="flex justify-between items-start mb-1">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
-          <div className="ml-2 flex flex-col items-end">
+          <div className="ml-2">
             <p className="text-base text-gray-700" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
+          </div>
+        </div>
+        {displayDescription ? (
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-xs text-gray-600 flex-1" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
             {isCreateHype && (
-              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold text-black mt-1" style={{ backgroundColor: '#95C5F4', fontFamily: 'Poppins, sans-serif' }}>
+              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold text-black ml-2" style={{ backgroundColor: '#95C5F4', fontFamily: 'Poppins, sans-serif' }}>
                 (2) Left
               </span>
             )}
           </div>
-        </div>
-        {displayDescription && (
-          <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>
+        ) : isCreateHype && (
+          <div className="flex justify-end mt-1">
+            <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold text-black" style={{ backgroundColor: '#95C5F4', fontFamily: 'Poppins, sans-serif' }}>
+              (2) Left
+            </span>
+          </div>
         )}
       </div>
       <div className="space-y-0">
