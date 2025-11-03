@@ -240,7 +240,7 @@ function HomePage(){
                 )}
                 
                 {/* Vector 704 Image Section - Mobile Only */}
-                <div className="w-full mt-6 md:mt-8 md:hidden relative">
+                <div id="about-us-section" className="w-full mt-6 md:mt-8 md:hidden relative">
                     <img 
                         src="/images/Vector 704 copy.png" 
                         alt="Vector 704 Image" 

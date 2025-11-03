@@ -53,6 +53,18 @@ function Sidemenu(){
         setIsMenuOpen(false);
     }
 
+    const handleAboutUs = () => {
+        setIsMenuOpen(false);
+        navigate('/');
+        // Wait for navigation to complete, then scroll
+        setTimeout(() => {
+            const section = document.getElementById('about-us-section');
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }, 100);
+    }
+
     const toggleCategoryExpansion = (categoryId) => {
         const newExpanded = new Set(expandedCategories);
         if (newExpanded.has(categoryId)) {
@@ -137,7 +149,7 @@ function Sidemenu(){
                                   </div>
                                 </div>
                                 
-                                <button onClick={() => window.open("/images/Vector 704 copy.png", "_blank")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
+                                <button onClick={handleAboutUs} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
                                 <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
                                 
                                 {isAuthenticated && (
