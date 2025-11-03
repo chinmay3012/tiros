@@ -137,7 +137,7 @@ function Sidemenu(){
                                   </div>
                                 </div>
                                 
-                                <button onClick={() => handleNavigation("/about")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
+                                <button onClick={() => window.open("/images/Vector 704 copy.png", "_blank")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
                                 <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
                                 
                                 {isAuthenticated && (
