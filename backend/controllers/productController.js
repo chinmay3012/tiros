@@ -6,7 +6,7 @@ import { upload } from "../config/cloudinary.js";
 // @route  POST /api/admin/products
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, section, status, isHotSelling } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, section, status, isHotSelling, isCreateHype } = req.body;
     
     console.log('Creating product with displayDescription:', displayDescription);
     
@@ -49,7 +49,8 @@ export const createProduct = async (req, res) => {
       subcategory: subcategory || null,
       section: section || "homepage_top",
       status: status || "available",
-      isHotSelling: isHotSelling === true || isHotSelling === 'true'
+      isHotSelling: isHotSelling === true || isHotSelling === 'true',
+      isCreateHype: isCreateHype === true || isCreateHype === 'true'
     });
     
     const populatedProduct = await Product.findById(product._id).populate("category", "name");
@@ -148,7 +149,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, section, status, isHotSelling } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, section, status, isHotSelling, isCreateHype } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -196,6 +197,7 @@ export const updateProduct = async (req, res) => {
     if (section !== undefined) product.section = section;
     if (status !== undefined) product.status = status;
     if (isHotSelling !== undefined) product.isHotSelling = isHotSelling === true || isHotSelling === 'true';
+    if (isCreateHype !== undefined) product.isCreateHype = isCreateHype === true || isCreateHype === 'true';
     
     const updatedProduct = await product.save();
     const populatedProduct = await Product.findById(updatedProduct._id).populate("category", "name");

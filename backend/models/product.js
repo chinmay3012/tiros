@@ -45,6 +45,10 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    isCreateHype: {
+      type: Boolean,
+      default: false,
+    },
     section: {
       type: String,
       enum: ["homepage_top", "homepage_mid", "homepage_bottom"],

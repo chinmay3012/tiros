@@ -34,7 +34,8 @@ export default function Products() {
     image: '',
     section: 'homepage_top',
     status: 'available',
-    isHotSelling: false
+    isHotSelling: false,
+    isCreateHype: false
   });
   const [selectedFile, setSelectedFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -99,7 +100,8 @@ export default function Products() {
       image: '',
       section: 'homepage_top',
       status: 'available',
-      isHotSelling: false
+      isHotSelling: false,
+      isCreateHype: false
     });
     setSelectedFile(null);
     setImagePreview(null);
@@ -119,7 +121,8 @@ export default function Products() {
       image: product.image || '',
       section: product.section || 'homepage_top',
       status: product.status || 'available',
-      isHotSelling: product.isHotSelling || false
+      isHotSelling: product.isHotSelling || false,
+      isCreateHype: product.isCreateHype || false
     });
     setSelectedFile(null);
     setImagePreview(product.image || null);
@@ -168,6 +171,7 @@ export default function Products() {
       formDataToSend.append('section', formData.section);
       formDataToSend.append('status', formData.status);
       formDataToSend.append('isHotSelling', formData.isHotSelling);
+      formDataToSend.append('isCreateHype', formData.isCreateHype);
       
       if (selectedFile) {
         formDataToSend.append('image', selectedFile);
@@ -598,6 +602,18 @@ export default function Products() {
                           </label>
                           <p className="mt-1 text-xs text-gray-500">Display "HOT SELLING" badge on product card</p>
                         </div>
+        <div>
+          <label className="flex items-center">
+            <input
+              type="checkbox"
+              checked={formData.isCreateHype}
+              onChange={(e) => setFormData({...formData, isCreateHype: e.target.checked})}
+              className="rounded border-gray-300 text-blue-500 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            />
+            <span className="ml-2 block text-sm font-medium text-gray-700">Create Hype (show (2) Left badge)</span>
+          </label>
+          <p className="mt-1 text-xs text-gray-500">When enabled, customers will see a "(2) Left" badge under the price.</p>
+        </div>
                         <div>
                           <label className="block text-sm font-medium text-gray-700">Product Image</label>
                           <div className="mt-1 space-y-3">

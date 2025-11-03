@@ -138,7 +138,14 @@ function ProductPage(){
         </div>
         <div>
           <h1 className="text-3xl font-bold mb-4" style={{ fontFamily: 'Poppins, sans-serif' }}>{product.name}</h1>
-          <p className="text-2xl font-semibold text-green-600 mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Rs. {product.price}</p>
+          <div className="mb-2 flex items-center justify-between">
+            <p className="text-2xl font-semibold text-green-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Rs. {product.price}</p>
+            {product.isCreateHype && (
+              <span className="inline-block px-3 py-1 rounded-full text-xs font-semibold text-black" style={{ backgroundColor: '#95C5F4', fontFamily: 'Poppins, sans-serif' }}>
+                (2) Left
+              </span>
+            )}
+          </div>
           
           {/* Product Features */}
           <div className="mb-6">
@@ -240,6 +247,7 @@ function ProductPage(){
                     status={suggestedProduct.status || 'available'}
                     displayDescription={suggestedProduct.displayDescription}
                     isHotSelling={suggestedProduct.isHotSelling}
+                    isCreateHype={suggestedProduct.isCreateHype}
                   />
                 </div>
               ))}

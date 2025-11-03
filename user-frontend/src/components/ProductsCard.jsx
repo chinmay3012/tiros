@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
 
-function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription, isHotSelling = false }) {
+function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription, isHotSelling = false, isCreateHype = false }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const { addToCart, clearCart } = useCart();
@@ -89,7 +89,14 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
       <div className="px-3 pt-2 pb-2">
         <div className="flex justify-between items-start mb-1">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
-          <p className="text-base text-gray-700 ml-2" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
+          <div className="ml-2 flex flex-col items-end">
+            <p className="text-base text-gray-700" style={{ fontFamily: 'Poppins, sans-serif' }}>{price}</p>
+            {isCreateHype && (
+              <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold text-black mt-1" style={{ backgroundColor: '#95C5F4', fontFamily: 'Poppins, sans-serif' }}>
+                (2) Left
+              </span>
+            )}
+          </div>
         </div>
         {displayDescription && (
           <p className="text-xs text-gray-600 mt-1" style={{ fontFamily: 'Poppins, sans-serif' }}>{displayDescription}</p>

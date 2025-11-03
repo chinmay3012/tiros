@@ -152,6 +152,7 @@ function HomePage(){
                                         status={p.status || 'available'}
                                         displayDescription={p.displayDescription}
                                         isHotSelling={p.isHotSelling}
+                                        isCreateHype={p.isCreateHype}
                                     />
                                 </div>
                             ))}
