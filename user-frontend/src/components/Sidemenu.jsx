@@ -56,9 +56,10 @@ function Sidemenu(){
     const handleAboutUs = () => {
         setIsMenuOpen(false);
         navigate('/');
-        // Wait for navigation to complete, then scroll
+        // Wait for navigation to complete, then scroll based on screen size
         setTimeout(() => {
-            const section = document.getElementById('about-us-section');
+            const isMobile = window.innerWidth < 768;
+            const section = document.getElementById(isMobile ? 'about-us-section' : 'footer-section');
             if (section) {
                 section.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
