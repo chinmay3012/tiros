@@ -52,7 +52,7 @@ function CartPage() {
           <div className="flex justify-between py-2 border-b">
             <span className="font-medium">Total:</span>
             <span className="font-medium">
-              Rs. {cartItems.reduce((sum, item) => sum + parseFloat(item.price.replace('Rs. ', '').replace(',', '')) * item.quantity, 0).toFixed(2)}
+              Rs. {cartItems.filter((item) => !item.status || item.status !== 'sold_out').reduce((sum, item) => sum + parseFloat(item.price.replace('Rs. ', '').replace(',', '')) * item.quantity, 0).toFixed(2)}
             </span>
           </div>
           <div>

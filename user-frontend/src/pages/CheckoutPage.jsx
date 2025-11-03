@@ -24,12 +24,14 @@ function CheckoutPage() {
   const [validatingCoupon, setValidatingCoupon] = useState(false);
 
   const getCartTotal = () => {
-    return cartItems.reduce((sum, item) => {
-      const price = parseFloat(
-        String(item.price).replace("Rs. ", "").replace(",", "")
-      );
-      return sum + price * item.quantity;
-    }, 0);
+    return cartItems
+      .filter((item) => !item.status || item.status !== 'sold_out')
+      .reduce((sum, item) => {
+        const price = parseFloat(
+          String(item.price).replace("Rs. ", "").replace(",", "")
+        );
+        return sum + price * item.quantity;
+      }, 0);
   };
 
   const getFinalTotal = () => {

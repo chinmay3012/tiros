@@ -60,12 +60,14 @@ export const CartProvider = ({ children }) => {
   const clearCart = () => setCartItems([]);
 
   const checkout = async ({ address, payment, couponCode } = {}) => {
-    // Build simple order payload
-    const items = cartItems.map((item) => ({
-      product: item.id,
-      quantity: item.quantity,
-      price: Number(String(item.price).replace("Rs. ", "").replace(",", "")),
-    }));
+    // Build simple order payload - filter out sold out items
+    const items = cartItems
+      .filter((item) => !item.status || item.status !== 'sold_out')
+      .map((item) => ({
+        product: item.id,
+        quantity: item.quantity,
+        price: Number(String(item.price).replace("Rs. ", "").replace(",", "")),
+      }));
     const total = items.reduce((sum, it) => sum + it.price * it.quantity, 0);
     const payload = {
       userId: user?._id,

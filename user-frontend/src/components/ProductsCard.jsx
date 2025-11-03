@@ -13,10 +13,10 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    // Disable for non-available products
-    if (status !== 'available') return;
+    // Allow sold out items to be added to cart
+    if (status === 'coming_soon') return;
     
-    addToCart({ id ,image, alt, title, price });
+    addToCart({ id ,image, alt, title, price, status });
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
@@ -40,7 +40,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     try {
       // Clear existing cart and add only this item
       clearCart();
-      addToCart({ id, image, alt, title, price });
+      addToCart({ id, image, alt, title, price, status });
       
       // Navigate to checkout
       navigate('/checkout');
@@ -56,7 +56,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     navigate(`/products/${id}`);
   };
 
-  const isDisabled = status !== 'available';
+  const isDisabled = status === 'coming_soon';
 
   return (
     <div 
