@@ -1,13 +1,17 @@
 import { useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
+import SuccessNotification from "./SuccessNotification";
 
 function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription, isHotSelling = false, isCreateHype = false }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [showWishlistNotification, setShowWishlistNotification] = useState(false);
   const { addToCart, clearCart } = useCart();
+  const { addToWishlist, isInWishlist } = useWishlist();
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
@@ -21,6 +25,15 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     setTimeout(() => {
       setAdded(false);
     }, 2000); // show "Added to Cart" for 2 seconds
+  };
+
+  const handleMoveToWishlist = (e) => {
+    e.stopPropagation();
+    // Only allow for coming_soon and sold_out items
+    if (status !== 'coming_soon' && status !== 'sold_out') return;
+    
+    addToWishlist({ id, image, alt, title, price, status });
+    setShowWishlistNotification(true);
   };
 
   const handleBuyNow = async (e) => {
@@ -111,19 +124,35 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
         )}
       </div>
       <div className="space-y-0">
-        <button
-          onClick={handleAddToCart}
-          disabled={added || isDisabled}
-          className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
-            added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
-          } bg-transparent`}
-        >
-          <img
-            src="/images/BUTTON-2 copy.png"
-            alt="Add to Cart"
-            className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
-          />
-        </button>
+        {status === 'coming_soon' || status === 'sold_out' ? (
+          <button
+            onClick={handleMoveToWishlist}
+            disabled={isInWishlist(id)}
+            className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
+              isInWishlist(id) ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
+            } bg-transparent`}
+          >
+            <img
+              src="/images/BUTTON-2 copy.png"
+              alt="Move to Wishlist"
+              className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+            />
+          </button>
+        ) : (
+          <button
+            onClick={handleAddToCart}
+            disabled={added || isDisabled}
+            className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
+              added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
+            } bg-transparent`}
+          >
+            <img
+              src="/images/BUTTON-2 copy.png"
+              alt="Add to Cart"
+              className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+            />
+          </button>
+        )}
         
         <button
           onClick={handleBuyNow}
@@ -176,6 +205,11 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
           <div className="bg-white text-black px-4 py-2 rounded shadow">Added to Cart</div>
         </div>
       )}
+      <SuccessNotification
+        message="Added to Wishlist!"
+        show={showWishlistNotification}
+        onClose={() => setShowWishlistNotification(false)}
+      />
     </div>
   );
 }

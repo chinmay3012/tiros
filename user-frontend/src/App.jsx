@@ -18,6 +18,7 @@ const OrdersPage = React.lazy(()=> import('./pages/OrdersPage'));
 const CategoryPage = React.lazy(()=> import('./pages/CategoryPage'));
 const SubcategoryPage = React.lazy(()=> import('./pages/SubcategoryPage'));
 const AccountPage = React.lazy(()=> import('./pages/AccountPage'));
+const WishlistPage = React.lazy(()=> import('./pages/WishlistPage'));
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -42,6 +43,7 @@ function App() {
           <Route path="/categories/:categoryId/:subcategorySlug" element={<SubcategoryPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />

@@ -2,6 +2,7 @@ import { useState , useEffect } from "react";
 import Marquee from "react-fast-marquee";
 import { useAuth } from "../context/AuthContext";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { getImageUrl } from "../utils/imageUtils";
@@ -18,6 +19,7 @@ function Navbar(){
 
     const { isAuthenticated } = useAuth();
     const { cartItems } = useCart();
+    const { wishlistItems } = useWishlist();
     const navigate = useNavigate();
 
   useEffect(()=>{
@@ -140,16 +142,30 @@ function Navbar(){
           </button>
           
           {isAuthenticated && (
-            <div className="relative">
-              <button className="p-2 rounded-full transition-colors hover:cursor-pointer hover:bg-[#95C5F4]" onClick={()=>navigate("/cart")}>
-                <img src="/cart-icon.png" alt="Cart" className="w-5 h-5" />
-              </button>
-              {cartItems?.length > 0 && (
-                <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
-                  {cartItems.reduce((sum, it)=> sum + (it.quantity||1), 0)}
-                </span>
-              )}
-            </div>
+            <>
+              <div className="relative">
+                <button className="p-2 rounded-full transition-colors hover:cursor-pointer hover:bg-[#95C5F4]" onClick={()=>navigate("/wishlist")}>
+                  <svg className="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                </button>
+                {wishlistItems?.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
+                    {wishlistItems.length}
+                  </span>
+                )}
+              </div>
+              <div className="relative">
+                <button className="p-2 rounded-full transition-colors hover:cursor-pointer hover:bg-[#95C5F4]" onClick={()=>navigate("/cart")}>
+                  <img src="/cart-icon.png" alt="Cart" className="w-5 h-5" />
+                </button>
+                {cartItems?.length > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-yellow-400 text-black text-[10px] font-bold leading-none px-1.5 py-0.5 rounded-full">
+                    {cartItems.reduce((sum, it)=> sum + (it.quantity||1), 0)}
+                  </span>
+                )}
+              </div>
+            </>
           )}
             </div>
         </nav>
