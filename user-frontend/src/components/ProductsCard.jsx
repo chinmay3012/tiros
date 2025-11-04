@@ -13,8 +13,8 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
-    // Allow sold out items to be added to cart
-    if (status === 'coming_soon') return;
+    // Disable for coming_soon and sold_out items
+    if (status === 'coming_soon' || status === 'sold_out') return;
     
     addToCart({ id ,image, alt, title, price, status });
     setAdded(true);
@@ -56,7 +56,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     navigate(`/products/${id}`);
   };
 
-  const isDisabled = status === 'coming_soon';
+  const isDisabled = status === 'coming_soon' || status === 'sold_out';
 
   return (
     <div 
