@@ -2,9 +2,10 @@ import { useWishlist } from "../context/WishlistContext";
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getImageUrl } from "../utils/imageUtils";
 import SuccessNotification from "../components/SuccessNotification";
+import api from "../api/axios";
 
 function WishlistPage() {
   const { wishlistItems, removeFromWishlist } = useWishlist();
@@ -13,6 +14,57 @@ function WishlistPage() {
   const navigate = useNavigate();
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [itemsWithStatus, setItemsWithStatus] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch latest product status for wishlist items
+  useEffect(() => {
+    if (!isAuthenticated || wishlistItems.length === 0) {
+      setItemsWithStatus(wishlistItems);
+      setLoading(false);
+      return;
+    }
+
+    let isMounted = true;
+    (async () => {
+      try {
+        // Fetch all products to get latest status
+        const res = await api.get('/products');
+        const allProducts = Array.isArray(res.data) ? res.data : (res.data?.products || []);
+        
+        // Map wishlist items with latest status from backend
+        const updatedItems = wishlistItems.map(wishlistItem => {
+          const latestProduct = allProducts.find(p => p._id === wishlistItem.id);
+          if (latestProduct) {
+            return {
+              ...wishlistItem,
+              status: latestProduct.status || wishlistItem.status || 'available',
+              price: `Rs. ${latestProduct.price}` || wishlistItem.price,
+              title: latestProduct.name || wishlistItem.title,
+              image: latestProduct.image || wishlistItem.image
+            };
+          }
+          return wishlistItem;
+        });
+
+        if (isMounted) {
+          setItemsWithStatus(updatedItems);
+        }
+      } catch (error) {
+        console.error('Failed to fetch product status:', error);
+        // Fallback to wishlist items if fetch fails
+        if (isMounted) {
+          setItemsWithStatus(wishlistItems);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    })();
+
+    return () => { isMounted = false };
+  }, [wishlistItems, isAuthenticated]);
 
   const handleMoveToCart = (item) => {
     // Only move if item is available
@@ -48,11 +100,23 @@ function WishlistPage() {
     );
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen p-8">
+        <h1 className="text-4xl font-bold mb-6 text-center">Your Wishlist</h1>
+        <div className="text-center py-12">
+          <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+          <p className="mt-2 text-gray-600">Loading wishlist...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-4xl font-bold mb-6 text-center">Your Wishlist</h1>
 
-      {wishlistItems.length === 0 ? (
+      {itemsWithStatus.length === 0 ? (
         <div className="text-center py-12">
           <div className="text-6xl mb-4">❤️</div>
           <p className="text-xl text-gray-600 mb-4">Your wishlist is empty</p>
@@ -66,7 +130,7 @@ function WishlistPage() {
         </div>
       ) : (
         <div className="grid gap-4 max-w-xl mx-auto">
-          {wishlistItems.map((item, index) => (
+          {itemsWithStatus.map((item, index) => (
             <div key={item.id || index} className="flex items-center gap-4 border p-4 rounded shadow">
               <img 
                 src={getImageUrl(item.image) || "https://placehold.co/80x80"} 
