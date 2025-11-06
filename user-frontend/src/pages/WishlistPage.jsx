@@ -14,11 +14,13 @@ function WishlistPage() {
   const [showNotification, setShowNotification] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
 
-  const handleAddToCart = (item) => {
-    // Only add if item is available
+  const handleMoveToCart = (item) => {
+    // Only move if item is available
     if (item.status === 'available') {
       addToCart({ id: item.id, image: item.image, alt: item.alt, title: item.title, price: item.price, status: item.status });
-      setNotificationMessage("Added to Cart!");
+      // Remove from wishlist when moved to cart
+      removeFromWishlist(item.id);
+      setNotificationMessage("Moved to Cart!");
       setShowNotification(true);
     }
   };
@@ -88,10 +90,10 @@ function WishlistPage() {
                 <div className="flex gap-2 mt-2">
                   {item.status === 'available' && (
                     <button
-                      onClick={() => handleAddToCart(item)}
+                      onClick={() => handleMoveToCart(item)}
                       className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 text-sm hover:bg-[#95C5F4]"
                     >
-                      Add to Cart
+                      Move to Cart
                     </button>
                   )}
                   <button
