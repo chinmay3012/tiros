@@ -173,31 +173,17 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
               Processing...
             </>
           ) : status === 'sold_out' ? (
-            <>
-              <img
-                src="/images/BUTTON-5 copy.png"
-                alt="Sold Out"
-                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 block sm:hidden"
-              />
-              <img
-                src="/images/BUTTON-5 copy.png"
-                alt="Sold Out"
-                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 hidden sm:block"
-              />
-            </>
+            <img
+              src="/images/BUTTON-5 copy.png"
+              alt="Sold Out"
+              className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+            />
           ) : (
-            <>
-              <img
-                src="/images/BUTTON-3 copy.png"
-                alt="Buy Now"
-                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 block sm:hidden"
-              />
-              <img
-                src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
-                alt="Buy Now"
-                className="mx-auto pointer-events-none h-auto w-auto sm:h-12 hidden sm:block"
-              />
-            </>
+            <img
+              src="/images/BUTTON-3 copy.png"
+              alt="Buy Now"
+              className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+            />
           )}
         </button>
       </div>
