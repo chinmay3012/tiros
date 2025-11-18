@@ -124,47 +124,47 @@ node add-admin.js
 
 ## API Endpoints
 
-### User Authentication
-- `POST /api/users/register` - Register a new user
-- `POST /api/users/login` - Login user
-- `POST /api/users/logout` - Logout user
-- `GET /api/users/profile` - Get user profile
-- `PUT /api/users/profile` - Update user profile
-- `PUT /api/users/change-password` - Change password
+All routes are served from the Express app (`backend/server.js`). When running locally the base URL is `http://localhost:3001`. In production we host on Render/Railway and expose the same `/api` namespace.
 
-### Products
-- `GET /api/products` - Get all products (with filters)
-- `GET /api/products/:id` - Get single product
-- `GET /api/products/featured` - Get featured products
-- `GET /api/products/:id/related` - Get related products
-- `GET /api/products/categories` - Get all categories
+### Public & Customer-Facing
 
-### Cart
-- `GET /api/cart` - Get user's cart
-- `POST /api/cart` - Add item to cart
-- `PUT /api/cart/:productId` - Update cart item quantity
-- `DELETE /api/cart/:productId` - Remove item from cart
-- `DELETE /api/cart` - Clear cart
+| Method | Endpoint | Description | Auth |
+| --- | --- | --- | --- |
+| POST | `/api/users/register` | Create a shopper account | None |
+| POST | `/api/users/login` | Authenticate and receive JWT | None |
+| GET | `/api/users/:id` | Fetch profile | Bearer |
+| PUT | `/api/users/:id` | Update profile | Bearer |
+| GET | `/api/products` | List products (`search`, `section`, `limit` supported) | None |
+| GET | `/api/products/:id` | Get single product | None |
+| GET | `/api/categories` | List categories for navigation | None |
+| POST | `/api/orders` | Create an order from cart payload | Bearer |
+| GET | `/api/orders/user/:id` | Fetch orders for a user | Bearer |
+| POST | `/api/dropsignups` | Subscribe to upcoming drops | None |
+| POST | `/api/payments` | Create payment intent | Bearer |
+| POST | `/api/payments/verify` | Razorpay/Stripe signature verification | Bearer |
+| GET | `/api/payments/user/:userId` | Logged-in user payment history | Bearer |
+| POST | `/api/coupons/validate` | Validate a coupon code at checkout | None |
 
-### Orders
-- `POST /api/orders` - Create new order
-- `GET /api/orders` - Get user's orders
-- `GET /api/orders/:id` - Get single order
-- `PUT /api/orders/:id/cancel` - Cancel order
+> Tip: The `publicRoutes` module consolidates auth, catalog and order endpoints, so you can inspect `backend/routes/publicRoutes.js` to see request/response shapes.
 
-### Wishlist
-- `GET /api/wishlist` - Get user's wishlist
-- `POST /api/wishlist` - Add item to wishlist
-- `DELETE /api/wishlist/:productId` - Remove item from wishlist
-- `GET /api/wishlist/:productId` - Check if item is in wishlist
+### Admin APIs (require Admin JWT via `protectAdmin`)
 
-### Admin Routes
-- `POST /api/admin/login` - Admin login
-- `GET /api/admin/dashboard/summary` - Dashboard summary
-- `GET /api/admin/products` - Admin product management
-- `GET /api/admin/orders` - Admin order management
-- `GET /api/admin/users` - Admin user management
-- And more...
+| Method | Endpoint | Description |
+| --- | --- | --- |
+| POST | `/api/admin/register` | Create an admin (bootstrap script also available) |
+| POST | `/api/admin/login` | Admin authentication |
+| POST | `/api/admin/auth/logout` | Invalidate current admin session |
+| GET/PUT | `/api/admin/profile` | View or update admin profile |
+| CRUD | `/api/admin/users` | Manage shopper accounts (`block`, `delete`) |
+| CRUD | `/api/admin/products` | Product catalog management with Cloudinary uploads |
+| CRUD | `/api/admin/categories` | Category + subcategory management |
+| GET/PUT | `/api/admin/inventory` | Low-stock alerts & manual stock overrides |
+| GET/PUT | `/api/admin/orders` | Review orders, update fulfillment status |
+| GET | `/api/admin/dashboard/*` | KPI summaries, sales and user reports |
+| CRUD | `/api/admin/coupons` | Marketing coupon lifecycle |
+| GET/DELETE | `/api/admin/dropsignups` | View or purge drop signup leads |
+
+All admin routes are mounted under the `/api/admin` prefix inside `server.js`, so you can plug the same base URL into Postman and share an Admin JWT to exercise the entire back office.
 
 ## Features Overview
 

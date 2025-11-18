@@ -27,6 +27,7 @@
   - [ Installation](#-installation)
   - [ Usage](#-usage)
   - [ Testing](#-testing)
+- [ API Endpoints](#-api-endpoints)
 - [ Project Roadmap](#-project-roadmap)
 - [ Contributing](#-contributing)
 - [ License](#-license)
@@ -255,6 +256,32 @@ Run PickleBall using the following command:
 ❯ npm run dev
 ```
 
+
+---
+
+##  API Endpoints
+
+All endpoints are served by the Express backend in `backend/server.js`. During development the base URL is `http://localhost:3001`, while production builds are exposed via Render/Railway (see `.env`).
+
+| Method | Path | Description | Auth |
+| --- | --- | --- | --- |
+| GET | `/api` | API status + version info | None |
+| GET | `/health` | Deployment health probe | None |
+| POST | `/api/users/register` | Create a public user account | None |
+| POST | `/api/users/login` | Authenticate and receive JWT | None |
+| GET | `/api/users/:id` | Fetch user profile | Bearer token |
+| PUT | `/api/users/:id` | Update profile details | Bearer token |
+| GET | `/api/products` | List products (supports `search`, `limit`) | None |
+| GET | `/api/products/:id` | Fetch a single product | None |
+| GET | `/api/categories` | List categories | None |
+| POST | `/api/orders` | Create an order from cart payload | Bearer token |
+| GET | `/api/orders/user/:id` | Fetch orders for a user | Bearer token |
+| POST | `/api/dropsignups` | Join upcoming drop notifications | None |
+| POST | `/api/payments/*` | Razorpay/Stripe webhooks & capture routes | Depends |
+| GET | `/api/coupons` | Validate public coupon codes | None |
+| CRUD | `/api/admin/**` | Admin dashboards for products, inventory, coupons, orders, drops | Admin JWT |
+
+> Tip: If you need to experiment quickly, import the `backend/routes/*.js` files into Postman – every router is namespaced exactly as listed above.
 
 ---
 
