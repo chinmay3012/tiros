@@ -168,13 +168,6 @@ function ProductPage(){
             </div>
           </div>
           
-          {product.description && (
-            <div className="mb-6">
-              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Description</h3>
-              <p className="text-gray-600 leading-relaxed" style={{ fontFamily: 'Poppins, sans-serif' }}>{product.description}</p>
-            </div>
-          )}
-          
           {/* Action Buttons */}
           <div className="space-y-4">
             <div className="space-y-2">
@@ -208,7 +201,7 @@ function ProductPage(){
               type="button"
               onClick={handleBuyNow}
               disabled={buyNowLoading || addedToCart || isDisabled}
-              className={`justify-center w-full py-1 px-2 rounded-lg flex items-center transition-opacity text-sm font-medium ${
+              className={`justify-center w-full rounded-lg flex items-center transition-opacity ${
                 buyNowLoading || addedToCart || isDisabled
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:opacity-90 active:opacity-80 cursor-pointer"
@@ -251,6 +244,13 @@ function ProductPage(){
               )}
             </button>
           </div>
+
+          {product.description && (
+            <div className="mt-8">
+              <h3 className="text-lg font-semibold mb-2" style={{ fontFamily: 'Poppins, sans-serif' }}>Description</h3>
+              <p className="text-gray-600 leading-relaxed" style={{ fontFamily: 'Poppins, sans-serif' }}>{product.description}</p>
+            </div>
+          )}
         </div>
       </div>
 
