@@ -125,7 +125,7 @@ function ProductPage(){
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div className="relative flex items-center justify-center bg-white rounded-2xl shadow-md p-4">
+        <div className="relative flex items-center justify-center p-4 md:p-6">
           <img 
             src={getImageUrl(product.image) || "https://placehold.co/600x600"} 
             alt={product.name} 
