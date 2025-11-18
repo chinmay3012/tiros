@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import ProductsCard from "../components/ProductsCard";
@@ -10,10 +10,9 @@ function HomePage(){
         const [products, setProducts] = useState([]);
         const [loading, setLoading] = useState(true);
         const [error, setError] = useState("");
-        const [currentIndex, setCurrentIndex] = useState(0);
-        const [itemsPerView, setItemsPerView] = useState(4);
         const navigate = useNavigate();
         const [params] = useSearchParams();
+        const scrollRefs = useRef({});
 
         // Group products by section (fallback to homepage_top if no section)
         const topProducts = products.filter(p => !p.section || p.section === 'homepage_top');
@@ -41,23 +40,6 @@ function HomePage(){
             return ()=>{ isMounted = false };
         },[params]);
 
-        // Update items per view based on screen size
-        useEffect(() => {
-            const updateItemsPerView = () => {
-                if (window.innerWidth < 768) {
-                    setItemsPerView(1);
-                } else if (window.innerWidth < 1024) {
-                    setItemsPerView(3);
-                } else {
-                    setItemsPerView(4);
-                }
-            };
-
-            updateItemsPerView();
-            window.addEventListener('resize', updateItemsPerView);
-            return () => window.removeEventListener('resize', updateItemsPerView);
-        }, []);
-
         // Helper function to highlight search terms
         const highlightSearchTerm = (text, searchTerm) => {
             if (!searchTerm) return text;
@@ -65,28 +47,32 @@ function HomePage(){
             return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
         };
 
-        // Helper function to render product grid with slider when overflowing
+        // Helper function to render product grid with horizontal scrolling
         const renderProductGrid = (productList, title) => {
             if (productList.length === 0) return null;
             
             const searchTerm = (params.get('q') || '').toLowerCase();
             const isSearchResults = searchTerm && title === "ALL PRODUCTS";
-            const canSlide = productList.length > itemsPerView;
-            const start = Math.min(currentIndex, Math.max(0, productList.length - itemsPerView));
-            const visibleProducts = canSlide 
-              ? productList.slice(start, Math.min(start + itemsPerView, productList.length))
-              : productList;
+            const sectionKey = title.toLowerCase().replace(/\s+/g, '_');
 
             const handlePrev = () => {
-                setCurrentIndex((prev) => Math.max(0, prev - itemsPerView));
+                const container = scrollRefs.current[sectionKey];
+                if (container) {
+                    const cardWidth = container.querySelector('div')?.offsetWidth || 300;
+                    const gap = 24; // gap-6 = 1.5rem = 24px
+                    const scrollAmount = cardWidth + gap;
+                    container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+                }
             };
 
             const handleNext = () => {
-                setCurrentIndex((prev) => {
-                    const nextIndex = prev + itemsPerView;
-                    const maxStart = Math.max(0, productList.length - itemsPerView);
-                    return Math.min(maxStart, nextIndex);
-                });
+                const container = scrollRefs.current[sectionKey];
+                if (container) {
+                    const cardWidth = container.querySelector('div')?.offsetWidth || 300;
+                    const gap = 24; // gap-6 = 1.5rem = 24px
+                    const scrollAmount = cardWidth + gap;
+                    container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+                }
             };
             
             return (
@@ -102,47 +88,37 @@ function HomePage(){
                         )}
                     </div>
                     <div className="relative">
-                        {canSlide && (
+                        {/* Arrow buttons - same style for all screens */}
+                        {productList.length > 1 && (
                             <>
                                 <button 
-                                    className="hidden md:flex absolute -left-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
+                                    className="absolute left-0 top-1/2 -translate-y-1/2 z-10"
                                     onClick={handlePrev}
                                     aria-label="Previous"
-                                    disabled={start === 0}
                                 >
-                                    <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-4 h-4" />
+                                    <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-10 h-10 hover:opacity-80 transition-opacity" />
                                 </button>
                                 <button 
-                                    className="hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2 bg-white border border-gray-200 rounded-full w-8 h-8 items-center justify-center shadow hover:bg-gray-50"
+                                    className="absolute right-0 top-1/2 -translate-y-1/2 z-10"
                                     onClick={handleNext}
                                     aria-label="Next"
-                                    disabled={start + itemsPerView >= productList.length}
                                 >
-                                    <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-4 h-4" />
-                                </button>
-
-                                {/* Mobile arrows using provided images, centered vertically */}
-                                <button 
-                                    className="md:hidden absolute left-0 top-1/2 -translate-y-1/2 z-10"
-                                    onClick={handlePrev}
-                                    aria-label="Previous"
-                                    disabled={start === 0}
-                                >
-                                    <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-10 h-10 disabled:opacity-50" />
-                                </button>
-                                <button 
-                                    className="md:hidden absolute right-0 top-1/2 -translate-y-1/2 z-10"
-                                    onClick={handleNext}
-                                    aria-label="Next"
-                                    disabled={start + itemsPerView >= productList.length}
-                                >
-                                    <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-10 h-10 disabled:opacity-50" />
+                                    <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-10 h-10 hover:opacity-80 transition-opacity" />
                                 </button>
                             </>
                         )}
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6">
-                            {visibleProducts.map((p) => (
-                                <div key={p._id}>
+                        {/* Horizontal scrolling container */}
+                        <div 
+                            ref={(el) => scrollRefs.current[sectionKey] = el}
+                            className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
+                            style={{
+                                scrollbarWidth: 'none',
+                                msOverflowStyle: 'none',
+                                WebkitOverflowScrolling: 'touch'
+                            }}
+                        >
+                            {productList.map((p) => (
+                                <div key={p._id} className="flex-shrink-0 w-[280px] sm:w-[300px]">
                                     <ProductsCard 
                                         id={p._id}
                                         image={p.image}
@@ -157,9 +133,6 @@ function HomePage(){
                                 </div>
                             ))}
                         </div>
-                        {canSlide && (
-                            <></>
-                        )}
                     </div>
                 </div>
             );
