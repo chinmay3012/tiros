@@ -18,6 +18,7 @@ function ProductPage(){
   const [error, setError] = useState("");
   const [addedToCart, setAddedToCart] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Load product details
   useEffect(()=>{
@@ -25,7 +26,10 @@ function ProductPage(){
     (async ()=>{
       try{
         const res = await api.get(`/products/${id}`);
-        if(isMounted){ setProduct(res.data); }
+        if(isMounted){ 
+          setProduct(res.data);
+          setSelectedImageIndex(0); // Reset to first image when product changes
+        }
       }catch(err){
         setError("Failed to load product");
       }finally{
@@ -120,24 +124,57 @@ function ProductPage(){
   if(!product) return null;
 
   const isDisabled = product.status && product.status !== 'available';
+  
+  // Get all product images (support both images array and legacy image field)
+  const productImages = product.images && product.images.length > 0 
+    ? product.images 
+    : (product.image ? [product.image] : []);
+  
+  const currentImage = productImages[selectedImageIndex] || product.image || "https://placehold.co/600x600";
 
   return (
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div className="relative flex items-center justify-center p-4 md:p-6">
-          <img 
-            src={getImageUrl(product.image) || "https://placehold.co/600x600"} 
-            alt={product.name} 
-            className="w-full max-w-md object-contain transition-transform duration-500 ease-out"
-            style={{ imageRendering: 'auto' }}
-          />
-          {/* Status Badge - Only for coming_soon, removed for sold_out */}
-          {product.status === 'coming_soon' && (
-            <div className="absolute top-4 left-4">
-              <span className="inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg bg-yellow-500">
-                ⏳ Coming Soon
-              </span>
+        <div className="relative">
+          {/* Main Image Display */}
+          <div className="relative flex items-center justify-center p-4 md:p-6 mb-4">
+            <img 
+              src={getImageUrl(currentImage)} 
+              alt={product.name} 
+              className="w-full max-w-md object-contain transition-opacity duration-300 ease-out"
+              style={{ imageRendering: 'auto' }}
+            />
+            {/* Status Badge - Only for coming_soon, removed for sold_out */}
+            {product.status === 'coming_soon' && (
+              <div className="absolute top-4 left-4 z-10">
+                <span className="inline-flex items-center px-3 py-1.5 rounded text-sm font-semibold text-white shadow-lg bg-yellow-500">
+                  ⏳ Coming Soon
+                </span>
+              </div>
+            )}
+          </div>
+          
+          {/* Image Gallery Thumbnails */}
+          {productImages.length > 1 && (
+            <div className="flex gap-2 justify-center flex-wrap px-4">
+              {productImages.map((img, index) => (
+                <button
+                  key={index}
+                  onClick={() => setSelectedImageIndex(index)}
+                  className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-all ${
+                    selectedImageIndex === index 
+                      ? 'border-blue-500 ring-2 ring-blue-200' 
+                      : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  <img
+                    src={getImageUrl(img)}
+                    alt={`${product.name} view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
             </div>
           )}
         </div>

@@ -37,8 +37,9 @@ export default function Products() {
     isHotSelling: false,
     isCreateHype: false
   });
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
 
   useEffect(() => {
     fetchProducts();
@@ -103,8 +104,9 @@ export default function Products() {
       isHotSelling: false,
       isCreateHype: false
     });
-    setSelectedFile(null);
-    setImagePreview(null);
+    setSelectedFiles([]);
+    setImagePreviews([]);
+    setExistingImages([]);
     setShowProductModal(true);
   };
 
@@ -124,8 +126,13 @@ export default function Products() {
       isHotSelling: product.isHotSelling || false,
       isCreateHype: product.isCreateHype || false
     });
-    setSelectedFile(null);
-    setImagePreview(product.image || null);
+    setSelectedFiles([]);
+    // Set existing images from product (support both images array and legacy image field)
+    const productImages = product.images && product.images.length > 0 
+      ? product.images 
+      : (product.image ? [product.image] : []);
+    setExistingImages(productImages);
+    setImagePreviews(productImages);
     
     // Load subcategories for the selected category
     const categoryId = product.category._id || product.category;
@@ -146,14 +153,30 @@ export default function Products() {
   };
 
   const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setSelectedFiles(prev => [...prev, ...files]);
+      
+      // Create previews for new files
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          setImagePreviews(prev => [...prev, e.target.result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const handleRemoveImage = (index, isExisting = false) => {
+    if (isExisting) {
+      setExistingImages(prev => prev.filter((_, i) => i !== index));
+      setImagePreviews(prev => prev.filter((_, i) => i !== index));
+    } else {
+      // Remove from selected files and previews
+      const newIndex = existingImages.length + index;
+      setSelectedFiles(prev => prev.filter((_, i) => i !== index));
+      setImagePreviews(prev => prev.filter((_, i) => i !== newIndex));
     }
   };
 
@@ -173,9 +196,18 @@ export default function Products() {
       formDataToSend.append('isHotSelling', formData.isHotSelling);
       formDataToSend.append('isCreateHype', formData.isCreateHype);
       
-      if (selectedFile) {
-        formDataToSend.append('image', selectedFile);
-      } else if (formData.image) {
+      // Append multiple image files
+      selectedFiles.forEach((file) => {
+        formDataToSend.append('images', file);
+      });
+      
+      // Append existing image URLs if any
+      if (existingImages.length > 0) {
+        formDataToSend.append('imageUrls', JSON.stringify(existingImages));
+      }
+      
+      // Support legacy single image URL for backward compatibility
+      if (formData.image && selectedFiles.length === 0 && existingImages.length === 0) {
         formDataToSend.append('imageUrl', formData.image);
       }
 
@@ -615,17 +647,18 @@ export default function Products() {
           <p className="mt-1 text-xs text-gray-500">When enabled, customers will see a "(2) Left" badge under the price.</p>
         </div>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700">Product Image</label>
+                          <label className="block text-sm font-medium text-gray-700">Product Images</label>
                           <div className="mt-1 space-y-3">
-                            {/* File Upload */}
+                            {/* Multiple File Upload */}
                             <div>
                               <input
                                 type="file"
                                 accept="image/*"
+                                multiple
                                 onChange={handleFileChange}
                                 className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-medium file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                               />
-                              <p className="mt-1 text-xs text-gray-500">Upload an image file (JPG, PNG, GIF)</p>
+                              <p className="mt-1 text-xs text-gray-500">Upload multiple images (JPG, PNG, GIF) - You can select multiple files at once</p>
                             </div>
                             
                             {/* OR Divider */}
@@ -638,27 +671,51 @@ export default function Products() {
                               </div>
                             </div>
                             
-                            {/* URL Input */}
+                            {/* URL Input (Legacy support) */}
                             <div>
                               <input
                                 type="url"
                                 value={formData.image}
-                                onChange={(e) => setFormData({...formData, image: e.target.value})}
-                                placeholder="Enter image URL"
+                                onChange={(e) => {
+                                  setFormData({...formData, image: e.target.value});
+                                  if (e.target.value) {
+                                    setExistingImages([e.target.value]);
+                                    setImagePreviews([e.target.value]);
+                                  }
+                                }}
+                                placeholder="Enter image URL (optional)"
                                 className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
                               />
-                              <p className="mt-1 text-xs text-gray-500">Enter an image URL instead</p>
+                              <p className="mt-1 text-xs text-gray-500">Enter a single image URL (for backward compatibility)</p>
                             </div>
                             
-                            {/* Image Preview */}
-                            {imagePreview && (
+                            {/* Image Previews */}
+                            {imagePreviews.length > 0 && (
                               <div className="mt-3">
-                                <p className="text-sm font-medium text-gray-700 mb-2">Preview:</p>
-                                <img
-                                  src={imagePreview}
-                                  alt="Product preview"
-                                  className="h-32 w-32 object-cover rounded-lg border border-gray-300"
-                                />
+                                <p className="text-sm font-medium text-gray-700 mb-2">Image Gallery ({imagePreviews.length}):</p>
+                                <div className="grid grid-cols-4 gap-3">
+                                  {imagePreviews.map((preview, index) => (
+                                    <div key={index} className="relative group">
+                                      <img
+                                        src={preview}
+                                        alt={`Product preview ${index + 1}`}
+                                        className="h-24 w-24 object-cover rounded-lg border border-gray-300"
+                                      />
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveImage(index, index < existingImages.length)}
+                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity text-xs"
+                                        title="Remove image"
+                                      >
+                                        ×
+                                      </button>
+                                      {index === 0 && (
+                                        <span className="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-1 rounded">Primary</span>
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                                <p className="mt-2 text-xs text-gray-500">First image will be used as the primary product image</p>
                               </div>
                             )}
                           </div>

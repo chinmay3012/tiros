@@ -6,7 +6,7 @@ import { upload } from "../config/cloudinary.js";
 // @route  POST /api/admin/products
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, section, status, isHotSelling, isCreateHype } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, imageUrl, imageUrls, section, status, isHotSelling, isCreateHype } = req.body;
     
     console.log('Creating product with displayDescription:', displayDescription);
     
@@ -31,12 +31,28 @@ export const createProduct = async (req, res) => {
       }
     }
     
-    // Handle image - either uploaded file or URL
-    let image = imageUrl;
-    if (req.file) {
-      // Cloudinary automatically provides the full URL in req.file.path
-      image = req.file.path;
+    // Handle images - support multiple uploads and URLs
+    let images = [];
+    let image = null;
+    
+    // Handle uploaded files (req.files is an array when using upload.array())
+    if (req.files && req.files.length > 0) {
+      images = req.files.map(file => file.path);
     }
+    
+    // Handle image URLs from body (can be single URL or array)
+    if (imageUrls) {
+      const urls = Array.isArray(imageUrls) ? imageUrls : JSON.parse(imageUrls || '[]');
+      images = [...images, ...urls];
+    }
+    
+    // Support legacy single imageUrl for backward compatibility
+    if (imageUrl && !imageUrls) {
+      images.push(imageUrl);
+    }
+    
+    // Set primary image (first image) for backward compatibility
+    image = images.length > 0 ? images[0] : null;
     
     const product = await Product.create({
       name,
@@ -44,6 +60,7 @@ export const createProduct = async (req, res) => {
       displayDescription,
       price,
       image,
+      images,
       stock: stock || 0,
       category,
       subcategory: subcategory || null,
@@ -149,7 +166,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, section, status, isHotSelling, isCreateHype } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, imageUrls, section, status, isHotSelling, isCreateHype } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -179,19 +196,40 @@ export const updateProduct = async (req, res) => {
       }
     }
     
-    // Handle image - either uploaded file or URL
-    let image = imageUrl || product.image;
-    if (req.file) {
-      // With Cloudinary, we don't need to delete old files manually
-      // Cloudinary automatically provides the full URL in req.file.path
-      image = req.file.path;
+    // Handle images - support multiple uploads and URLs
+    let images = product.images || [];
+    
+    // Handle uploaded files (req.files is an array when using upload.array())
+    if (req.files && req.files.length > 0) {
+      const uploadedImages = req.files.map(file => file.path);
+      images = [...images, ...uploadedImages];
     }
+    
+    // Handle image URLs from body (can be single URL or array)
+    if (imageUrls !== undefined) {
+      if (imageUrls) {
+        const urls = Array.isArray(imageUrls) ? imageUrls : JSON.parse(imageUrls || '[]');
+        images = [...images, ...urls];
+      } else {
+        // If imageUrls is explicitly set to empty/null, keep existing images
+        // This allows updating other fields without changing images
+      }
+    }
+    
+    // Support legacy single imageUrl for backward compatibility
+    if (imageUrl && !imageUrls) {
+      images = [imageUrl];
+    }
+    
+    // Set primary image (first image) for backward compatibility
+    const image = images.length > 0 ? images[0] : product.image;
     
     if (name) product.name = name;
     if (description !== undefined) product.description = description;
     if (displayDescription !== undefined) product.displayDescription = displayDescription;
     if (price !== undefined) product.price = price;
     if (image) product.image = image;
+    if (images.length > 0) product.images = images;
     if (stock !== undefined) product.stock = stock;
     if (isActive !== undefined) product.isActive = isActive;
     if (section !== undefined) product.section = section;

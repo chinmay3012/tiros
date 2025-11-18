@@ -18,7 +18,11 @@ const productSchema = new mongoose.Schema(
       required: true,
     },
     image: {
-      type: String, // image URL
+      type: String, // primary image URL (for backward compatibility)
+    },
+    images: {
+      type: [String], // array of image URLs for product gallery
+      default: [],
     },
     stock: {
       type: Number,
