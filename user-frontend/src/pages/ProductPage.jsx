@@ -157,16 +157,17 @@ function ProductPage(){
           
           {/* Image Gallery Thumbnails */}
           {productImages.length > 1 && (
-            <div className="flex gap-2 justify-center flex-wrap px-4">
+            <div className="flex gap-3 px-4 overflow-x-auto pb-2" style={{ scrollSnapType: 'x mandatory' }}>
               {productImages.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-all ${
+                  className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-all flex-shrink-0 ${
                     selectedImageIndex === index 
                       ? 'border-blue-500 ring-2 ring-blue-200' 
                       : 'border-gray-200 hover:border-gray-400'
                   }`}
+                  style={{ scrollSnapAlign: 'center' }}
                 >
                   <img
                     src={getImageUrl(img)}
