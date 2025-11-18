@@ -74,7 +74,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   return (
     <div 
       onClick={handleCardClick}
-      className="group rounded-xl bg-white relative cursor-pointer overflow-hidden border border-transparent transition-all duration-300 ease-out shadow-[0_10px_30px_rgba(15,23,42,0.05)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.15)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
+      className="group relative cursor-pointer overflow-hidden rounded-xl bg-transparent transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
     >
       <div className="relative aspect-[4/5] overflow-hidden">
         <img
