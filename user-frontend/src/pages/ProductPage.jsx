@@ -171,50 +171,78 @@ function ProductPage(){
           )}
           
           {/* Action Buttons */}
-          <div className="space-y-3">
-            <button
-              onClick={handleAddToCart}
-              disabled={addedToCart || isDisabled}
-              className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 ${
-                addedToCart 
-                  ? "bg-green-500 text-white cursor-not-allowed" 
-                  : isDisabled
-                  ? "bg-gray-400 text-white cursor-not-allowed"
-                  : "bg-gray-900 hover:bg-gray-800 text-white"
-              }`}
-            >
-              {addedToCart ? "✓ Added to Cart" : isDisabled ? (product.status === 'coming_soon' ? '⏳ Coming Soon' : (product.status === 'sold_out' ? '❌ Sold Out' : 'Unavailable')) : "Add to Cart"}
-            </button>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <button
+                type="button"
+                onClick={handleAddToCart}
+                disabled={addedToCart || isDisabled}
+                className={`justify-center w-full rounded-lg flex items-center transition-opacity ${
+                  addedToCart || isDisabled
+                    ? "opacity-50 cursor-not-allowed"
+                    : "hover:opacity-90 active:opacity-80 cursor-pointer"
+                } bg-transparent`}
+              >
+                <img
+                  src="/images/BUTTON-2 copy.png"
+                  alt={isDisabled ? "Unavailable" : "Add to Cart"}
+                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+                />
+              </button>
+              {addedToCart && (
+                <p
+                  className="text-center text-green-600 text-sm font-medium"
+                  style={{ fontFamily: 'Poppins, sans-serif' }}
+                >
+                  Added to cart!
+                </p>
+              )}
+            </div>
             
             <button
+              type="button"
               onClick={handleBuyNow}
               disabled={buyNowLoading || addedToCart || isDisabled}
-              className={`w-full py-3 px-6 rounded-lg font-medium transition-opacity duration-200 ${
+              className={`justify-center w-full py-1 px-2 rounded-lg flex items-center transition-opacity text-sm font-medium ${
                 buyNowLoading || addedToCart || isDisabled
                   ? "opacity-50 cursor-not-allowed"
-                  : ""
+                  : "hover:opacity-90 active:opacity-80 cursor-pointer"
               } bg-transparent`}
             >
               {buyNowLoading ? (
-                <div className="flex items-center justify-center">
-                  <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <>
+                  <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                   Processing...
-                </div>
+                </>
               ) : product.status === 'sold_out' ? (
-                <img
-                  src="/images/BUTTON-5 copy.png"
-                  alt="Sold Out"
-                  className="h-12 w-auto mx-auto pointer-events-none"
-                />
+                <>
+                  <img
+                    src="/images/BUTTON-5 copy.png"
+                    alt="Sold Out"
+                    className="mx-auto pointer-events-none h-auto w-auto sm:h-12 block sm:hidden"
+                  />
+                  <img
+                    src="/images/BUTTON-5 copy.png"
+                    alt="Sold Out"
+                    className="mx-auto pointer-events-none h-auto w-auto sm:h-12 hidden sm:block"
+                  />
+                </>
               ) : (
-                <img
-                  src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
-                  alt="Buy Now"
-                  className="h-12 w-auto mx-auto pointer-events-none"
-                />
+                <>
+                  <img
+                    src="/images/BUTTON-3 copy.png"
+                    alt="Buy Now"
+                    className="mx-auto pointer-events-none h-auto w-auto sm:h-12 block sm:hidden"
+                  />
+                  <img
+                    src={import.meta.env.VITE_BUY_BUTTON_URL || "/images/buy-button.png"}
+                    alt="Buy Now"
+                    className="mx-auto pointer-events-none h-auto w-auto sm:h-12 hidden sm:block"
+                  />
+                </>
               )}
             </button>
           </div>
