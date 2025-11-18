@@ -184,7 +184,7 @@ function Footer(){
                             <img 
                                 src="/images/image 231 copy.png" 
                                 alt="Payment Methods" 
-                                className="h-auto max-w-full opacity-80 hover:opacity-100 transition-opacity"
+                                className="h-auto max-w-full opacity-100 transition-opacity"
                             />
                         </div>
                     </div>
