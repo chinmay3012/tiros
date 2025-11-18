@@ -125,8 +125,13 @@ function ProductPage(){
     <div className="container mx-auto px-4 py-12">
       {/* Product Details Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
-        <div className="relative">
-          <img src={getImageUrl(product.image) || "https://placehold.co/600x600"} alt={product.name} className="w-full object-cover rounded" />
+        <div className="relative flex items-center justify-center bg-white rounded-2xl shadow-md p-4">
+          <img 
+            src={getImageUrl(product.image) || "https://placehold.co/600x600"} 
+            alt={product.name} 
+            className="w-full max-w-md object-contain transition-transform duration-500 ease-out"
+            style={{ imageRendering: 'auto' }}
+          />
           {/* Status Badge - Only for coming_soon, removed for sold_out */}
           {product.status === 'coming_soon' && (
             <div className="absolute top-4 left-4">
