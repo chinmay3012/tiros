@@ -74,14 +74,15 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   return (
     <div 
       onClick={handleCardClick}
-      className="group rounded-lg bg-white relative cursor-pointer"
+      className="group rounded-xl bg-white relative cursor-pointer overflow-hidden transition-all duration-300 ease-out shadow-[0_10px_30px_rgba(15,23,42,0.05)] hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.15)]"
     >
-      <div className="relative aspect-[4/5] pt-1 pb-1 px-0.5">
+      <div className="relative aspect-[4/5] pt-1 pb-1 px-0.5 overflow-hidden">
         <img
           src={getImageUrl(image) || "https://placehold.co/400x533"}
           alt={alt}
-          className="w-full h-full object-contain transition-transform duration-300"
+          className="w-full h-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
         />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-70 pointer-events-none" />
         {/* Status Badge - Only for coming_soon, removed for sold_out */}
         {status === 'coming_soon' && (
           <div className="absolute top-2 left-2 z-20">
