@@ -6,6 +6,7 @@ function HeroSection() {
     const heroRef = useRef(null);
     const rafRef = useRef(null);
     const [scrollProgress, setScrollProgress] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         const updateProgress = () => {
@@ -32,6 +33,26 @@ function HeroSection() {
         };
     }, []);
 
+    useEffect(() => {
+        if (typeof window === "undefined" || typeof window.matchMedia === "undefined") return;
+        const mediaQuery = window.matchMedia("(max-width: 640px)");
+        const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+        updateIsMobile();
+
+        const addListener = mediaQuery.addEventListener ? mediaQuery.addEventListener.bind(mediaQuery) : mediaQuery.addListener?.bind(mediaQuery);
+        const removeListener = mediaQuery.removeEventListener ? mediaQuery.removeEventListener.bind(mediaQuery) : mediaQuery.removeListener?.bind(mediaQuery);
+
+        if (addListener) {
+            addListener("change", updateIsMobile);
+        }
+
+        return () => {
+            if (removeListener) {
+                removeListener("change", updateIsMobile);
+            }
+        };
+    }, []);
+
     const desktopHeroSrc = "/images/Frame 1000004003-2 copy.png";
     const mobileHeroSrc = "/images/Frame 1686553400 copy.png";
     const encodedDesktopHeroSrc = encodeURI(desktopHeroSrc);
@@ -51,17 +72,24 @@ function HeroSection() {
         backgroundPosition: "center",
     };
 
-    const topTransform = `translateY(-${scrollProgress * 25}vh) scale(${1 + scrollProgress * 0.08})`;
-    const bottomTransform = `translateY(${scrollProgress * 25}vh) scale(${1 + scrollProgress * 0.08})`;
+    const splitDistance = isMobile ? 15 : 25;
+    const scaleIntensity = isMobile ? 0.04 : 0.08;
+    const transformDuration = isMobile ? "transform 0.45s ease-out" : "transform 0.3s ease-out";
     const overlayOpacity = 1 - scrollProgress * 0.6;
-    const contentReveal = clamp((scrollProgress - 0.4) / 0.25);
+    const contentReveal = clamp((scrollProgress - (isMobile ? 0.45 : 0.4)) / (isMobile ? 0.3 : 0.25));
     const heroLayerOpacity = clamp(1 - contentReveal * 1.1, 0, 1);
     const logoOpacity = clamp((1 - scrollProgress * 0.8) * heroLayerOpacity, 0, 1);
+    const sparkleOpacity = isMobile ? 0.75 : 0.9;
+    const sparkleBlur = isMobile ? "blur(0.1px)" : "blur(0.02px)";
+    const contentTransition = isMobile ? "opacity 0.5s ease-out, transform 0.5s ease-out" : "opacity 0.4s ease-out, transform 0.4s ease-out";
+    const stickyMinHeightClass = isMobile ? "min-h-[160vh]" : "min-h-[180vh]";
+    const topTransform = `translateY(-${scrollProgress * splitDistance}vh) scale(${1 + scrollProgress * scaleIntensity})`;
+    const bottomTransform = `translateY(${scrollProgress * splitDistance}vh) scale(${1 + scrollProgress * scaleIntensity})`;
 
     return (
         <section
             ref={heroRef}
-            className="relative w-full min-h-[180vh] flex items-start justify-center bg-black"
+            className={`relative w-full ${stickyMinHeightClass} sm:min-h-[180vh] flex items-start justify-center bg-black`}
         >
             <div className="sticky top-0 h-screen w-full overflow-hidden">
                 {/* Desktop split effect */}
@@ -76,7 +104,7 @@ function HeroSection() {
                             ...splitBaseStyleDesktop,
                             clipPath: "inset(0 0 50% 0)",
                             transform: topTransform,
-                            transition: "transform 0.3s ease-out",
+                            transition: transformDuration,
                         }}
                     />
                     <div
@@ -85,7 +113,7 @@ function HeroSection() {
                             ...splitBaseStyleDesktop,
                             clipPath: "inset(50% 0 0 0)",
                             transform: bottomTransform,
-                            transition: "transform 0.3s ease-out",
+                            transition: transformDuration,
                         }}
                     />
                     <div
@@ -106,7 +134,7 @@ function HeroSection() {
                             ...splitBaseStyleMobile,
                             clipPath: "inset(0 0 50% 0)",
                             transform: topTransform,
-                            transition: "transform 0.3s ease-out",
+                            transition: transformDuration,
                         }}
                     />
                     <div
@@ -115,7 +143,7 @@ function HeroSection() {
                             ...splitBaseStyleMobile,
                             clipPath: "inset(50% 0 0 0)",
                             transform: bottomTransform,
-                            transition: "transform 0.3s ease-out",
+                            transition: transformDuration,
                         }}
                     />
                     <div
@@ -152,13 +180,13 @@ function HeroSection() {
                     style={{
                         opacity: contentReveal,
                         transform: `translateY(${(1 - contentReveal) * 40}px)`,
-                        transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
+                        transition: contentTransition,
                         pointerEvents: "none",
                         background: `linear-gradient(180deg, rgba(10,10,10,${0.9 - contentReveal * 0.6}) 0%, rgba(0,0,0,${0.5 - contentReveal * 0.5}) 40%, rgba(4,4,4,0) 100%)`
                     }}
                 >
                     <div
-                        className="absolute inset-0 z-0 opacity-90 mix-blend-screen pointer-events-none"
+                        className="absolute inset-0 z-0 mix-blend-screen pointer-events-none"
                         style={{
                             backgroundImage: `radial-gradient(circle at 8% 15%, rgba(255,255,255,0.38) 0, transparent 10px),
                                               radial-gradient(circle at 16% 32%, rgba(255,255,255,0.34) 0, transparent 8px),
@@ -182,7 +210,8 @@ function HeroSection() {
                                               radial-gradient(circle at 58% 90%, rgba(255,255,255,0.31) 0, transparent 8px),
                                               radial-gradient(circle at 80% 90%, rgba(255,255,255,0.3) 0, transparent 7px),
                                               radial-gradient(circle at 94% 86%, rgba(255,255,255,0.28) 0, transparent 8px)`,
-                            filter: "blur(0.02px)"
+                            filter: sparkleBlur,
+                            opacity: sparkleOpacity
                         }}
                     />
                     <div
@@ -190,7 +219,7 @@ function HeroSection() {
                         style={{
                             opacity: contentReveal,
                             transform: `translateY(${(1 - contentReveal) * 30}px)`,
-                            transition: "opacity 0.4s ease-out, transform 0.4s ease-out",
+                            transition: contentTransition,
                             color: `rgba(255,255,255,${contentReveal || 0})`
                         }}
                     >
