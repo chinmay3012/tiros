@@ -6,7 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import { getImageUrl } from "../utils/imageUtils";
 import SuccessNotification from "./SuccessNotification";
 
-function ProductsCard({ id, image, alt, title, price, status = 'available', displayDescription, isHotSelling = false, isCreateHype = false }) {
+function ProductsCard({ id, image, images = [], alt, title, price, status = 'available', displayDescription, isHotSelling = false, isCreateHype = false }) {
   const [added, setAdded] = useState(false);
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const [showWishlistNotification, setShowWishlistNotification] = useState(false);
@@ -15,12 +15,20 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
 
+  // Prepare primary + secondary images (supports legacy single image field)
+  const resolvedImages = [image, ...(Array.isArray(images) ? images : [])].filter(Boolean);
+  const uniqueImages = [...new Set(resolvedImages)];
+  const primaryImagePath = uniqueImages[0] || null;
+  const hoverImagePath = uniqueImages[1] || null;
+  const primaryImageSrc = getImageUrl(primaryImagePath) || "https://placehold.co/400x533";
+  const hoverImageSrc = hoverImagePath ? getImageUrl(hoverImagePath) : null;
+
   const handleAddToCart = (e) => {
     e.stopPropagation();
     // Disable for coming_soon and sold_out items
     if (status === 'coming_soon' || status === 'sold_out') return;
     
-    addToCart({ id ,image, alt, title, price, status });
+    addToCart({ id, image: primaryImagePath, alt, title, price, status });
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
@@ -32,7 +40,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     // Only allow for coming_soon and sold_out items
     if (status !== 'coming_soon' && status !== 'sold_out') return;
     
-    addToWishlist({ id, image, alt, title, price, status });
+    addToWishlist({ id, image: primaryImagePath, alt, title, price, status });
     setShowWishlistNotification(true);
   };
 
@@ -53,7 +61,7 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
     try {
       // Clear existing cart and add only this item
       clearCart();
-      addToCart({ id, image, alt, title, price, status });
+      addToCart({ id, image: primaryImagePath, alt, title, price, status });
       
       // Navigate to checkout
       navigate('/checkout');
@@ -76,12 +84,19 @@ function ProductsCard({ id, image, alt, title, price, status = 'available', disp
       onClick={handleCardClick}
       className="group relative cursor-pointer overflow-hidden rounded-xl bg-transparent transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
     >
-      <div className="relative aspect-[4/5] overflow-hidden">
+      <div className="relative aspect-[4/5] overflow-hidden bg-white">
         <img
-          src={getImageUrl(image) || "https://placehold.co/400x533"}
+          src={primaryImageSrc}
           alt={alt}
-          className="w-full h-full object-contain transition-transform duration-500 ease-out group-hover:scale-105"
+          className={`absolute inset-0 w-full h-full object-contain transition-all duration-700 ease-out ${hoverImageSrc ? "opacity-100 group-hover:opacity-0" : ""} group-hover:scale-105`}
         />
+        {hoverImageSrc && (
+          <img
+            src={hoverImageSrc}
+            alt={alt}
+            className="absolute inset-0 w-full h-full object-contain opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-70 pointer-events-none" />
         {/* Status Badge - Only for coming_soon, removed for sold_out */}
         {status === 'coming_soon' && (

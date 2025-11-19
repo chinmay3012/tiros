@@ -298,6 +298,7 @@ function ProductPage(){
                   <ProductsCard 
                     id={suggestedProduct._id}
                     image={suggestedProduct.image}
+                    images={suggestedProduct.images}
                     alt={suggestedProduct.name}
                     title={suggestedProduct.name}
                     price={`Rs. ${suggestedProduct.price}`}

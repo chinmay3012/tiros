@@ -77,6 +77,7 @@ function SubcategoryPage(){
             <ProductsCard 
               id={p._id} 
               image={p.image} 
+              images={p.images}
               alt={p.name} 
               title={p.name} 
               price={`Rs. ${p.price}`}
