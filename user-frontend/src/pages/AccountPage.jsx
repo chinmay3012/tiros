@@ -10,9 +10,67 @@ function AccountPage(){
   const [tab, setTab] = useState('profile');
   const [orders, setOrders] = useState([]);
   const [payments, setPayments] = useState([]);
-  const [address, setAddress] = useState(()=>{
-    try{ const raw = window.localStorage.getItem('shippingAddress'); return raw? JSON.parse(raw) : {}; }catch{return {}} 
-  });
+  const [address, setAddress] = useState({});
+  const [form, setForm] = useState({ name: user?.name||'', email: user?.email||'', address: {} });
+
+  // Load user profile including address when component mounts or user changes
+  useEffect(() => {
+    const loadProfile = async () => {
+      if (user?._id) {
+        try {
+          const { data } = await api.get(`/users/${user._id}`);
+          const userAddress = data.address || {};
+          setAddress(userAddress);
+          setForm({
+            name: data.name || '',
+            email: data.email || '',
+            address: userAddress
+          });
+        } catch (error) {
+          console.error("Error loading profile:", error);
+          // Fallback to localStorage if API fails
+          try {
+            const raw = window.localStorage.getItem('shippingAddress');
+            const localAddress = raw ? JSON.parse(raw) : {};
+            setAddress(localAddress);
+            setForm({
+              name: user?.name || '',
+              email: user?.email || '',
+              address: localAddress
+            });
+          } catch (e) {
+            setAddress({});
+            setForm({
+              name: user?.name || '',
+              email: user?.email || '',
+              address: {}
+            });
+          }
+        }
+      } else {
+        // User not logged in - load from localStorage
+        try {
+          const raw = window.localStorage.getItem('shippingAddress');
+          const localAddress = raw ? JSON.parse(raw) : {};
+          setAddress(localAddress);
+          setForm({
+            name: '',
+            email: '',
+            address: localAddress
+          });
+        } catch (e) {
+          setAddress({});
+          setForm({
+            name: '',
+            email: '',
+            address: {}
+          });
+        }
+      }
+    };
+
+    loadProfile();
+  }, [user?._id]);
 
   useEffect(()=>{
     if(tab==='orders' && user?._id){
@@ -26,8 +84,6 @@ function AccountPage(){
       })();
     }
   },[tab,user?._id]);
-
-  const [form, setForm] = useState({ name: user?.name||'', email: user?.email||'', address: address||{} });
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
@@ -35,8 +91,9 @@ function AccountPage(){
     try{
       setSaving(true); setMessage('');
       const { data } = await api.put(`/users/${user._id}`, { name: form.name, email: form.email, address: form.address });
-      window.localStorage.setItem('user', JSON.stringify({ _id: data._id, name: data.name, email: data.email }));
+      setAddress(data.address || {});
       setMessage('Saved successfully');
+      // Update user in AuthContext if needed (it will be handled by AuthContext refresh)
     }catch(e){ setMessage(e?.response?.data?.message||'Failed to save'); }
     finally{ setSaving(false); }
   };

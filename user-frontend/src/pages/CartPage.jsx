@@ -1,18 +1,44 @@
 import { useCart } from "../context/CartContext";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { getImageUrl } from "../utils/imageUtils";
 
 
 function CartPage() {
-  const { cartItems, removeFromCart } = useCart();
+  const { cartItems, removeFromCart, syncCartWithProducts } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const [syncing, setSyncing] = useState(false);
+
+  // Sync cart with current product data when page loads
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setSyncing(true);
+      syncCartWithProducts().finally(() => setSyncing(false));
+    }
+  }, []); // Only run on mount
+
+  // Also sync when page becomes visible (user switches back to tab)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible' && cartItems.length > 0) {
+        syncCartWithProducts();
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
+  }, [cartItems.length, syncCartWithProducts]);
 
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-4xl font-bold mb-6 text-center">Your Cart</h1>
+      {syncing && (
+        <div className="max-w-xl mx-auto mb-4 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700 text-center">
+          Updating cart with latest product information...
+        </div>
+      )}
 
       {cartItems.length === 0 ? (
         <div className="text-center py-12">

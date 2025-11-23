@@ -42,7 +42,14 @@ export const loginUser = async (req, res) => {
     const token = signToken(user._id);
     return res.json({
       token,
-      user: { _id: user._id, name: user.name, email: user.email, address: user.address || null },
+      user: { 
+        _id: user._id, 
+        name: user.name, 
+        email: user.email, 
+        address: user.address || null,
+        cart: user.cart || [],
+        wishlist: user.wishlist || []
+      },
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -68,6 +75,68 @@ export const updateProfile = async (req, res) => {
     await user.save();
     return res.json({ _id: user._id, name: user.name, email: user.email, address: user.address || null });
   }catch(error){ return res.status(500).json({ message: error.message }); }
+};
+
+// Cart Management
+export const getCart = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('cart');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    return res.json({ cart: user.cart || [] });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateCart = async (req, res) => {
+  try {
+    const { cart } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.cart = cart || [];
+    await user.save();
+    return res.json({ cart: user.cart });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Wishlist Management
+export const getWishlist = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id).select('wishlist');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    return res.json({ wishlist: user.wishlist || [] });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+export const updateWishlist = async (req, res) => {
+  try {
+    const { wishlist } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.wishlist = wishlist || [];
+    await user.save();
+    return res.json({ wishlist: user.wishlist });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+
+// Address Management
+export const updateAddress = async (req, res) => {
+  try {
+    const { address } = req.body;
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    user.address = address || {};
+    await user.save();
+    return res.json({ address: user.address || null });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
 };
 
 

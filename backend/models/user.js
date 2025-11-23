@@ -40,6 +40,23 @@ const userSchema = new mongoose.Schema(
       country: String,
       phone: String,
     },
+    cart: [{
+      id: String,
+      image: String,
+      alt: String,
+      title: String,
+      price: String,
+      status: String,
+      quantity: { type: Number, default: 1 }
+    }],
+    wishlist: [{
+      id: String,
+      image: String,
+      alt: String,
+      title: String,
+      price: String,
+      status: String
+    }],
   },
   { timestamps: true }
 );

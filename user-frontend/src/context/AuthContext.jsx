@@ -43,7 +43,18 @@ export const AuthProvider = ({ children }) => {
       const res = await api.post("/users/login", { email, password });
       // Expecting { token, user }
       setToken(res.data?.token || "");
-      setUser(res.data?.user || null);
+      // Store only essential user info (cart/wishlist will be loaded by their contexts)
+      const userData = res.data?.user || null;
+      if (userData) {
+        setUser({
+          _id: userData._id,
+          name: userData.name,
+          email: userData.email,
+          address: userData.address || null
+        });
+      } else {
+        setUser(null);
+      }
       return { success: true };
     } catch (error) {
       // Clear any stale auth data on login failure

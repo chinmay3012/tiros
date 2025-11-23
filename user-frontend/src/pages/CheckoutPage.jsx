@@ -6,18 +6,88 @@ import OrderConfirmationPopup from "../components/OrderConfirmationPopup";
 import api from "../api/axios";
 
 function CheckoutPage() {
-  const { cartItems, checkout } = useCart();
+  const { cartItems, checkout, syncCartWithProducts } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
   const [error, setError] = useState("");
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
-  const [address, setAddress] = useState(()=>{
-    try{
-      const raw = window.localStorage.getItem('shippingAddress');
-      return raw ? JSON.parse(raw) : { name:"", street:"", city:"", zip:"", country:"", phone:"" };
-    }catch{return { name:"", street:"", city:"", zip:"", country:"", phone:"" }}
-  });
+  const [syncing, setSyncing] = useState(false);
+
+  // Sync cart with current product data when page loads
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      setSyncing(true);
+      syncCartWithProducts().finally(() => setSyncing(false));
+    }
+  }, []); // Only run on mount
+
+  const [address, setAddress] = useState({ name:"", street:"", city:"", zip:"", country:"", phone:"" });
+  const [loadingAddress, setLoadingAddress] = useState(true);
+
+  // Load address from API if user is logged in, or from localStorage if not
+  useEffect(() => {
+    const loadAddress = async () => {
+      setLoadingAddress(true);
+      try {
+        if (user?._id) {
+          // User is logged in - load from API
+          const response = await api.get(`/users/${user._id}`);
+          const userAddress = response.data.address || {};
+          setAddress({
+            name: userAddress.name || "",
+            street: userAddress.street || "",
+            city: userAddress.city || "",
+            zip: userAddress.zip || "",
+            country: userAddress.country || "",
+            phone: userAddress.phone || ""
+          });
+        } else {
+          // User not logged in - load from localStorage
+          try {
+            const raw = window.localStorage.getItem('shippingAddress');
+            setAddress(raw ? JSON.parse(raw) : { name:"", street:"", city:"", zip:"", country:"", phone:"" });
+          } catch (error) {
+            setAddress({ name:"", street:"", city:"", zip:"", country:"", phone:"" });
+          }
+        }
+      } catch (error) {
+        console.error("Error loading address:", error);
+        // Fallback to localStorage
+        try {
+          const raw = window.localStorage.getItem('shippingAddress');
+          setAddress(raw ? JSON.parse(raw) : { name:"", street:"", city:"", zip:"", country:"", phone:"" });
+        } catch (e) {
+          setAddress({ name:"", street:"", city:"", zip:"", country:"", phone:"" });
+        }
+      } finally {
+        setLoadingAddress(false);
+      }
+    };
+
+    loadAddress();
+  }, [user?._id]);
+
+  // Save address to API or localStorage when it changes
+  const saveAddress = async (addressData) => {
+    try {
+      if (user?._id) {
+        // User is logged in - save to API
+        await api.put(`/users/${user._id}/address`, { address: addressData });
+      } else {
+        // User not logged in - save to localStorage
+        window.localStorage.setItem('shippingAddress', JSON.stringify(addressData));
+      }
+    } catch (error) {
+      console.error("Error saving address:", error);
+      // Fallback to localStorage
+      try {
+        window.localStorage.setItem('shippingAddress', JSON.stringify(addressData));
+      } catch (e) {
+        console.error("Error saving to localStorage:", e);
+      }
+    }
+  };
   const [couponCode, setCouponCode] = useState("");
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponError, setCouponError] = useState("");
@@ -128,7 +198,7 @@ function CheckoutPage() {
         return;
       }
       
-      window.localStorage.setItem('shippingAddress', JSON.stringify(address));
+      await saveAddress(address);
       // Razorpay flow
       const loaded = await loadRazorpay("https://checkout.razorpay.com/v1/checkout.js");
       if(!loaded){ throw new Error('Failed to load Razorpay'); }
@@ -209,6 +279,11 @@ function CheckoutPage() {
   return (
     <div className="min-h-screen p-8">
       <h1 className="text-4xl font-bold mb-6 text-center">Checkout</h1>
+      {syncing && (
+        <div className="max-w-xl mx-auto mb-4 p-2 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700 text-center">
+          Updating cart with latest product information...
+        </div>
+      )}
       <div className="max-w-xl mx-auto border p-6 rounded shadow space-y-4">
         <h2 className="text-2xl font-semibold mb-4">Order Summary</h2>
         <div className="space-y-2">

@@ -2,11 +2,15 @@ import { useEffect, useRef, useState } from "react";
 
 const clamp = (value, min = 0, max = 1) => Math.min(Math.max(value, min), max);
 
+// Detect Safari for performance optimizations
+const isSafari = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
+
 function HeroSection() {
     const heroRef = useRef(null);
     const rafRef = useRef(null);
     const [scrollProgress, setScrollProgress] = useState(0);
     const [isMobile, setIsMobile] = useState(false);
+    const lastScrollTime = useRef(0);
 
     useEffect(() => {
         const updateProgress = () => {
@@ -18,6 +22,13 @@ function HeroSection() {
         };
 
         const handleScroll = () => {
+            const now = performance.now();
+            // Throttle more aggressively on Safari
+            if (isSafari && now - lastScrollTime.current < 8) {
+                return;
+            }
+            lastScrollTime.current = now;
+            
             if (rafRef.current) cancelAnimationFrame(rafRef.current);
             rafRef.current = requestAnimationFrame(updateProgress);
         };
@@ -74,29 +85,50 @@ function HeroSection() {
 
     const splitDistance = isMobile ? 15 : 25;
     const scaleIntensity = isMobile ? 0.04 : 0.08;
-    const transformDuration = isMobile ? "transform 0.45s ease-out" : "transform 0.3s ease-out";
+    // Remove CSS transitions during scroll for Safari - they conflict with RAF updates
+    const transformDuration = isSafari ? "none" : (isMobile ? "transform 0.45s ease-out" : "transform 0.3s ease-out");
     const overlayOpacity = 1 - scrollProgress * 0.6;
     const contentReveal = clamp((scrollProgress - (isMobile ? 0.45 : 0.4)) / (isMobile ? 0.3 : 0.25));
     const heroLayerOpacity = clamp(1 - contentReveal * 1.1, 0, 1);
     const logoOpacity = clamp((1 - scrollProgress * 0.8) * heroLayerOpacity, 0, 1);
-    const sparkleOpacity = isMobile ? 0.75 : 0.9;
-    const sparkleBlur = isMobile ? "blur(0.1px)" : "blur(0.02px)";
-    const contentTransition = isMobile ? "opacity 0.5s ease-out, transform 0.5s ease-out" : "opacity 0.4s ease-out, transform 0.4s ease-out";
+    const sparkleOpacity = isMobile ? 0.75 : (isSafari ? 0.85 : 0.9);
+    const sparkleBlur = isMobile ? "blur(0.1px)" : (isSafari ? "blur(0.05px)" : "blur(0.02px)");
+    const contentTransition = isSafari ? "none" : (isMobile ? "opacity 0.5s ease-out, transform 0.5s ease-out" : "opacity 0.4s ease-out, transform 0.4s ease-out");
     const stickyMinHeightClass = isMobile ? "min-h-[160vh]" : "min-h-[180vh]";
-    const topTransform = `translateY(-${scrollProgress * splitDistance}vh) scale(${1 + scrollProgress * scaleIntensity})`;
-    const bottomTransform = `translateY(${scrollProgress * splitDistance}vh) scale(${1 + scrollProgress * scaleIntensity})`;
+    
+    // Use translate3d for better GPU acceleration, especially on Safari
+    const viewportHeight = typeof window !== 'undefined' ? window.innerHeight : 800;
+    const topTranslateY = -scrollProgress * splitDistance * viewportHeight / 100;
+    const bottomTranslateY = scrollProgress * splitDistance * viewportHeight / 100;
+    const scale = 1 + scrollProgress * scaleIntensity;
+    const topTransform = `translate3d(0, ${topTranslateY}px, 0) scale(${scale})`;
+    const bottomTransform = `translate3d(0, ${bottomTranslateY}px, 0) scale(${scale})`;
 
     return (
         <section
             ref={heroRef}
             className={`relative w-full ${stickyMinHeightClass} sm:min-h-[180vh] flex items-start justify-center bg-black`}
         >
-            <div className="sticky top-0 h-screen w-full overflow-hidden">
+            <div 
+                className="sticky top-0 h-screen w-full overflow-hidden"
+                style={{
+                    willChange: 'transform',
+                    WebkitTransform: 'translateZ(0)',
+                    transform: 'translateZ(0)',
+                    backfaceVisibility: 'hidden',
+                    WebkitBackfaceVisibility: 'hidden'
+                }}
+            >
                 {/* Desktop split effect */}
                 <div
                     className="hidden sm:block absolute inset-0"
                     aria-hidden="true"
-                    style={{ opacity: heroLayerOpacity, transition: "opacity 0.4s ease-out" }}
+                    style={{ 
+                        opacity: heroLayerOpacity, 
+                        transition: isSafari ? "none" : "opacity 0.4s ease-out",
+                        willChange: 'opacity',
+                        contain: 'layout style paint'
+                    }}
                 >
                     <div
                         className="absolute inset-0 will-change-transform"
@@ -105,6 +137,10 @@ function HeroSection() {
                             clipPath: "inset(0 0 50% 0)",
                             transform: topTransform,
                             transition: transformDuration,
+                            WebkitTransform: topTransform,
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            contain: 'layout style paint'
                         }}
                     />
                     <div
@@ -114,6 +150,10 @@ function HeroSection() {
                             clipPath: "inset(50% 0 0 0)",
                             transform: bottomTransform,
                             transition: transformDuration,
+                            WebkitTransform: bottomTransform,
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            contain: 'layout style paint'
                         }}
                     />
                     <div
@@ -126,7 +166,12 @@ function HeroSection() {
                 <div
                     className="sm:hidden absolute inset-0"
                     aria-hidden="true"
-                    style={{ opacity: heroLayerOpacity, transition: "opacity 0.4s ease-out" }}
+                    style={{ 
+                        opacity: heroLayerOpacity, 
+                        transition: isSafari ? "none" : "opacity 0.4s ease-out",
+                        willChange: 'opacity',
+                        contain: 'layout style paint'
+                    }}
                 >
                     <div
                         className="absolute inset-0 will-change-transform"
@@ -135,6 +180,10 @@ function HeroSection() {
                             clipPath: "inset(0 0 50% 0)",
                             transform: topTransform,
                             transition: transformDuration,
+                            WebkitTransform: topTransform,
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            contain: 'layout style paint'
                         }}
                     />
                     <div
@@ -144,6 +193,10 @@ function HeroSection() {
                             clipPath: "inset(50% 0 0 0)",
                             transform: bottomTransform,
                             transition: transformDuration,
+                            WebkitTransform: bottomTransform,
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden',
+                            contain: 'layout style paint'
                         }}
                     />
                     <div
@@ -166,8 +219,12 @@ function HeroSection() {
                             textAlign: 'center',
                             textShadow: '2px 2px 4px rgba(0,0,0,0.5)',
                             opacity: logoOpacity,
-                            transform: `translateY(-${scrollProgress * 20}px)`,
-                            transition: "opacity 0.3s ease-out, transform 0.3s ease-out"
+                            transform: `translate3d(0, ${-scrollProgress * 20}px, 0)`,
+                            transition: isSafari ? "none" : "opacity 0.3s ease-out, transform 0.3s ease-out",
+                            willChange: 'transform, opacity',
+                            WebkitTransform: `translate3d(0, ${-scrollProgress * 20}px, 0)`,
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden'
                         }}
                     >
                         TOPSHOT
@@ -179,48 +236,71 @@ function HeroSection() {
                     className="absolute inset-0 flex items-center justify-center px-6"
                     style={{
                         opacity: contentReveal,
-                        transform: `translateY(${(1 - contentReveal) * 40}px)`,
+                        transform: `translate3d(0, ${(1 - contentReveal) * 40}px, 0)`,
                         transition: contentTransition,
                         pointerEvents: "none",
-                        background: `linear-gradient(180deg, rgba(10,10,10,${0.9 - contentReveal * 0.6}) 0%, rgba(0,0,0,${0.5 - contentReveal * 0.5}) 40%, rgba(4,4,4,0) 100%)`
+                        background: `linear-gradient(180deg, rgba(10,10,10,${0.9 - contentReveal * 0.6}) 0%, rgba(0,0,0,${0.5 - contentReveal * 0.5}) 40%, rgba(4,4,4,0) 100%)`,
+                        WebkitTransform: `translate3d(0, ${(1 - contentReveal) * 40}px, 0)`,
+                        willChange: 'transform, opacity',
+                        backfaceVisibility: 'hidden',
+                        WebkitBackfaceVisibility: 'hidden'
                     }}
                 >
                     <div
                         className="absolute inset-0 z-0 mix-blend-screen pointer-events-none"
                         style={{
-                            backgroundImage: `radial-gradient(circle at 8% 15%, rgba(255,255,255,0.38) 0, transparent 10px),
-                                              radial-gradient(circle at 16% 32%, rgba(255,255,255,0.34) 0, transparent 8px),
-                                              radial-gradient(circle at 26% 18%, rgba(255,255,255,0.32) 0, transparent 7px),
-                                              radial-gradient(circle at 38% 8%, rgba(255,255,255,0.3) 0, transparent 6px),
-                                              radial-gradient(circle at 48% 24%, rgba(255,255,255,0.36) 0, transparent 9px),
-                                              radial-gradient(circle at 60% 12%, rgba(255,255,255,0.35) 0, transparent 8px),
-                                              radial-gradient(circle at 72% 18%, rgba(255,255,255,0.33) 0, transparent 7px),
-                                              radial-gradient(circle at 84% 10%, rgba(255,255,255,0.32) 0, transparent 6px),
-                                              radial-gradient(circle at 92% 26%, rgba(255,255,255,0.34) 0, transparent 8px),
-                                              radial-gradient(circle at 6% 52%, rgba(255,255,255,0.3) 0, transparent 9px),
-                                              radial-gradient(circle at 18% 60%, rgba(255,255,255,0.32) 0, transparent 7px),
-                                              radial-gradient(circle at 30% 70%, rgba(255,255,255,0.34) 0, transparent 8px),
-                                              radial-gradient(circle at 42% 62%, rgba(255,255,255,0.36) 0, transparent 7px),
-                                              radial-gradient(circle at 54% 78%, rgba(255,255,255,0.33) 0, transparent 8px),
-                                              radial-gradient(circle at 66% 68%, rgba(255,255,255,0.35) 0, transparent 7px),
-                                              radial-gradient(circle at 78% 82%, rgba(255,255,255,0.3) 0, transparent 9px),
-                                              radial-gradient(circle at 90% 72%, rgba(255,255,255,0.32) 0, transparent 8px),
-                                              radial-gradient(circle at 12% 85%, rgba(255,255,255,0.33) 0, transparent 7px),
-                                              radial-gradient(circle at 36% 88%, rgba(255,255,255,0.34) 0, transparent 9px),
-                                              radial-gradient(circle at 58% 90%, rgba(255,255,255,0.31) 0, transparent 8px),
-                                              radial-gradient(circle at 80% 90%, rgba(255,255,255,0.3) 0, transparent 7px),
-                                              radial-gradient(circle at 94% 86%, rgba(255,255,255,0.28) 0, transparent 8px)`,
+                            backgroundImage: isSafari 
+                                ? `radial-gradient(circle at 10% 20%, rgba(255,255,255,0.4) 0, transparent 12px),
+                                   radial-gradient(circle at 30% 15%, rgba(255,255,255,0.35) 0, transparent 10px),
+                                   radial-gradient(circle at 50% 25%, rgba(255,255,255,0.38) 0, transparent 11px),
+                                   radial-gradient(circle at 70% 20%, rgba(255,255,255,0.33) 0, transparent 9px),
+                                   radial-gradient(circle at 90% 30%, rgba(255,255,255,0.36) 0, transparent 10px),
+                                   radial-gradient(circle at 15% 60%, rgba(255,255,255,0.32) 0, transparent 9px),
+                                   radial-gradient(circle at 40% 70%, rgba(255,255,255,0.35) 0, transparent 10px),
+                                   radial-gradient(circle at 65% 65%, rgba(255,255,255,0.34) 0, transparent 9px),
+                                   radial-gradient(circle at 85% 75%, rgba(255,255,255,0.3) 0, transparent 11px),
+                                   radial-gradient(circle at 20% 85%, rgba(255,255,255,0.33) 0, transparent 10px),
+                                   radial-gradient(circle at 55% 88%, rgba(255,255,255,0.31) 0, transparent 9px),
+                                   radial-gradient(circle at 80% 90%, rgba(255,255,255,0.29) 0, transparent 10px)`
+                                : `radial-gradient(circle at 8% 15%, rgba(255,255,255,0.38) 0, transparent 10px),
+                                   radial-gradient(circle at 16% 32%, rgba(255,255,255,0.34) 0, transparent 8px),
+                                   radial-gradient(circle at 26% 18%, rgba(255,255,255,0.32) 0, transparent 7px),
+                                   radial-gradient(circle at 38% 8%, rgba(255,255,255,0.3) 0, transparent 6px),
+                                   radial-gradient(circle at 48% 24%, rgba(255,255,255,0.36) 0, transparent 9px),
+                                   radial-gradient(circle at 60% 12%, rgba(255,255,255,0.35) 0, transparent 8px),
+                                   radial-gradient(circle at 72% 18%, rgba(255,255,255,0.33) 0, transparent 7px),
+                                   radial-gradient(circle at 84% 10%, rgba(255,255,255,0.32) 0, transparent 6px),
+                                   radial-gradient(circle at 92% 26%, rgba(255,255,255,0.34) 0, transparent 8px),
+                                   radial-gradient(circle at 6% 52%, rgba(255,255,255,0.3) 0, transparent 9px),
+                                   radial-gradient(circle at 18% 60%, rgba(255,255,255,0.32) 0, transparent 7px),
+                                   radial-gradient(circle at 30% 70%, rgba(255,255,255,0.34) 0, transparent 8px),
+                                   radial-gradient(circle at 42% 62%, rgba(255,255,255,0.36) 0, transparent 7px),
+                                   radial-gradient(circle at 54% 78%, rgba(255,255,255,0.33) 0, transparent 8px),
+                                   radial-gradient(circle at 66% 68%, rgba(255,255,255,0.35) 0, transparent 7px),
+                                   radial-gradient(circle at 78% 82%, rgba(255,255,255,0.3) 0, transparent 9px),
+                                   radial-gradient(circle at 90% 72%, rgba(255,255,255,0.32) 0, transparent 8px),
+                                   radial-gradient(circle at 12% 85%, rgba(255,255,255,0.33) 0, transparent 7px),
+                                   radial-gradient(circle at 36% 88%, rgba(255,255,255,0.34) 0, transparent 9px),
+                                   radial-gradient(circle at 58% 90%, rgba(255,255,255,0.31) 0, transparent 8px),
+                                   radial-gradient(circle at 80% 90%, rgba(255,255,255,0.3) 0, transparent 7px),
+                                   radial-gradient(circle at 94% 86%, rgba(255,255,255,0.28) 0, transparent 8px)`,
                             filter: sparkleBlur,
-                            opacity: sparkleOpacity
+                            opacity: sparkleOpacity,
+                            willChange: 'opacity',
+                            contain: 'layout style paint'
                         }}
                     />
                     <div
                         className="max-w-3xl text-center relative z-10"
                         style={{
                             opacity: contentReveal,
-                            transform: `translateY(${(1 - contentReveal) * 30}px)`,
+                            transform: `translate3d(0, ${(1 - contentReveal) * 30}px, 0)`,
                             transition: contentTransition,
-                            color: `rgba(255,255,255,${contentReveal || 0})`
+                            color: `rgba(255,255,255,${contentReveal || 0})`,
+                            WebkitTransform: `translate3d(0, ${(1 - contentReveal) * 30}px, 0)`,
+                            willChange: 'transform, opacity',
+                            backfaceVisibility: 'hidden',
+                            WebkitBackfaceVisibility: 'hidden'
                         }}
                     >
                         <p
