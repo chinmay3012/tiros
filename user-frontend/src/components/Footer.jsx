@@ -10,7 +10,14 @@ function Footer(){
                     
                     {/* Brand Column */}
                     <div className="col-span-1">
-                        <h2 className="text-3xl font-bold tracking-wider mb-6 text-white" style={{ fontFamily: 'Kode Mono, monospace' }}>TOPSHOT</h2>
+                        <h2 className="mb-6 text-white" style={{ 
+                            fontFamily: 'Kode Mono, monospace',
+                            fontWeight: 500,
+                            fontSize: '60px',
+                            lineHeight: '100%',
+                            letterSpacing: '0%',
+                            textAlign: 'left'
+                        }}>TOPSHOT</h2>
                         
                         {/* Social Media Icons */}
                         <div className="flex items-center gap-3 mb-6">
@@ -66,18 +73,14 @@ function Footer(){
                     </div>
                     
                     {/* Story Column */}
-                    <div className="col-span-1 lg:mr-8">
+                    <div className="col-span-1 lg:col-span-2 lg:mr-8">
                         <h3 className="font-semibold mb-4 text-white">OUR STORY</h3>
                         <div className="space-y-3" style={{ color: 'hsl(0, 0%, 60%)' }}>
                             <p className="text-sm">
-                                Latico Leathers has been crafting premium quality leather goods for over three decades. 
-                                Born from a passion for traditional craftsmanship and timeless design, we've built our 
-                                reputation on creating products that blend heritage techniques with modern functionality.
+                                Topshot represents the bold edge of pickleball — dynamic, disruptive, and unapologetically Futuristic. Whether you're on the court or on your feed, Topshot gives you the tools to make your mark
                             </p>
                             <p className="text-sm">
-                                Every piece in our collection is a testament to our commitment to excellence, 
-                                featuring carefully selected materials and meticulous attention to detail that 
-                                stands the test of time.
+                                Bring the best game style
                             </p>
                         </div>
                         
@@ -89,83 +92,88 @@ function Footer(){
                         </div>
                     </div>
                     
-                    {/* Menu Column */}
-                    <div className="col-span-1">
-                        <h3 className="font-semibold mb-4 text-white">MENU</h3>
-                        <ul className="space-y-3">
-                            <li>
-                                <Link to="/categories/new" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    New
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/categories/best-sellers" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Best Sellers
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/categories/library" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Library
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/categories/beginner" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Beginner
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/categories/intermediate" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Intermediate
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/categories/pro" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Pro
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    {/* Footer Menu Column */}
-                    <div className="col-span-1">
-                        <h3 className="font-semibold mb-4 text-white">FOOTER MENU</h3>
-                        <ul className="space-y-3">
-                            <li>
-                                <Link to="/reviews" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Reviews
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/join-community" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Join community
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/gift-cards" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Gift Cards
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/orders" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Track Order
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/accessibility" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Accessibility
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/shipping-returns" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Shipping And Returns
-                                </Link>
-                            </li>
-                            <li>
-                                <Link to="/contact" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
-                                    Contact Us
-                                </Link>
-                            </li>
-                        </ul>
+                    {/* Menu and Footer Menu Container with reduced gap */}
+                    <div className="col-span-1 hidden md:block">
+                        <div className="grid grid-cols-2 gap-2">
+                            {/* Menu Column */}
+                            <div>
+                                <h3 className="font-semibold mb-4 text-white">MENU</h3>
+                                <ul className="space-y-3">
+                                    <li>
+                                        <Link to="/categories/new" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            New
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/categories/best-sellers" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Best Sellers
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/categories/library" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Library
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/categories/beginner" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Beginner
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/categories/intermediate" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Intermediate
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/categories/pro" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Pro
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                            
+                            {/* Footer Menu Column */}
+                            <div>
+                                <h3 className="font-semibold mb-4 text-white">FOOTER MENU</h3>
+                                <ul className="space-y-3">
+                                    <li>
+                                        <Link to="/reviews" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Reviews
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/join-community" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Join community
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/gift-cards" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Gift Cards
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/orders" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Track Order
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/accessibility" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Accessibility
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/shipping-returns" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Shipping And Returns
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link to="/contact" className="block hover:translate-x-1 transition-transform" style={{ color: '#FFFFFF' }}>
+                                            Contact Us
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
