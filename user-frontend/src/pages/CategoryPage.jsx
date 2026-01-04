@@ -39,9 +39,6 @@ function CategoryPage(){
     return ()=>{ isMounted = false };
   },[id]);
 
-  if(loading) return <div className="p-8 text-center" style={{ backgroundColor: '#2B2B2B', minHeight: '100vh' }}>Loading...</div>;
-  if(error) return <div className="p-8 text-center text-red-600" style={{ backgroundColor: '#2B2B2B', minHeight: '100vh' }}>{error}</div>;
-
   const isDropLibraryCategory = category?.name?.toLowerCase() === 'drop library';
   const paddleLibraryCategory = allCategories.find((c) => 
     c.name?.toLowerCase() === 'paddle library'
@@ -52,8 +49,11 @@ function CategoryPage(){
     }
   };
 
+  if(loading) return <div className="p-8 text-center">Loading...</div>;
+  if(error) return <div className="p-8 text-center text-red-600">{error}</div>;
+
   return (
-    <div style={{ backgroundColor: '#2B2B2B', minHeight: '100vh' }}>
+    <div style={isDropLibraryCategory ? { backgroundColor: '#2B2B2B', minHeight: '100vh' } : {}}>
       {isDropLibraryCategory && (
         <>
           <style>
