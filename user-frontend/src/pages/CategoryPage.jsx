@@ -63,6 +63,9 @@ function CategoryPage(){
                   color: #9A9A9A !important;
                   font-size: 48px !important;
                 }
+                .image-overlay-text {
+                  font-size: 32px !important;
+                }
               }
             `}
           </style>
@@ -116,70 +119,15 @@ function CategoryPage(){
               </button>
             </div>
           </div>
-          <div className="w-full text-center py-8 px-4">
-            <p
-              style={{
-                fontFamily: 'Gasoek One, sans-serif',
-                color: '#EBDBFF',
-                fontSize: '24px',
-                lineHeight: '1.4',
-                maxWidth: '1200px',
-                margin: '0 auto'
-              }}
-              className="md:text-3xl"
-            >
-              TOPSHOT PICKLEBALL PADDLES PAIR PERFECTLY WITH TOP TO EVOKE PEAK PERFORMANCE, DOMINANCE AND THE EDGE OVER!
-            </p>
-            <div className="w-full mt-8">
-              <img 
-                src="/images/Line 272 copy.png" 
-                alt="Divider line" 
-                className="w-full h-auto object-cover"
-                style={{ maxHeight: '10px' }}
-              />
-            </div>
-            <div className="w-full flex flex-col items-center mt-16 px-4">
-              <img 
-                src="/images/Frame 1686553387.png" 
-                alt="Frame 1" 
-                className="w-full md:max-w-xl h-auto object-contain mb-4"
-              />
-              <img 
-                src="/images/Frame 1686553388 copy.png" 
-                alt="Frame 2" 
-                className="w-full md:max-w-xl h-auto object-contain mb-4"
-              />
-              <img 
-                src="/images/Frame 1686553389 copy.png" 
-                alt="Frame 3" 
-                className="w-full md:max-w-xl h-auto object-contain mb-8"
-              />
-              <img 
-                src="/images/Group 1698 copy.png" 
-                alt="Group items" 
-                className="w-full md:max-w-xl h-auto object-contain mb-6"
-              />
-            </div>
-            <div className="w-full flex flex-col items-center px-4">
-              <div className="w-full md:max-w-xl flex">
+            <div className="w-full flex flex-col items-center">
+              <div className="w-full md:max-w-4xl relative">
                 <img 
-                  src="/images/image 359.png" 
-                  alt="Image 359" 
-                  className="w-1/2 h-auto object-cover"
-                />
-                <img 
-                  src="/images/image 357.png" 
-                  alt="Image 357" 
-                  className="w-1/2 h-auto object-cover"
-                />
-              </div>
-              <div className="w-full md:max-w-xl relative">
-                <img 
-                  src="/images/image 358.png" 
-                  alt="Image 358" 
+                  src="/images/image 342 copy.png" 
+                  alt="Image 342" 
                   className="w-full h-auto object-cover"
                 />
                 <div 
+                  className="image-overlay-text"
                   style={{
                     position: 'absolute',
                     top: '20px',
@@ -187,41 +135,21 @@ function CategoryPage(){
                     zIndex: 10,
                     fontFamily: 'Kode Mono, monospace',
                     color: '#9A9A9A',
-                    fontSize: '32px',
+                    fontSize: '20px',
                     fontWeight: 700
                   }}
                 >
-                  PRO
+                  TOPSHOT BAZUKA
                 </div>
               </div>
-              <div className="w-full md:max-w-xl relative">
-                <img 
-                  src="/images/image 360.png" 
-                  alt="Image 360" 
-                  className="w-full h-auto object-cover"
-                />
-                <div 
-                  style={{
-                    position: 'absolute',
-                    bottom: '20px',
-                    left: '20px',
-                    zIndex: 10,
-                    fontFamily: 'Kode Mono, monospace',
-                    color: '#9A9A9A',
-                    fontSize: '32px',
-                    fontWeight: 700
-                  }}
-                >
-                  SPINNER
-                </div>
-              </div>
-              <div className="w-full md:max-w-xl relative">
+              <div className="w-full md:max-w-4xl relative">
                 <img 
                   src="/images/image 349.png" 
                   alt="Image 349" 
                   className="w-full h-auto object-cover"
                 />
                 <div 
+                  className="image-overlay-text"
                   style={{
                     position: 'absolute',
                     top: '20px',
@@ -229,13 +157,14 @@ function CategoryPage(){
                     zIndex: 10,
                     fontFamily: 'Kode Mono, monospace',
                     color: '#9A9A9A',
-                    fontSize: '32px',
+                    fontSize: '20px',
                     fontWeight: 700
                   }}
                 >
                   HONEYCOMB POLYMER CORE
                 </div>
                 <div 
+                  className="image-overlay-text"
                   style={{
                     position: 'absolute',
                     bottom: '20px',
@@ -243,21 +172,21 @@ function CategoryPage(){
                     zIndex: 10,
                     fontFamily: 'Kode Mono, monospace',
                     color: '#9A9A9A',
-                    fontSize: '32px',
+                    fontSize: '20px',
                     fontWeight: 700
                   }}
                 >
                   EFC EDGE WALL
                 </div>
               </div>
-              <div className="w-full md:max-w-xl">
+              <div className="w-full md:max-w-4xl">
                 <img 
                   src="/images/image 346.png" 
                   alt="Image 346" 
                   className="w-full h-auto object-cover"
                 />
               </div>
-              <div className="w-full md:max-w-xl">
+              <div className="w-full md:max-w-4xl">
                 <img 
                   src="/images/image 348.png" 
                   alt="Image 348" 
@@ -265,10 +194,10 @@ function CategoryPage(){
                 />
               </div>
             </div>
-          </div>
         </>
       )}
-      <div className="container mx-auto px-4 py-12">
+      {!isDropLibraryCategory && (
+        <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((p)=> (
           <div key={p._id}>
@@ -288,7 +217,8 @@ function CategoryPage(){
         ))}
         </div>
         {/* TODO: UI polish */}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
