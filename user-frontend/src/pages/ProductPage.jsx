@@ -207,7 +207,7 @@ function ProductPage(){
           </div>
           
           {/* Action Buttons */}
-          <div className="space-y-4">
+          <div className="space-y-4 sm:space-y-0">
             <div className="space-y-2">
               <button
                 type="button"
@@ -220,9 +220,9 @@ function ProductPage(){
                 } bg-transparent`}
               >
                 <img
-                  src="/images/BUTTON-2 copy.png"
+                  src="/images/BUTTON-7-AddToCard.png"
                   alt={isDisabled ? "Unavailable" : "Add to Cart"}
-                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
                 />
               </button>
               {addedToCart && (
@@ -257,13 +257,13 @@ function ProductPage(){
                 <img
                   src="/images/BUTTON-5 copy.png"
                   alt="Sold Out"
-                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
                 />
               ) : (
                 <img
-                  src="/images/BUTTON-3 copy.png"
+                  src="/images/BUTTON-8-BuyNow.png"
                   alt="Buy Now"
-                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12"
+                  className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
                 />
               )}
             </button>
