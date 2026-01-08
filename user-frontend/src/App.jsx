@@ -9,6 +9,11 @@ import ProductPage from "./pages/ProductPage.jsx";
 import ContactPage from "./pages/Contact.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage";
+import TermsAndConditions from "./pages/TermsAndConditions.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import RefundCancellationPolicy from "./pages/RefundCancellationPolicy.jsx";
+import ReturnPolicy from "./pages/ReturnPolicy.jsx";
+import ShippingPolicy from "./pages/ShippingPolicy.jsx";
 import { useAuth } from "./context/AuthContext";
 
 // Placeholder pages for auth
@@ -49,6 +54,11 @@ function App() {
           <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
           <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
           <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/refund-cancellation-policy" element={<RefundCancellationPolicy />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
         </React.Suspense>

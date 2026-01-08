@@ -209,19 +209,44 @@ function Footer(){
             {/* Bottom Bar */}
             <div className="border-t border-gray-700">
                 <div className="container mx-auto px-4 py-6">
-                    <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-                        {/* Copyright */}
-                        <p className="text-sm text-center lg:text-left" style={{ color: 'hsl(0, 0%, 60%)' }}>
-                            © 2025 TOPSHOT. ALL RIGHTS RESERVED.
-                        </p>
+                    <div className="flex flex-col gap-4">
+                        {/* Policy Links */}
+                        <div className="flex flex-wrap items-center justify-center gap-4 text-xs" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                            <Link to="/terms-and-conditions" className="hover:text-white transition-colors">
+                                Terms & Conditions
+                            </Link>
+                            <span>|</span>
+                            <Link to="/privacy-policy" className="hover:text-white transition-colors">
+                                Privacy Policy
+                            </Link>
+                            <span>|</span>
+                            <Link to="/refund-cancellation-policy" className="hover:text-white transition-colors">
+                                Refund and Cancellation Policy
+                            </Link>
+                            <span>|</span>
+                            <Link to="/return-policy" className="hover:text-white transition-colors">
+                                Return Policy
+                            </Link>
+                            <span>|</span>
+                            <Link to="/shipping-policy" className="hover:text-white transition-colors">
+                                Shipping Policy
+                            </Link>
+                        </div>
                         
-                        {/* Payment Methods Image */}
-                        <div className="flex items-center justify-center">
-                            <img 
-                                src="/images/image 231 copy.png" 
-                                alt="Payment Methods" 
-                                className="h-auto max-w-full opacity-100 transition-opacity"
-                            />
+                        <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                            {/* Copyright */}
+                            <p className="text-sm text-center lg:text-left" style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                © 2025 TOPSHOT. ALL RIGHTS RESERVED.
+                            </p>
+                            
+                            {/* Payment Methods Image */}
+                            <div className="flex items-center justify-center">
+                                <img 
+                                    src="/images/image 231 copy.png" 
+                                    alt="Payment Methods" 
+                                    className="h-auto max-w-full opacity-100 transition-opacity"
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
