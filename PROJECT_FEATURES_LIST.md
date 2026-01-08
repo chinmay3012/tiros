@@ -1,8 +1,9 @@
 # TIROS E-Commerce Platform - Features List for Cost Calculation
 
 **Project Name:** TIROS (TOPSHOT E-Commerce Platform)  
-**Total Lines of Code:** 10,458 lines (excluding JSON and dependencies)  
+**Total Lines of Code:** 13,387 lines (excluding JSON, dependencies, and documentation)  
 **Technology Stack:** MERN Stack (MongoDB, Express.js, React, Node.js)  
+**Architecture:** Multi-layer Application (3 Layers: User Frontend, Admin Frontend, Backend API)  
 **Development Period:** October 2025
 
 ---
@@ -70,7 +71,7 @@
 - ✅ Responsive Navbar with authentication states
 - ✅ Side Menu (mobile navigation)
 - ✅ Dropdown Navigation
-- ✅ Footer Component
+- ✅ Footer Component with policy links
 - ✅ Hero Section for homepage
 - ✅ Search Bar component
 - ✅ Login/Logout buttons (desktop & mobile)
@@ -83,8 +84,22 @@
 - ✅ About Page
 - ✅ Contact Page
 - ✅ 404/Error handling with Error Boundary
+- ✅ Terms & Conditions Page
+- ✅ Privacy Policy Page
+- ✅ Refund and Cancellation Policy Page
+- ✅ Return Policy Page
+- ✅ Shipping Policy Page
 
-### 1.9 User Experience Features
+### 1.9 Legal & Compliance Pages
+- ✅ Terms & Conditions page with full legal content
+- ✅ Privacy Policy page with data protection details
+- ✅ Refund and Cancellation Policy page
+- ✅ Return Policy page
+- ✅ Shipping Policy page
+- ✅ Footer links to all policy pages
+- ✅ Consistent styling matching site color scheme
+
+### 1.10 User Experience Features
 - ✅ Loading states and spinners
 - ✅ Toast notifications for user feedback
 - ✅ Form validation
@@ -403,18 +418,197 @@
 
 | Metric | Count |
 |--------|-------|
-| **Total Lines of Code** | 10,458 |
-| **JavaScript Files** | 2,841 lines |
-| **React/JSX Files** | 6,700 lines |
-| **CSS Files** | 92 lines |
-| **Documentation** | 825 lines |
-| **Backend Controllers** | 12 files |
+| **Total Lines of Code** | 13,387 |
+| **JavaScript Files** | 3,422 lines (47 files) |
+| **React/JSX Files** | 9,862 lines (60 files) |
+| **CSS Files** | 103 lines |
+| **Documentation** | 1,391 lines |
+| **Backend Controllers** | 14 files |
 | **Backend Models** | 7 schemas |
-| **Backend Routes** | 10 route files |
-| **Admin Pages** | 11 pages |
-| **User Frontend Pages** | 11 pages |
-| **Reusable Components** | 15+ components |
-| **API Endpoints** | 50+ endpoints |
+| **Backend Routes** | 12 route files |
+| **Admin Pages** | 12 pages |
+| **User Frontend Pages** | 18 pages |
+| **Reusable Components** | 35+ components |
+| **API Endpoints** | 58 endpoints |
+| **Application Layers** | 3 (User Frontend, Admin Frontend, Backend API) |
+
+---
+
+## 📋 **API ENDPOINTS DETAILED LIST**
+
+### Public API Endpoints (`/api/*`)
+
+#### User Authentication & Management
+- `POST /api/users/register` - Register new user
+- `POST /api/users/login` - User login
+- `GET /api/users/:id` - Get user profile
+- `PUT /api/users/:id` - Update user profile
+- `GET /api/users/:id/cart` - Get user cart
+- `PUT /api/users/:id/cart` - Update user cart
+- `GET /api/users/:id/wishlist` - Get user wishlist
+- `PUT /api/users/:id/wishlist` - Update user wishlist
+- `PUT /api/users/:id/address` - Update user address
+
+#### Product Catalog
+- `GET /api/products` - List all products (with search & filters)
+- `GET /api/products/:id` - Get product details
+- `GET /api/categories` - List all categories
+
+#### Orders
+- `POST /api/orders` - Create new order
+- `GET /api/orders/user/:id` - Get user orders
+
+#### Coupons
+- `POST /api/coupons/validate` - Validate coupon code
+
+#### Payments
+- `POST /api/payments` - Create payment
+- `POST /api/payments/verify` - Verify payment
+- `GET /api/payments/user/:userId` - Get user payments
+- `GET /api/payments/:id` - Get payment by ID
+- `PUT /api/payments/:id` - Update payment status
+
+#### Drop Signups
+- `POST /api/dropsignups` - Submit email for drops
+
+### Admin API Endpoints (`/api/admin/*`)
+
+#### Admin Authentication
+- `POST /api/admin/register` - Register admin
+- `POST /api/admin/login` - Admin login
+- `POST /api/admin/auth/logout` - Admin logout
+- `GET /api/admin/profile` - Get admin profile
+- `PUT /api/admin/profile` - Update admin profile
+
+#### User Management
+- `GET /api/admin/users` - Get all users
+- `GET /api/admin/users/:id` - Get user by ID
+- `PUT /api/admin/users/:id/block` - Block/unblock user
+- `DELETE /api/admin/users/:id` - Delete user
+
+#### Product Management
+- `POST /api/admin/products` - Create product (with image upload)
+- `GET /api/admin/products` - Get all products
+- `GET /api/admin/products/:id` - Get product by ID
+- `PUT /api/admin/products/:id` - Update product (with image upload)
+- `DELETE /api/admin/products/:id` - Delete product
+
+#### Category Management
+- `POST /api/admin/categories` - Create category (with image upload)
+- `GET /api/admin/categories` - Get all categories
+- `PUT /api/admin/categories/:id` - Update category (with image upload)
+- `DELETE /api/admin/categories/:id` - Delete category
+- `POST /api/admin/categories/:categoryId/subcategories` - Add subcategory
+- `PUT /api/admin/categories/:categoryId/subcategories/:subcategoryId` - Update subcategory
+- `DELETE /api/admin/categories/:categoryId/subcategories/:subcategoryId` - Delete subcategory
+
+#### Order Management
+- `GET /api/admin/orders` - Get all orders
+- `GET /api/admin/orders/:id` - Get order by ID
+- `PUT /api/admin/orders/:id/status` - Update order status
+
+#### Inventory Management
+- `GET /api/admin/inventory` - Get low stock alerts
+- `PUT /api/admin/inventory/:productId` - Update product stock
+
+#### Dashboard & Analytics
+- `GET /api/admin/dashboard/summary` - Get dashboard summary
+- `GET /api/admin/dashboard/sales-report` - Get sales report
+- `GET /api/admin/dashboard/users-report` - Get users report
+
+#### Coupon Management
+- `POST /api/admin/coupons` - Create coupon
+- `GET /api/admin/coupons` - Get all coupons
+- `GET /api/admin/coupons/:id` - Get coupon by ID
+- `PUT /api/admin/coupons/:id` - Update coupon
+- `DELETE /api/admin/coupons/:id` - Delete coupon
+
+#### Drop Signups Management
+- `GET /api/admin/dropsignups` - Get all drop signups
+- `GET /api/admin/dropsignups/stats` - Get drop signup statistics
+- `DELETE /api/admin/dropsignups/:id` - Delete drop signup
+
+### Health & System Endpoints
+- `GET /` - API health check
+- `GET /health` - Health check endpoint
+
+**Total: 58 API Endpoints**
+
+---
+
+## 📄 **APPLICATION PAGES DETAILED LIST**
+
+### User Frontend Pages (18 pages)
+1. **HomePage** - Main landing page with hero section
+2. **AboutPage** - About us page
+3. **Contact** - Contact us page
+4. **ProductPage** - Individual product details page
+5. **CategoryPage** - Category product listing page
+6. **SubcategoryPage** - Subcategory product listing page
+7. **CartPage** - Shopping cart page
+8. **CheckoutPage** - Checkout and order placement page
+9. **OrdersPage** - User order history page
+10. **AccountPage** - User account management page
+11. **LoginPage** - User login page
+12. **RegisterPage** - User registration page
+13. **WishlistPage** - User wishlist page
+14. **TermsAndConditions** - Terms & Conditions page
+15. **PrivacyPolicy** - Privacy Policy page
+16. **RefundCancellationPolicy** - Refund and Cancellation Policy page
+17. **ReturnPolicy** - Return Policy page
+18. **ShippingPolicy** - Shipping Policy page
+
+### Admin Frontend Pages (12 pages)
+1. **AdminHome** - Admin dashboard home page
+2. **Dashboard** - Analytics and statistics dashboard
+3. **Products** - Product management page
+4. **Categories** - Category management page
+5. **Orders** - All orders management page
+6. **PendingOrders** - Pending orders page
+7. **AllOrders** - Complete orders list page
+8. **Users** - User management page
+9. **Inventory** - Inventory management page
+10. **Coupons** - Coupon management page
+11. **DropSignups** - Drop signup management page
+12. **Reports** - Sales and analytics reports page
+
+**Total: 30 Pages** (18 User + 12 Admin)
+
+---
+
+## 🏗️ **MULTI-LAYER APPLICATION ARCHITECTURE**
+
+The TIROS platform is built as a **3-layer multi-application architecture**, with complete separation of concerns:
+
+### Layer 1: User Frontend Application
+- **Technology:** React.js with Vite
+- **Purpose:** Customer-facing e-commerce interface
+- **Features:** Product browsing, shopping cart, checkout, user account management, order tracking
+- **Deployment:** Separate deployment configuration
+- **Location:** `user-frontend/` directory
+
+### Layer 2: Admin Frontend Application
+- **Technology:** React.js with Vite
+- **Purpose:** Administrative panel for managing the platform
+- **Features:** Dashboard, product/category management, order management, user management, inventory control, coupon system, analytics
+- **Deployment:** Separate deployment configuration
+- **Location:** `TIROS/` directory
+
+### Layer 3: Backend API Server
+- **Technology:** Node.js with Express.js
+- **Purpose:** RESTful API providing business logic and data access
+- **Database:** MongoDB
+- **Features:** Authentication, CRUD operations, payment processing, order management, inventory tracking, coupon validation
+- **Deployment:** Separate server deployment
+- **Location:** `backend/` directory
+
+### Architecture Benefits
+- **Separation of Concerns:** Each layer handles distinct responsibilities
+- **Independent Deployment:** Each application can be deployed and scaled independently
+- **Security:** Admin and user interfaces are completely isolated
+- **Scalability:** Each layer can be scaled based on demand
+- **Maintainability:** Changes to one layer don't affect others
+- **Multi-tenancy Ready:** Architecture supports future multi-store capabilities
 
 ---
 
@@ -444,48 +638,56 @@
 11. Error boundary implementation
 12. Multi-environment deployment setup
 
-### Standard Features (15+ features)
+### Standard Features (20+ features)
 1. User registration/login
 2. Product listing pages
 3. Product detail pages
 4. Category pages
 5. Footer and header components
 6. About/Contact pages
-7. Loading states
-8. Toast notifications
-9. Modal dialogs
-10. Status badges
-11. Image optimization
-12. Static file serving
-13. Health check endpoints
-14. Environment configuration
-15. Documentation files
+7. Legal & Policy pages (Terms, Privacy, Refund, Return, Shipping)
+8. Loading states
+9. Toast notifications
+10. Modal dialogs
+11. Status badges
+12. Image optimization
+13. Static file serving
+14. Health check endpoints
+15. Environment configuration
+16. Documentation files
+17. Footer policy links integration
+18. Policy pages routing
+19. Content management for legal pages
+20. Responsive policy page layouts
 
 ---
 
 ## 💼 **TECHNICAL DELIVERABLES**
 
 ### Backend Deliverables
-- ✅ Complete RESTful API with 50+ endpoints
+- ✅ **Layer 3:** Complete RESTful API server with 58 endpoints
 - ✅ 7 MongoDB schemas with relationships
-- ✅ JWT authentication system
-- ✅ 12 controller files with business logic
+- ✅ JWT authentication system (separate for admin and user)
+- ✅ 14 controller files with business logic
 - ✅ Cloudinary integration for image management
 - ✅ Payment processing system
 - ✅ Coupon validation engine
 - ✅ Inventory tracking system
 - ✅ Admin authentication middleware
-- ✅ CORS configuration for production
+- ✅ User authentication middleware
+- ✅ CORS configuration for multiple frontend origins
 
 ### Frontend Deliverables
-- ✅ User-facing React application (11 pages)
-- ✅ Admin panel React application (11 pages)
-- ✅ 15+ reusable React components
+- ✅ **Layer 1:** User-facing React application (18 pages) - Separate deployment
+- ✅ **Layer 2:** Admin panel React application (12 pages) - Separate deployment
+- ✅ 35+ reusable React components
 - ✅ Context API state management
 - ✅ Responsive Tailwind CSS styling
-- ✅ Protected routing system
+- ✅ Protected routing system (separate for admin and user)
 - ✅ Form validation framework
 - ✅ Error handling system
+- ✅ Legal & Compliance pages (Terms, Privacy, Policies)
+- ✅ Footer navigation with policy links
 
 ### Infrastructure Deliverables
 - ✅ Multi-platform deployment configs (Railway, Netlify, Render, Vercel)
@@ -499,16 +701,23 @@
 
 ## 📝 **NOTES FOR COST CALCULATION**
 
-- **Full-stack MERN application** with separate user and admin interfaces
-- **10,458 lines of custom code** (excluding dependencies and configuration)
-- **3 separate applications** (Backend API, Admin Frontend, User Frontend)
+- **Multi-layer full-stack MERN application** with 3 separate application layers:
+  - **Layer 1:** User Frontend Application (18 pages) - Customer-facing e-commerce interface
+  - **Layer 2:** Admin Frontend Application (12 pages) - Administrative panel
+  - **Layer 3:** Backend API Server - RESTful API with 58 endpoints
+- **13,387 lines of custom code** (excluding dependencies, JSON, and documentation files)
+- **30 total pages** across both frontend applications (18 user + 12 admin)
+- **58 API endpoints** providing complete e-commerce functionality
 - **Complete e-commerce workflow** from browsing to checkout
 - **Advanced features** including coupon system, payment integration, and inventory management
-- **Production-ready** with deployment configurations for multiple platforms
+- **Legal & Compliance pages** including Terms & Conditions, Privacy Policy, Refund/Cancellation Policy, Return Policy, and Shipping Policy
+- **Production-ready** with deployment configurations for multiple platforms (Railway, Netlify, Render, Vercel)
 - **Responsive design** optimized for mobile, tablet, and desktop
-- **Security implemented** with JWT authentication and protected routes
-- **Cloud storage integration** via Cloudinary
+- **Security implemented** with JWT authentication and protected routes for both admin and user layers
+- **Cloud storage integration** via Cloudinary for product and category images
 - **Complete documentation** and setup guides
+- **Independent deployment capability** for each application layer
+- **Scalable architecture** allowing each layer to scale independently based on demand
 
 ---
 
