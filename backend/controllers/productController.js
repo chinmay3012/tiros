@@ -166,7 +166,7 @@ export const getProductById = async (req, res) => {
 // @route  PUT /api/admin/products/:id
 export const updateProduct = async (req, res) => {
   try {
-    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, imageUrls, section, status, isHotSelling, isCreateHype } = req.body;
+    const { name, description, displayDescription, price, stock, category, subcategory, isActive, imageUrl, imageUrls, images: bodyImages, section, status, isHotSelling, isCreateHype } = req.body;
     
     const product = await Product.findById(req.params.id);
     
@@ -197,27 +197,37 @@ export const updateProduct = async (req, res) => {
     }
     
     // Handle images - support multiple uploads and URLs
-    let images = product.images || [];
+    // If images/imageUrls is provided, use it as the source of truth (final list from frontend)
+    // Only append newly uploaded files to this list
+    let images = [];
     
-    // Handle uploaded files (req.files is an array when using upload.array())
+    // Priority: bodyImages > imageUrls > existing images
+    // If bodyImages or imageUrls is provided, use it as the base list (source of truth)
+    if (bodyImages !== undefined) {
+      // req.body.images takes highest priority as source of truth
+      images = Array.isArray(bodyImages) ? [...bodyImages] : JSON.parse(bodyImages || '[]');
+    } else if (imageUrls !== undefined) {
+      // imageUrls as fallback source of truth
+      if (imageUrls) {
+        const urls = Array.isArray(imageUrls) ? imageUrls : JSON.parse(imageUrls || '[]');
+        images = [...urls];
+      } else {
+        // If imageUrls is explicitly set to empty/null, start with empty array
+        images = [];
+      }
+    } else {
+      // If neither provided, fallback to existing images (backward compatibility)
+      images = product.images || [];
+    }
+    
+    // Append newly uploaded files (if any) to the final image list
     if (req.files && req.files.length > 0) {
       const uploadedImages = req.files.map(file => file.path);
       images = [...images, ...uploadedImages];
     }
     
-    // Handle image URLs from body (can be single URL or array)
-    if (imageUrls !== undefined) {
-      if (imageUrls) {
-        const urls = Array.isArray(imageUrls) ? imageUrls : JSON.parse(imageUrls || '[]');
-        images = [...images, ...urls];
-      } else {
-        // If imageUrls is explicitly set to empty/null, keep existing images
-        // This allows updating other fields without changing images
-      }
-    }
-    
-    // Support legacy single imageUrl for backward compatibility
-    if (imageUrl && !imageUrls) {
+    // Support legacy single imageUrl for backward compatibility (only if images/imageUrls not provided)
+    if (imageUrl && bodyImages === undefined && imageUrls === undefined) {
       images = [imageUrl];
     }
     
@@ -229,7 +239,11 @@ export const updateProduct = async (req, res) => {
     if (displayDescription !== undefined) product.displayDescription = displayDescription;
     if (price !== undefined) product.price = price;
     if (image) product.image = image;
-    if (images.length > 0) product.images = images;
+    // Always update images if it was provided or if we processed uploaded files
+    // This allows clearing images by sending empty array
+    if (bodyImages !== undefined || imageUrls !== undefined || (req.files && req.files.length > 0)) {
+      product.images = images;
+    }
     if (stock !== undefined) product.stock = stock;
     if (isActive !== undefined) product.isActive = isActive;
     if (section !== undefined) product.section = section;
