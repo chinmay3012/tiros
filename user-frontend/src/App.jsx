@@ -12,7 +12,6 @@ import CheckoutPage from "./pages/CheckoutPage";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import RefundCancellationPolicy from "./pages/RefundCancellationPolicy.jsx";
-import ReturnPolicy from "./pages/ReturnPolicy.jsx";
 import ShippingPolicy from "./pages/ShippingPolicy.jsx";
 import { useAuth } from "./context/AuthContext";
 
@@ -57,7 +56,6 @@ function App() {
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-cancellation-policy" element={<RefundCancellationPolicy />} />
-          <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>

@@ -1,4 +1,7 @@
-function ContactPage(){
+function ContactPage() {
+    // Contact Us page temporarily disabled for Razorpay compliance
+    // Previous content:
+    /*
     return(
         <>
         <div>
@@ -6,5 +9,9 @@ function ContactPage(){
         </div>
         </>
     )
+    */
+
+    return null;
 }
+
 export default ContactPage;

@@ -6,50 +6,47 @@ function RefundCancellationPolicy() {
                     Refund and Cancellation Policy
                 </h1>
                 
-                <div className="prose prose-lg max-w-none" style={{ color: 'hsl(220, 13%, 13%)', fontFamily: 'Poppins, sans-serif' }}>
-                    <p className="mb-4">
-                        This refund and cancellation policy outlines how you can cancel or seek a refund for a product / service
-                        that you have purchased through the Platform. Under this policy:
+                <div className="prose prose-lg max-w-none space-y-4" style={{ color: 'hsl(220, 13%, 13%)', fontFamily: 'Poppins, sans-serif' }}>
+                    <h2 className="text-xl font-semibold">RETURNS (THE 7-DAY WINDOW)</h2>
+                    <p>
+                        Our policy lasts 7 days. If 7 days have gone by since your delivery, unfortunately, we cannot offer you a
+                        refund or exchange. To be eligible for a return, your item must be unused and in the same condition that
+                        you received it. It must also be in the original packaging.
                     </p>
-                    
-                    <ul className="list-disc pl-6 mb-6 space-y-4">
-                        <li>
-                            Cancellations will only be considered if the request is made 15 days
-                            of placing the order.
-                        </li>
-                        <li>
-                            However, cancellation requests may not be entertained if the orders have been communicated to
-                            such sellers / merchant(s) listed on the Platform and they have initiated the process of shipping
-                            them, or the product is out for delivery. In such an event, you may choose to reject the product at
-                            the doorstep.
-                        </li>
-                        <li>
-                            9266987400 does not accept cancellation requests for perishable items like flowers, eatables, etc.
-                            However, the refund / replacement can be made if the user establishes that the quality of the
-                            product delivered is not good.
-                        </li>
-                        <li>
-                            In case of receipt of damaged or defective items, please report to our customer service team. The
-                            request would be entertained once the seller/ merchant listed on the Platform, has checked and
-                            determined the same at its own end. This should be reported within 15 days
-                            of receipt of products.
-                        </li>
-                        <li>
-                            In case you feel that the product received is not as shown on the site or as per your expectations,
-                            you must bring it to the notice of our customer service within 15 days
-                            of receiving the product.
-                            The customer service team after looking into your complaint will take an appropriate decision.
-                        </li>
-                        <li>
-                            In case of complaints regarding the products that come with a warranty from the manufacturers,
-                            please refer the issue to them.
-                        </li>
-                        <li>
-                            In case of any refunds approved by 9266987400 15 days
-                            , it will take for the refund to be processed
-                            to you.
-                        </li>
-                    </ul>
+                    <p>
+                        <span className="font-semibold">Note on Paddles:</span> For hygiene and performance integrity reasons, any paddle where the
+                        shrink-wrap on the handle has been removed or the face shows ball marks is strictly non-returnable.
+                    </p>
+
+                    <h2 className="text-xl font-semibold mt-4">CANCELLATIONS</h2>
+                    <p>
+                        Orders are processed quickly to ensure fast delivery. You may request a cancellation within 6 hours of
+                        placing the order. After this window, the order may have already been handed over to our logistics
+                        partners. If the order has already shipped, you must follow the standard Return process upon arrival
+                        (shipping costs will not be refunded).
+                    </p>
+
+                    <h2 className="text-xl font-semibold mt-4">REFUNDS (IF APPLICABLE)</h2>
+                    <p>
+                        Once your return is received and inspected, we will send you an email to notify you that we have received
+                        your returned item. We will also notify you of the approval or rejection of your refund. If you are
+                        approved, then your refund will be processed, and a credit will automatically be applied to your credit
+                        card or original method of payment, within 7-10 working days.
+                    </p>
+
+                    <h2 className="text-xl font-semibold mt-4">EXCHANGES/REPLACEMENT (IF APPLICABLE)</h2>
+                    <p>
+                        We only replace or exchange items if they are defective or damaged due to a manufacturing fault. If you
+                        need to exchange or replace it for the same item, send us an email at topshotinfra@gmail.com within 3
+                        days of delivery. If any replacement / exchange is approved the new item will be delivered to you within
+                        3 - 5 business days to your registered address from the date of approval.
+                    </p>
+
+                    <h2 className="text-xl font-semibold mt-4">SHIPPING RETURNS</h2>
+                    <p>
+                        You will be responsible for paying for your own shipping costs for returning your item. Shipping costs are
+                        non-refundable. If you receive a refund, the cost of return shipping will be deducted from your refund.
+                    </p>
                 </div>
             </div>
         </div>

@@ -150,8 +150,23 @@ function Sidemenu(){
                                   </div>
                                 </div>
                                 
-                                <button onClick={handleAboutUs} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">About us</button>
-                                <button onClick={() => handleNavigation("/contact")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Contact us</button>
+                                {/* About Us and Contact Us temporarily disabled for Razorpay compliance */}
+                                {false && (
+                                    <>
+                                        <button 
+                                            onClick={handleAboutUs} 
+                                            className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded"
+                                        >
+                                            About us
+                                        </button>
+                                        <button 
+                                            onClick={() => handleNavigation("/contact")} 
+                                            className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded"
+                                        >
+                                            Contact us
+                                        </button>
+                                    </>
+                                )}
                                 
                                 {isAuthenticated && (
                                     <button onClick={() => handleNavigation("/account")} className="w-full text-gray-800 text-left font-bold text-base hover:bg-[#95C5F4] p-2 rounded">Account</button>

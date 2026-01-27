@@ -1,10 +1,17 @@
-function AboutPage(){
-return(
-    <>
-    <div>
-        <h1 className="text-4xl font-bold text-center mt-10">About Us</h1>
-    </div>
-    </>
-)
+function AboutPage() {
+    // About Us page temporarily disabled for Razorpay compliance
+    // Previous content:
+    /*
+    return(
+        <>
+        <div>
+            <h1 className="text-4xl font-bold text-center mt-10">About Us</h1>
+        </div>
+        </>
+    )
+    */
+
+    return null;
 }
+
 export default AboutPage;

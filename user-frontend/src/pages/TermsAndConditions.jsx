@@ -6,132 +6,60 @@ function TermsAndConditions() {
                     Terms & Conditions
                 </h1>
                 
-                <div className="prose prose-lg max-w-none" style={{ color: 'hsl(220, 13%, 13%)', fontFamily: 'Poppins, sans-serif' }}>
-                    <p className="mb-4">
-                        This document is an electronic record in terms of Information Technology Act, 2000 and rules
-                        there under as applicable and the amended provisions pertaining to electronic records in various
-                        statutes as amended by the Information Technology Act, 2000. This electronic record is generated
-                        by a computer system and does not require any physical or digital signatures.
+                <div className="prose prose-lg max-w-none space-y-4" style={{ color: 'hsl(220, 13%, 13%)', fontFamily: 'Poppins, sans-serif' }}>
+                    <p className="font-semibold">1. Terms &amp; Conditions</p>
+                    <p className="text-sm text-gray-600">Last Updated: Jan 2026</p>
+
+                    <h2 className="text-xl font-semibold mt-4">SECTION 1 - ONLINE STORE TERMS</h2>
+                    <p>
+                        By agreeing to these Terms of Service of TOPSHOT SPORTS, you represent that you are at least the age
+                        of majority in your state or province of residence. You may not use our products for any illegal or
+                        unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction
+                        (including but not limited to copyright laws). A breach or violation of any of the Terms will result in an
+                        immediate termination of your Services.
                     </p>
-                    
-                    <p className="mb-4">
-                        This document is published in accordance with the provisions of Rule 3 (1) of the Information
-                        Technology (Intermediaries guidelines) Rules, 2011 that require publishing the rules and
-                        regulations, privacy policy and Terms of Use for access or usage of domain name https://www.
-                        topshot.co/
-                        ('Website'), including the related mobile site and mobile application (hereinafter
-                        referred to as 'Platform').
+
+                    <h2 className="text-xl font-semibold mt-4">SECTION 2 - MODIFICATIONS TO THE SERVICE AND PRICES</h2>
+                    <p>
+                        Prices for our products are subject to change without notice. We reserve the right at any time to modify
+                        or discontinue the Service (or any part or content thereof) without notice at any time. We shall not be
+                        liable to you or to any third-party for any modification, price change, suspension, or discontinuance of
+                        the Service.
                     </p>
-                    
-                    <p className="mb-4">
-                        The Platform is owned by with its registered office at S-153 Greater Kailash part-2 New Delhi
-                        , a company incorporated under the Companies Act, 1956 9266987400
-                        (hereinafter referred to as
-                        'Platform Owner', 'we', 'us', 'our')..
+
+                    <h2 className="text-xl font-semibold mt-4">SECTION 3 - USER COMMENTS, FEEDBACK AND OTHER SUBMISSIONS</h2>
+                    <p>
+                        If, at our request, you send certain specific submissions (for example contest entries) or without a
+                        request from us you send creative ideas, suggestions, proposals, plans, or other materials, whether
+                        online, by email, by postal mail, or otherwise (collectively, &apos;comments&apos;), you agree that we may, at any
+                        time, without restriction, edit, copy, publish, distribute, translate and otherwise use in any medium any
+                        comments that you forward to us. We are and shall be under no obligation (1) to maintain any comments
+                        in confidence; (2) to pay compensation for any comments; or (3) to respond to any comments.
                     </p>
-                    
-                    <p className="mb-4">
-                        Your use of the Platform and services and tools are governed by the following terms and
-                        conditions ("Terms of Use") as applicable to the Platform including the applicable policies which
-                        are incorporated herein by way of reference. If You transact on the Platform, You shall be subject
-                        to the policies that are applicable to the Platform for such transaction. By mere use of the Platform,
-                        You shall be contracting with the Platform Owner and these terms and conditions including the
-                        policies constitute Your binding obligations, with Platform Owner. These Terms of Use relate to
-                        your use of our website, goods (as applicable) or services (as applicable) (collectively, 'Services').
+
+                    <h2 className="text-xl font-semibold mt-4">SECTION 4 - LIMITATION OF LIABILITY</h2>
+                    <p>
+                        Topshot does not guarantee, represent or warrant that your use of our service will be uninterrupted,
+                        timely, secure or error-free. In no case shall Topshot, our directors, officers, employees, affiliates, or
+                        agents be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or
+                        consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings,
+                        loss of data, replacement costs, or any similar damages, whether based in contract, tort (including
+                        negligence), strict liability or otherwise, arising from your use of any of the service or any products
+                        procured using the service.
                     </p>
-                    
-                    <p className="mb-4">
-                        Any terms and conditions proposed by You which are in addition to or which conflict with these
-                        Terms of Use are expressly rejected by the Platform Owner and shall be of no force or effect.
-                        These Terms of Use can be modified at any time without assigning any reason. It is your
-                        responsibility to periodically review these Terms of Use to stay informed of updates..
+                    <p>
+                        <span className="font-semibold">Use of Equipment:</span> Topshot paddles are designed for sports use. Topshot is not liable for
+                        injuries resulting from improper use, lack of protective gear, or use outside of designated sporting
+                        environments.
                     </p>
-                    
-                    <p className="mb-4">
-                        For the purpose of these Terms of Use, wherever the context so requires 'you', 'your' or 'user' shall
-                        mean any natural or legal person who has agreed to become a user/buyer on the Platform..
+                    <p>
+                        <span className="font-semibold">Pricing:</span> Prices for our products are subject to change without notice. We reserve the right
+                        to modify or discontinue any product at any time.
                     </p>
-                    
-                    <p className="mb-6 font-semibold">
-                        ACCESSING, BROWSING OR OTHERWISE USING THE PLATFORM INDICATES YOUR
-                        AGREEMENT TO ALL THE TERMS AND CONDITIONS UNDER THESE TERMS OF USE,
-                        SO PLEASE READ THE TERMS OF USE CAREFULLY BEFORE PROCEEDING..
+                    <p>
+                        <span className="font-semibold">Prohibited Uses:</span> You are prohibited from using the site or its content for any unlawful
+                        purpose or to infringe upon our intellectual property rights.
                     </p>
-                    
-                    <p className="mb-4">
-                        The use of Platform and/or availing of our Services is subject to the following Terms of Use:
-                    </p>
-                    
-                    <ul className="list-disc pl-6 mb-6 space-y-3">
-                        <li>
-                            To access and use the Services, you agree to provide true, accurate and complete information
-                            to us during and after registration, and you shall be responsible for all acts done through the
-                            use of your registered account on the Platform..
-                        </li>
-                        <li>
-                            Neither we nor any third parties provide any warranty or guarantee as to the accuracy,
-                            timeliness, performance, completeness or suitability of the information and materials offered
-                            on this website or through the Services, for any specific purpose. You acknowledge that such
-                            information and materials may contain inaccuracies or errors and we expressly exclude
-                            liability for any such inaccuracies or errors to the fullest extent permitted by law..
-                        </li>
-                        <li>
-                            Your use of our Services and the Platform is solely and entirely at your own risk and
-                            discretion for which we shall not be liable to you in any manner. You are required to
-                            independently assess and ensure that the Services meet your requirements..
-                        </li>
-                        <li>
-                            The contents of the Platform and the Services are proprietary to us and are licensed to us.
-                            You will not have any authority to claim any intellectual property rights, title, or interest in
-                            its contents. The contents includes and is not limited to the design, layout, look and graphics..
-                        </li>
-                        <li>
-                            You acknowledge that unauthorized use of the Platform and/or the Services may lead to
-                            action against you as per these Terms of Use and/or applicable laws..
-                        </li>
-                        <li>
-                            You agree to pay us the charges associated with availing the Services..
-                        </li>
-                        <li>
-                            You agree not to use the Platform and/ or Services for any purpose that is unlawful, illegal or
-                            forbidden by these Terms, or Indian or local laws that might apply to you.
-                        </li>
-                        <li>
-                            You agree and acknowledge that website and the Services may contain links to other third
-                            party websites. On accessing these links, you will be governed by the terms of use, privacy
-                            policy and such other policies of such third party websites. These links are provided for your
-                            convenience for provide further information..
-                        </li>
-                        <li>
-                            You understand that upon initiating a transaction for availing the Services you are entering
-                            into a legally binding and enforceable contract with the Platform Owner for the Services..
-                        </li>
-                        <li>
-                            You shall indemnify and hold harmless Platform Owner, its affiliates, group companies (as
-                            applicable) and their respective officers, directors, agents, and employees, from any claim or
-                            demand, or actions including reasonable attorney's fees, made by any third party or penalty
-                            imposed due to or arising out of Your breach of this Terms of Use, privacy Policy and other
-                            Policies, or Your violation of any law, rules or regulations or the rights (including
-                            infringement of intellectual property rights) of a third party.
-                        </li>
-                        <li>
-                            Notwithstanding anything contained in these Terms of Use, the parties shall not be liable for
-                            any failure to perform an obligation under these Terms if performance is prevented or
-                            delayed by a force majeure event..
-                        </li>
-                        <li>
-                            These Terms and any dispute or claim relating to it, or its enforceability, shall be governed
-                            by and construed in accordance with the laws of India..
-                        </li>
-                        <li>
-                            All disputes arising out of or in connection with these Terms shall be subject to the exclusive
-                            jurisdiction of the courts in and .
-                        </li>
-                        <li>
-                            All concerns or communications relating to these Terms must be communicated to us using
-                            the contact information provided on this website.
-                        </li>
-                    </ul>
                 </div>
             </div>
         </div>
