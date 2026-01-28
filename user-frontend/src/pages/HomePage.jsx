@@ -235,141 +235,15 @@ function HomePage(){
                     </div>
                 </div>
                 
-                {/* Content sections hidden on mobile - Pro Sport Journey to Discover More */}
+                {/* Content sections hidden on mobile - desktop-only storytelling sections */}
                 <div className="hidden md:block">
                 
-                {/* Desktop Frame Image above Pro Sport Journey */}
+                {/* Desktop Frame Image above remaining desktop sections */}
                 <div className="w-full">
                     <img 
                         src="/images/Frame 1686553383 copy.png" 
                         alt="Frame Image - Desktop" 
                         className="w-full h-auto"
-                    />
-                </div>
-                
-                {/* Pro Sport Journey Section */}
-                <div className="w-full mt-8 md:mt-12" style={{ backgroundColor: '#EDEDED' }}>
-                    <div className="container mx-auto px-4 py-16 md:py-20">
-                        <div className="text-center max-w-4xl mx-auto">
-                            {/* Heading */}
-                            <h2 
-                                className="mb-6"
-                                style={{
-                                    fontFamily: 'Kode Mono, monospace',
-                                    fontWeight: 600,
-                                    fontSize: '36px',
-                                    lineHeight: '100%',
-                                    textAlign: 'center',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '0%'
-                                }}
-                            >
-                                PRO SPORT JOURNEY
-                            </h2>
-                            
-                            {/* Paragraph */}
-                            <p 
-                                className="mb-8"
-                                style={{
-                                    fontFamily: 'Poppins, sans-serif',
-                                    fontWeight: 400,
-                                    fontSize: '18px',
-                                    lineHeight: '30px',
-                                    textAlign: 'center',
-                                    letterSpacing: '0%'
-                                }}
-                            >
-                                Latico donates 10 meals to Feeding America for each purchase. Over 110k+ meals have been donated across nationwide food banks. Each Latico bag is handcrafted by artisans & made with responsibly sourced leather.
-                            </p>
-                            
-                            {/* Button */}
-                            <button 
-                                className="text-white font-medium transition-colors hover:bg-gray-800 cursor-pointer"
-                                style={{
-                                    backgroundColor: '#000000',
-                                    width: '234px',
-                                    height: '64px',
-                                    paddingTop: '22px',
-                                    paddingRight: '26px',
-                                    paddingBottom: '22px',
-                                    paddingLeft: '26px',
-                                    borderWidth: '1px',
-                                    borderColor: '#000000',
-                                    gap: '10px'
-                                }}
-                            >
-                                OUR STORY
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                
-                {/* Frame 148 Section */}
-                <div 
-                    className="flex flex-col items-center mt-16 md:mt-20"
-                    style={{
-                        transform: 'rotate(0deg)',
-                        opacity: 1,
-                        position: 'relative'
-                    }}
-                >
-                    <p 
-                        className="text-center"
-                        style={{
-                            fontFamily: 'Poppins, sans-serif',
-                            fontWeight: 400,
-                            fontStyle: 'normal',
-                            fontSize: '19px',
-                            lineHeight: '27px',
-                            letterSpacing: '10%',
-                            textAlign: 'center',
-                            textTransform: 'uppercase',
-                            color: '#201A15'
-                        }}
-                    >
-                        YOUR NEW EVERYDAY PADDLE
-                    </p>
-                    <p 
-                        className="text-center mt-4"
-                        style={{
-                            fontFamily: 'Kode Mono, monospace',
-                            fontWeight: 400,
-                            fontStyle: 'normal',
-                            fontSize: '36px',
-                            lineHeight: '100%',
-                            letterSpacing: '0%',
-                            textAlign: 'center',
-                            textTransform: 'uppercase',
-                            color: '#201A15'
-                        }}
-                    >
-                        Over 1 Million Bags Sold
-                    </p>
-                    <p 
-                        className="text-center mt-4"
-                        style={{
-                            fontFamily: 'Poppins, sans-serif',
-                            fontWeight: 300,
-                            fontStyle: 'normal',
-                            fontSize: '15px',
-                            lineHeight: '18px',
-                            letterSpacing: '0%',
-                            textAlign: 'center',
-                            color: '#201A15'
-                        }}
-                    >
-                        40k+ 5-star Reviews
-                    </p>
-                    <img 
-                        src="/images/Frame 148-2 copy.png" 
-                        alt="Frame 148-2" 
-                        className="mt-4"
-                        style={{
-                            width: '200px',
-                            height: '200px',
-                            transform: 'rotate(0deg)',
-                            opacity: 1
-                        }}
                     />
                 </div>
                 
