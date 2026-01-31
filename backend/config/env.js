@@ -5,9 +5,10 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Load .env from the backend root directory (where server.js and .env are)
-dotenv.config({ path: path.resolve(__dirname, "../.env") });
-
-console.log("Environment variables loaded from:", path.resolve(__dirname, "../.env"));
-console.log("PHONEPE_CLIENT_ID:", process.env.PHONEPE_CLIENT_ID ? "Found" : "Not Found");
-console.log("PHONEPE_CLIENT_SECRET:", process.env.PHONEPE_CLIENT_SECRET ? "Found" : "Not Found");
+// Try multiple paths: backend/.env (local) then root .env (Render/CI)
+const backendEnv = path.resolve(__dirname, "../.env");
+const rootEnv = path.resolve(process.cwd(), ".env");
+dotenv.config({ path: backendEnv });
+if (!process.env.PHONEPE_CLIENT_ID) {
+  dotenv.config({ path: rootEnv });
+}
