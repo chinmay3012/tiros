@@ -272,7 +272,7 @@ export const CartProvider = ({ children }) => {
       couponCode: couponCode || undefined,
     };
     const res = await api.post("/orders", payload);
-    clearCart();
+    // Cart is cleared only after payment verification (see CheckoutReturnPage)
     return res.data;
   };
 

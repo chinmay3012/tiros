@@ -1,12 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import api from "../api/axios";
+import { useCart } from "../context/CartContext";
 
 const POLL_INTERVAL_MS = 2000;
 const TIMEOUT_MS = 60000;
 
 export default function CheckoutReturnPage() {
   const navigate = useNavigate();
+  const { clearCart } = useCart();
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState("polling");
   const [message, setMessage] = useState("Confirming your payment...");
@@ -30,6 +32,7 @@ export default function CheckoutReturnPage() {
           setStatus("success");
           setMessage("Payment successful!");
           if (pollRef.current) clearInterval(pollRef.current);
+          clearCart(); // Clear cart only after successful payment verification
           navigate("/orders", { replace: true });
           return true;
         }
