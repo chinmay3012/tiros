@@ -141,7 +141,7 @@ All routes are served from the Express app (`backend/server.js`). When running l
 | GET | `/api/orders/user/:id` | Fetch orders for a user | Bearer |
 | POST | `/api/dropsignups` | Subscribe to upcoming drops | None |
 | POST | `/api/payments` | Create payment intent | Bearer |
-| POST | `/api/payments/verify` | Razorpay/Stripe signature verification | Bearer |
+| POST | `/api/payments/verify` | Payment verification (PhonePe, etc.) | Bearer |
 | GET | `/api/payments/user/:userId` | Logged-in user payment history | Bearer |
 | POST | `/api/coupons/validate` | Validate a coupon code at checkout | None |
 

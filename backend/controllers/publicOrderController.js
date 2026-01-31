@@ -32,6 +32,10 @@ export const createOrder = async (req, res) => {
       }
     }
     
+    const paymentData = payment
+      ? { ...payment, status: payment.method === "phonepe" ? "pending" : payment.status }
+      : { status: "created", amount: finalAmount };
+
     const order = await Order.create({
       userId,
       products,
@@ -40,11 +44,11 @@ export const createOrder = async (req, res) => {
       finalAmount: finalAmount,
       shippingAddress: shippingAddress || "N/A",
       paymentMethod: paymentMethod || "cash",
-      payment: payment || { status: 'created', amount: finalAmount },
+      payment: paymentData,
     });
 
-    // Create payment receipt if payment was successful
-    if (payment && payment.status === 'paid' && payment.paymentId) {
+    // Create payment receipt when payment is paid; PhonePe receipts created by webhook instead
+    if (payment && payment.status === 'paid' && payment.paymentId && payment.method !== 'phonepe') {
       try {
         // Get product details for receipt
         const productDetails = await Product.find({
@@ -66,9 +70,10 @@ export const createOrder = async (req, res) => {
           userId,
           orderId: order._id,
           paymentId: payment.paymentId,
+          transactionId: payment.transactionId,
           amount: finalAmount,
           status: 'paid',
-          method: payment.method || 'razorpay',
+          method: payment.method,
           items: receiptItems,
           shippingAddress: shippingAddress || "N/A",
         });
@@ -89,6 +94,22 @@ export const listUserOrders = async (req, res) => {
     const userId = req.params.id;
     const orders = await Order.find({ userId }).populate("products.productId", "name price image");
     res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const getOrderByPaymentId = async (req, res) => {
+  try {
+    const { paymentId } = req.params;
+    const order = await Order.findOne({ "payment.paymentId": paymentId }).populate(
+      "products.productId",
+      "name price image"
+    );
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    res.json(order);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

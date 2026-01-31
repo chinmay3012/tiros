@@ -150,7 +150,7 @@ function Sidemenu(){
                                   </div>
                                 </div>
                                 
-                                {/* About Us and Contact Us temporarily disabled for Razorpay compliance */}
+                                {/* About Us and Contact Us temporarily disabled */}
                                 {false && (
                                     <>
                                         <button 

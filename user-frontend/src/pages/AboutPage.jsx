@@ -1,5 +1,5 @@
 function AboutPage() {
-    // About Us page temporarily disabled for Razorpay compliance
+    // About Us page temporarily disabled
     // Previous content:
     /*
     return(

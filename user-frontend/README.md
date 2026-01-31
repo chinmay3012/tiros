@@ -62,7 +62,7 @@ Hosted on Netlify with continuous deployment configured through GitHub.<br></ul>
 
 <ul>
 <h1>Future Improvements</h1><br>
-<li>Backend integration for order management and payment processing (e.g., Razorpay).</li>
+<li>Backend integration for order management and payment processing (e.g., PhonePe).</li>
 <li>Admin dashboard for inventory control.</li>
 <li>Product filtering, sorting, and search functionality.</li>
 <li>Persistent cart with user-specific data.</li></ul>
@@ -277,7 +277,7 @@ All endpoints are served by the Express backend in `backend/server.js`. During d
 | POST | `/api/orders` | Create an order from cart payload | Bearer token |
 | GET | `/api/orders/user/:id` | Fetch orders for a user | Bearer token |
 | POST | `/api/dropsignups` | Join upcoming drop notifications | None |
-| POST | `/api/payments/*` | Razorpay/Stripe webhooks & capture routes | Depends |
+| POST | `/api/payments/*` | Payment webhooks & capture routes | Depends |
 | GET | `/api/coupons` | Validate public coupon codes | None |
 | CRUD | `/api/admin/**` | Admin dashboards for products, inventory, coupons, orders, drops | Admin JWT |
 

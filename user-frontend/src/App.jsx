@@ -9,6 +9,7 @@ import ProductPage from "./pages/ProductPage.jsx";
 import ContactPage from "./pages/Contact.jsx";
 import CartPage from "./pages/CartPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage";
+import CheckoutReturnPage from "./pages/CheckoutReturnPage";
 import TermsAndConditions from "./pages/TermsAndConditions.jsx";
 import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import RefundCancellationPolicy from "./pages/RefundCancellationPolicy.jsx";
@@ -53,6 +54,7 @@ function App() {
           <Route path="/orders" element={<ProtectedRoute><OrdersPage /></ProtectedRoute>} />
           <Route path="/account" element={<ProtectedRoute><AccountPage /></ProtectedRoute>} />
           <Route path="/checkout" element={<ProtectedRoute><CheckoutPage /></ProtectedRoute>} />
+          <Route path="/checkout/return" element={<ProtectedRoute><CheckoutReturnPage /></ProtectedRoute>} />
           <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/refund-cancellation-policy" element={<RefundCancellationPolicy />} />

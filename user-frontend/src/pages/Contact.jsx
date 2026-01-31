@@ -1,5 +1,5 @@
 function ContactPage() {
-    // Contact Us page temporarily disabled for Razorpay compliance
+    // Contact Us page temporarily disabled
     // Previous content:
     /*
     return(

@@ -11,7 +11,7 @@ import {
   updateAddress
 } from "../controllers/publicAuthController.js";
 import { listProducts, getProduct, listCategories } from "../controllers/publicCatalogController.js";
-import { createOrder, listUserOrders } from "../controllers/publicOrderController.js";
+import { createOrder, listUserOrders, getOrderByPaymentId } from "../controllers/publicOrderController.js";
 
 const router = express.Router();
 
@@ -36,6 +36,7 @@ router.get("/categories", listCategories);
 // Orders
 router.post("/orders", createOrder);
 router.get("/orders/user/:id", listUserOrders);
+router.get("/orders/payment/:paymentId", getOrderByPaymentId);
 
 export default router;
 

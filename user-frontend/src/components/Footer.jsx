@@ -119,7 +119,7 @@ function Footer(){
                             <span className="text-xs font-semibold tracking-wider">WWD</span>
                         </div>
                     </div>
-                    {/* Menu and Footer Menu temporarily disabled for Razorpay compliance */}
+                    {/* Menu and Footer Menu temporarily disabled */}
                     {false && (
                         <div className="col-span-1 hidden md:block">
                             <div className="grid grid-cols-2 gap-2">

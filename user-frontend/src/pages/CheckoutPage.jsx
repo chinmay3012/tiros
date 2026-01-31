@@ -157,16 +157,6 @@ function CheckoutPage() {
     }
   };
 
-  const loadRazorpay = (src) => {
-    return new Promise((resolve) => {
-      const script = document.createElement("script");
-      script.src = src;
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
-  };
-
   const validateAddress = () => {
     const requiredFields = ['name', 'street', 'city', 'zip', 'country', 'phone'];
     const missingFields = requiredFields.filter(field => !address[field] || address[field].trim() === '');
@@ -199,70 +189,30 @@ function CheckoutPage() {
       }
       
       await saveAddress(address);
-      // Razorpay flow
-      const loaded = await loadRazorpay("https://checkout.razorpay.com/v1/checkout.js");
-      if(!loaded){ throw new Error('Failed to load Razorpay'); }
-      const totalAmount = getFinalTotal();
-      const rzp = new window.Razorpay({
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
-        amount: totalAmount * 100,
-        currency: "INR",
-        name: "TOPSHOT Store",
-        description: "Order Payment",
-        prefill: {
-          name: address.name,
-          email: user?.email || 'customer@tiros.com',
-          contact: address.phone || '9999999999'
-        },
-        notes: {
-          address: `${address.street}, ${address.city}, ${address.zip}, ${address.country}`,
-          order_total: totalAmount.toString()
-        },
-        handler: async (response) => {
-          try{
-            console.log('Payment successful:', response);
-            
-            // Verify payment with backend
-            const verifyResponse = await api.post('/payments/verify', {
-              paymentId: response.razorpay_payment_id,
-              orderId: response.razorpay_order_id,
-              signature: response.razorpay_signature
-            });
-            
-            if (verifyResponse.data.verified) {
-              // Create order with verified payment
-              await checkout({ 
-                address, 
-                payment: { 
-                  paymentId: response.razorpay_payment_id, 
-                  status: 'paid', 
-                  method: 'razorpay', 
-                  amount: getFinalTotal() 
-                },
-                couponCode: appliedCoupon ? appliedCoupon.coupon.code : undefined
-              });
-              setShowOrderConfirmation(true);
-            } else {
-              throw new Error('Payment verification failed');
-            }
-          }catch(e){ 
-            console.error('Payment processing error:', e);
-            setError('Failed to finalize order: ' + (e?.response?.data?.message || e.message));
-            setPlacing(false);
-          }
-        },
-        modal: {
-          ondismiss: function() {
-            console.log('Payment modal dismissed');
-            setPlacing(false);
-          }
-        },
-        theme: { 
-          color: "#000000",
-          backdrop_color: "rgba(0,0,0,0.5)"
-        }
+
+      // PhonePe: webhook-primary flow - create order (pending) then initiate, then redirect
+      const totalPaisa = Math.round(getFinalTotal() * 100);
+      const initRes = await api.post("/payments/phonepe/initiate", {
+        amountInPaisa: totalPaisa,
+        redirectUrl: `${window.location.origin}/checkout/return`,
       });
-      rzp.open();
+      const redirectUrl = initRes.data?.redirectUrl;
+      const merchantOrderId = initRes.data?.merchantOrderId;
+      if (redirectUrl && merchantOrderId) {
+        await checkout({
+          address,
+          payment: {
+            paymentId: merchantOrderId,
+            status: "pending",
+            method: "phonepe",
+            amount: getFinalTotal(),
+          },
+          couponCode: appliedCoupon ? appliedCoupon.coupon.code : undefined,
+        });
+        window.location.href = redirectUrl;
+        return;
+      }
+      setError("Could not start payment. Please try again.");
     }catch(err){
       setError("Failed to place order");
     }finally{
