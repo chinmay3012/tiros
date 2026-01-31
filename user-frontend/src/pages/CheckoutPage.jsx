@@ -214,7 +214,8 @@ function CheckoutPage() {
       }
       setError("Could not start payment. Please try again.");
     }catch(err){
-      setError("Failed to place order");
+      const msg = err?.response?.data?.message || err?.message;
+      setError(msg || "Failed to place order");
     }finally{
       setPlacing(false);
     }

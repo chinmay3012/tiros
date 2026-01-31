@@ -40,7 +40,8 @@ const orderSchema = new mongoose.Schema(
     },
     payment: {
       paymentId: { type: String },
-      status: { type: String, enum: ["created", "paid", "failed"], default: "created" },
+      transactionId: { type: String },
+      status: { type: String, enum: ["created", "pending", "paid", "failed"], default: "created" },
       method: { type: String },
       amount: { type: Number },
     },

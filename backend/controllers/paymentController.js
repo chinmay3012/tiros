@@ -9,7 +9,7 @@ import { StandardCheckoutPayRequest } from "pg-sdk-node";
 export const createPayment = async (req, res) => {
   try {
     const { userId, orderId, paymentId, amount, status, method, items, shippingAddress } = req.body;
-    
+
     if (!userId || !orderId || !paymentId || !amount) {
       return res.status(400).json({ message: "userId, orderId, paymentId, and amount are required" });
     }
@@ -40,7 +40,7 @@ export const createPayment = async (req, res) => {
 export const getUserPayments = async (req, res) => {
   try {
     const { userId } = req.params;
-    
+
     const payments = await Payment.find({ userId })
       .populate("orderId", "status totalAmount")
       .sort({ createdAt: -1 });
@@ -56,7 +56,7 @@ export const getUserPayments = async (req, res) => {
 export const getPaymentById = async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const payment = await Payment.findById(id)
       .populate("userId", "name email")
       .populate("orderId", "status totalAmount");
@@ -77,7 +77,7 @@ export const updatePaymentStatus = async (req, res) => {
   try {
     const { id } = req.params;
     const { status } = req.body;
-    
+
     const payment = await Payment.findByIdAndUpdate(
       id,
       { status },
@@ -105,15 +105,12 @@ export const initiatePhonePePayment = async (req, res) => {
       return res.status(400).json({ message: "amount (INR) or amountInPaisa is required and must be at least 1 INR / 100 paisa" });
     }
 
-    // TEMP log (safe, 30 seconds)
-    console.log("PHONEPE CONFIG", {
-      clientId: process.env.PHONEPE_CLIENT_ID,
-      clientSecret: !!process.env.PHONEPE_CLIENT_SECRET,
-      version: process.env.PHONEPE_CLIENT_VERSION,
-      env: process.env.PHONEPE_ENV,
-    });
-
     const merchantOrderId = `TX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.replace(/\./g, "-");
+
+    if (!phonepeClient.pay) {
+      return res.status(503).json({ message: "PhonePe payment is not configured. Set PHONEPE_CLIENT_ID and PHONEPE_CLIENT_SECRET." });
+    }
+
     const baseRedirect = req.body.redirectUrl || process.env.PHONEPE_REDIRECT_URL || "https://topshot.co/checkout/return";
     const redirectUrl = `${baseRedirect}${baseRedirect.includes("?") ? "&" : "?"}merchantOrderId=${merchantOrderId}`;
 
@@ -150,6 +147,9 @@ export const verifyPayment = async (req, res) => {
     const isPhonePe = provider === "phonepe" || (typeof paymentId === "string" && paymentId.startsWith("TX-"));
 
     if (isPhonePe) {
+      if (!phonepeClient.getOrderStatus) {
+        return res.status(503).json({ verified: false, payment: null, message: "PhonePe is not configured" });
+      }
       try {
         const statusResponse = await phonepeClient.getOrderStatus(paymentId);
 
@@ -216,6 +216,9 @@ export const verifyPayment = async (req, res) => {
 // @route  POST /api/payments/phonepe/webhook
 export const handlePhonePeWebhook = async (req, res) => {
   try {
+    if (!phonepeClient.validateCallback) {
+      return res.status(503).json({ message: "PhonePe is not configured" });
+    }
     const authHeader = req.headers.authorization;
     const responseBody = JSON.stringify(req.body);
 

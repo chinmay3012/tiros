@@ -1,20 +1,31 @@
-import { StandardCheckoutClient, Env } from 'pg-sdk-node';
+import { StandardCheckoutClient, Env } from "pg-sdk-node";
 
-const clientId = process.env.PHONEPE_CLIENT_ID;
-const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
-const clientVersion = parseInt(process.env.PHONEPE_CLIENT_VERSION) || 1;
-const env = process.env.PHONEPE_ENV === 'PRODUCTION' ? Env.PRODUCTION : Env.SANDBOX;
+let _phonepeClient = null;
 
-console.log("Initializing phonepeClient with:", {
-  clientId: clientId ? "Configured" : "MISSING",
-  hasSecret: !!clientSecret,
-  version: clientVersion,
-  env: process.env.PHONEPE_ENV
-});
+function getPhonePeClient() {
+  if (_phonepeClient) return _phonepeClient;
+  const clientId = process.env.PHONEPE_CLIENT_ID;
+  const clientSecret = process.env.PHONEPE_CLIENT_SECRET;
+  if (!clientId || !clientSecret) return null;
+  try {
+    const clientVersion = parseInt(process.env.PHONEPE_CLIENT_VERSION) || 1;
+    const env = process.env.PHONEPE_ENV === "PRODUCTION" ? Env.PRODUCTION : Env.SANDBOX;
+    _phonepeClient = StandardCheckoutClient.getInstance(clientId, clientSecret, clientVersion, env);
+    return _phonepeClient;
+  } catch (err) {
+    console.error("PhonePe client init failed:", err.message);
+    return null;
+  }
+}
 
-export const phonepeClient = StandardCheckoutClient.getInstance(
-  clientId,
-  clientSecret,
-  clientVersion,
-  env
+export const phonepeClient = new Proxy(
+  {},
+  {
+    get(_, prop) {
+      const client = getPhonePeClient();
+      if (!client) return undefined;
+      const val = client[prop];
+      return typeof val === "function" ? val.bind(client) : val;
+    },
+  }
 );
