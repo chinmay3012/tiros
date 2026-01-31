@@ -259,6 +259,7 @@ function CheckoutPage() {
                   }}
                   placeholder="Enter coupon code"
                   className="flex-1 px-3 py-2 border border-gray-300 rounded-md uppercase"
+                  style={{ fontFamily: "'Open Sans', sans-serif" }}
                   disabled={validatingCoupon}
                 />
                 <button

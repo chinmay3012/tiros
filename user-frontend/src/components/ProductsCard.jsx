@@ -82,9 +82,9 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
   return (
     <div 
       onClick={handleCardClick}
-      className="group relative cursor-pointer overflow-hidden rounded-xl bg-transparent transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
+      className="group relative flex flex-col h-full cursor-pointer overflow-hidden rounded-xl bg-transparent transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
     >
-      <div className="relative aspect-[4/5] overflow-hidden bg-white">
+      <div className="relative aspect-[4/5] overflow-hidden bg-white shrink-0">
         <img
           src={primaryImageSrc}
           alt={alt}
@@ -115,7 +115,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
           </div>
         )}
       </div>
-      <div className="px-3 pt-2 pb-2">
+      <div className="flex-1 min-h-0 flex flex-col px-3 pt-2 pb-2">
         <div className="flex justify-between items-start mb-1">
           <h3 className="font-semibold text-gray-900 text-base flex-1 text-left" style={{ fontFamily: 'Poppins, sans-serif', letterSpacing: '0.20em' }}>{title}</h3>
           <div className="ml-2">
@@ -139,33 +139,35 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
           </div>
         )}
       </div>
-      <div className="space-y-0">
+      <div className="space-y-0 shrink-0">
         {status === 'coming_soon' || status === 'sold_out' ? (
           <button
             onClick={handleMoveToWishlist}
             disabled={isInWishlist(id)}
-            className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
+            className={`h-12 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${
               isInWishlist(id) ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
             } bg-transparent`}
           >
             <img
               src="/images/BUTTON-2 copy.png"
               alt="Move to Wishlist"
-              className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
+              className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+              style={{ transform: "translateY(1px)" }}
             />
           </button>
         ) : (
           <button
             onClick={handleAddToCart}
             disabled={added || isDisabled}
-            className={`justify-center w-full rounded-t-lg flex items-center transition-opacity ${
+            className={`h-12 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${
               added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
             } bg-transparent`}
           >
             <img
               src="/images/BUTTON-7-AddToCard.png"
               alt="Add to Cart"
-              className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
+              className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+              style={{ transform: "translateY(1px)" }}
             />
           </button>
         )}
@@ -173,31 +175,33 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
         <button
           onClick={handleBuyNow}
           disabled={buyNowLoading || added || isDisabled}
-          className={`justify-center w-full py-1 px-2 rounded-b-lg flex items-center transition-opacity text-sm font-medium ${
+          className={`h-12 w-full rounded-b-lg flex items-center justify-center overflow-hidden transition-opacity text-sm font-medium ${
             buyNowLoading || added || isDisabled
               ? "opacity-50 cursor-not-allowed" 
               : "hover:opacity-90 active:opacity-80 cursor-pointer"
           } bg-transparent`}
         >
           {buyNowLoading ? (
-            <>
-              <svg className="animate-spin -ml-1 mr-2 h-3 w-3 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-3 w-3 text-black shrink-0" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                 <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
               </svg>
               Processing...
-            </>
+            </span>
           ) : status === 'sold_out' ? (
             <img
               src="/images/BUTTON-5 copy.png"
               alt="Sold Out"
-              className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
+              className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+              style={{ transform: "translateY(1px)" }}
             />
           ) : (
             <img
               src="/images/BUTTON-8-BuyNow.png"
               alt="Buy Now"
-              className="mx-auto pointer-events-none h-auto w-auto sm:h-12 max-w-full object-contain"
+              className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+              style={{ transform: "translateY(1px)" }}
             />
           )}
         </button>
