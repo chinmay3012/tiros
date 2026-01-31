@@ -21,43 +21,46 @@ export default function CheckoutReturnPage() {
       return;
     }
 
-    const poll = async () => {
+    const checkVerify = async () => {
       try {
-        const res = await api.get(`/orders/payment/${encodeURIComponent(paymentId)}`);
-        const order = res.data;
+        const res = await api.post("/payments/verify", { paymentId, provider: "phonepe" });
+        const { verified, message: msg } = res.data;
 
-        if (order?.payment?.status === "paid") {
+        if (verified) {
           setStatus("success");
           setMessage("Payment successful!");
           if (pollRef.current) clearInterval(pollRef.current);
           navigate("/orders", { replace: true });
-          return;
+          return true;
         }
 
-        if (order?.payment?.status === "failed") {
+        if (msg === "Payment failed") {
           setStatus("error");
           setMessage("Payment failed");
           if (pollRef.current) clearInterval(pollRef.current);
-          return;
+          return true;
         }
 
+        return false;
+      } catch (err) {
         if (Date.now() - startTimeRef.current > TIMEOUT_MS) {
           setStatus("timeout");
           setMessage("Payment is being processed. Check your orders in a few moments.");
           if (pollRef.current) clearInterval(pollRef.current);
+          return true;
         }
-      } catch (err) {
-        if (err.response?.status === 404) {
-          if (Date.now() - startTimeRef.current > TIMEOUT_MS) {
-            setStatus("timeout");
-            setMessage("Payment is being processed. Check your orders in a few moments.");
-            if (pollRef.current) clearInterval(pollRef.current);
-          }
-        } else {
-          setStatus("error");
-          setMessage(err.response?.data?.message || "Could not verify payment status");
-          if (pollRef.current) clearInterval(pollRef.current);
-        }
+        return false;
+      }
+    };
+
+    const poll = async () => {
+      const done = await checkVerify();
+      if (done) return;
+
+      if (Date.now() - startTimeRef.current > TIMEOUT_MS) {
+        setStatus("timeout");
+        setMessage("Payment is being processed. Check your orders in a few moments.");
+        if (pollRef.current) clearInterval(pollRef.current);
       }
     };
 

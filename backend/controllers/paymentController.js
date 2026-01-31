@@ -152,24 +152,77 @@ export const verifyPayment = async (req, res) => {
       }
       try {
         const statusResponse = await phonepeClient.getOrderStatus(paymentId);
+        const transactionId = statusResponse.transactionId || statusResponse.paymentDetails?.[0]?.transactionId;
+        const amountRupees = (statusResponse.amount || 0) / 100;
 
         if (statusResponse.state === "COMPLETED") {
+          // Persist: update Order and Payment records (idempotent)
+          const order = await Order.findOne({ "payment.paymentId": paymentId });
+          if (order) {
+            if (order.payment.status !== "paid") {
+              order.payment.status = "paid";
+              order.payment.transactionId = transactionId;
+              await order.save();
+
+              // Upsert Payment record (idempotent: skip if already exists and paid)
+              const existingPayment = await Payment.findOne({ paymentId, status: "paid" });
+              if (!existingPayment) {
+                const productDetails = await Product.find({
+                  _id: { $in: order.products.map((p) => p.productId) },
+                });
+                const receiptItems = order.products.map((item) => {
+                  const product = productDetails.find((p) => p._id.toString() === item.productId.toString());
+                  return {
+                    productName: product?.name || "Unknown Product",
+                    quantity: item.quantity,
+                    price: product?.price || 0,
+                  };
+                });
+                const receipt = `RCP-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+                await Payment.create({
+                  userId: order.userId,
+                  orderId: order._id,
+                  paymentId,
+                  transactionId,
+                  amount: amountRupees,
+                  status: "paid",
+                  method: "phonepe",
+                  receipt,
+                  items: receiptItems,
+                  shippingAddress: order.shippingAddress || "N/A",
+                });
+              }
+            }
+          }
+
           res.json({
             verified: true,
             payment: {
               paymentId,
-              transactionId: statusResponse.transactionId || statusResponse.paymentDetails?.[0]?.transactionId,
+              transactionId,
               status: "paid",
               method: "phonepe",
-              amount: statusResponse.amount / 100,
+              amount: amountRupees,
             },
             message: "Payment verified successfully",
+          });
+        } else if (statusResponse.state === "FAILED") {
+          // Persist failed status (idempotent)
+          const order = await Order.findOne({ "payment.paymentId": paymentId });
+          if (order && order.payment.status !== "failed") {
+            order.payment.status = "failed";
+            await order.save();
+          }
+          res.json({
+            verified: false,
+            payment: null,
+            message: "Payment failed",
           });
         } else {
           res.json({
             verified: false,
             payment: null,
-            message: statusResponse.state === "FAILED" ? "Payment failed" : "Payment not completed",
+            message: "Payment not completed",
           });
         }
       } catch (error) {
@@ -234,24 +287,29 @@ export const handlePhonePeWebhook = async (req, res) => {
     if (type === "CHECKOUT_ORDER_COMPLETED") {
       const order = await Order.findOne({ "payment.paymentId": payload.originalMerchantOrderId });
       if (order) {
-        order.payment.status = "paid";
-        order.payment.transactionId = payload.paymentDetails?.[0]?.transactionId;
-        await order.save();
+        if (order.payment.status !== "paid") {
+          order.payment.status = "paid";
+          order.payment.transactionId = payload.paymentDetails?.[0]?.transactionId;
+          await order.save();
+        }
 
-        const productDetails = await Product.find({
-          _id: { $in: order.products.map((p) => p.productId) },
-        });
+        // Idempotent: skip Payment create if already exists (e.g. verify ran first)
+        const existingPayment = await Payment.findOne({ paymentId: payload.originalMerchantOrderId, status: "paid" });
+        if (!existingPayment) {
+          const productDetails = await Product.find({
+            _id: { $in: order.products.map((p) => p.productId) },
+          });
 
-        const receiptItems = order.products.map((item) => {
-          const product = productDetails.find((p) => p._id.toString() === item.productId.toString());
-          return {
-            productName: product?.name || "Unknown Product",
-            quantity: item.quantity,
-            price: product?.price || 0,
-          };
-        });
+          const receiptItems = order.products.map((item) => {
+            const product = productDetails.find((p) => p._id.toString() === item.productId.toString());
+            return {
+              productName: product?.name || "Unknown Product",
+              quantity: item.quantity,
+              price: product?.price || 0,
+            };
+          });
 
-        await Payment.create({
+          await Payment.create({
           userId: order.userId,
           orderId: order._id,
           paymentId: payload.originalMerchantOrderId,
@@ -262,6 +320,7 @@ export const handlePhonePeWebhook = async (req, res) => {
           items: receiptItems,
           shippingAddress: order.shippingAddress,
         });
+        }
       }
     } else if (type === "CHECKOUT_ORDER_FAILED") {
       const order = await Order.findOne({ "payment.paymentId": payload.originalMerchantOrderId });
