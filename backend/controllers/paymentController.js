@@ -105,6 +105,14 @@ export const initiatePhonePePayment = async (req, res) => {
       return res.status(400).json({ message: "amount (INR) or amountInPaisa is required and must be at least 1 INR / 100 paisa" });
     }
 
+    // TEMP log (safe, 30 seconds)
+    console.log("PHONEPE CONFIG", {
+      clientId: process.env.PHONEPE_CLIENT_ID,
+      clientSecret: !!process.env.PHONEPE_CLIENT_SECRET,
+      version: process.env.PHONEPE_CLIENT_VERSION,
+      env: process.env.PHONEPE_ENV,
+    });
+
     const merchantOrderId = `TX-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`.replace(/\./g, "-");
     const baseRedirect = req.body.redirectUrl || process.env.PHONEPE_REDIRECT_URL || "https://topshot.co/checkout/return";
     const redirectUrl = `${baseRedirect}${baseRedirect.includes("?") ? "&" : "?"}merchantOrderId=${merchantOrderId}`;

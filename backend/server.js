@@ -1,5 +1,5 @@
+import "./config/env.js";
 import express from "express";
-import dotenv from "dotenv";
 import connectDB from "./middlewares/config/db.js";
 import cors from "cors";
 import adminRoutes from "./routes/adminRoutes.js";
@@ -15,7 +15,6 @@ import couponRoutes from "./routes/couponRoutes.js";
 import dropSignupRoutes from "./routes/dropSignupRoutes.js";
 import adminDropSignupRoutes from "./routes/adminDropSignupRoutes.js";
 
-dotenv.config();
 connectDB();
 
 
@@ -45,7 +44,7 @@ const corsOptions = {
   origin: function (origin, callback) {
     // Allow requests with no origin (mobile apps, Postman, etc.)
     if (!origin) return callback(null, true);
-    
+
     if (allowedOrigins.indexOf(origin) !== -1) {
       console.log('✅ Allowed by CORS:', origin);
       callback(null, true);
@@ -93,7 +92,7 @@ app.use("/api/admin/coupons", couponRoutes);
 app.use("/api/coupons", couponRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ 
+  res.json({
     message: "TIROS API is running...",
     version: "1.0.0",
     status: "healthy",
@@ -108,8 +107,8 @@ app.get("/health", (req, res) => {
 
 // Test CORS endpoint
 app.get("/test-cors", (req, res) => {
-  res.json({ 
-    message: "CORS is working!", 
+  res.json({
+    message: "CORS is working!",
     origin: req.headers.origin,
     timestamp: new Date().toISOString()
   });
