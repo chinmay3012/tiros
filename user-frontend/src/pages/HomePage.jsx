@@ -143,10 +143,10 @@ function HomePage(){
      <>
         <SEO 
           title="Topshot | Official Paddle Store"
-          description="Shop the latest fashion trends at Topshot. Premium clothing, fast delivery, and secure checkout."
+          description="TOPSHOT, a premium pickleball brand in India. Shop the latest pickleball equipment from this premium Indian pickleball brand for the TOP!."
           canonical="https://topshot.co/"
           ogTitle="Topshot | Official Paddle Store"
-          ogDescription="Shop the latest fashion trends at Topshot. Premium clothing, fast delivery, and secure checkout."
+          ogDescription="TOPSHOT, a premium pickleball brand in India. Shop the latest pickleball equipment from this premium Indian pickleball brand for the TOP!"
           ogUrl="https://topshot.co/"
         />
         <div>
