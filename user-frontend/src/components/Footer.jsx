@@ -22,7 +22,7 @@ function Footer(){
                         {/* Social Media Icons */}
                         <div className="flex flex-col gap-4 mb-6">
                             <div className="flex items-center gap-3">
-                                <a 
+                                {/* <a 
                                     href="https://twitter.com" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
@@ -32,9 +32,9 @@ function Footer(){
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" style={{ color: 'hsl(220, 13%, 13%)' }}>
                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
                                     </svg>
-                                </a>
+                                </a> */}
                                 <a 
-                                    href="https://www.instagram.com/topshot_padel/" 
+                                    href="https://www.instagram.com/topshot_pickleball/" 
                                     target="_blank" 
                                     rel="noopener noreferrer"
                                     aria-label="Follow us on Instagram"
@@ -49,7 +49,7 @@ function Footer(){
                                         fontFamily: 'Kode Mono, monospace',
                                         color: '#FFFFFF',
                                         fontSize: '14px'
-                                    }}>topshot_padel</span>
+                                    }}>topshot_pickleball</span>
                                 </a>
                             </div>
                             <a 
@@ -91,9 +91,10 @@ function Footer(){
                                         fontSize: '14px'
                                     }}>(+91)-9266-987400</span>
                                 </a>
-                                <p className="text-sm ml-12" style={{ color: 'hsl(0, 0%, 60%)' }}>NEW DELHI, INDIA</p>
+                                {/* <p className="text-sm ml-12" style={{ color: 'hsl(0, 0%, 60%)' }}>NEW DELHI, INDIA</p> */}
                             </div>
                             <div style={{ color: 'hsl(0, 0%, 60%)' }}>
+                                <p className="text-sm ">NEW DELHI, INDIA</p>
                                 <p className="text-sm">Mon-Fri: 9AM - 6PM EST</p>
                                 <p className="text-sm">Sat-Sun: 10AM - 4PM EST</p>
                             </div>
