@@ -4,14 +4,14 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { getImageUrl } from "../utils/imageUtils";
 
-function AccountPage(){
+function AccountPage() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [tab, setTab] = useState('profile');
   const [orders, setOrders] = useState([]);
   const [payments, setPayments] = useState([]);
   const [address, setAddress] = useState({});
-  const [form, setForm] = useState({ name: user?.name||'', email: user?.email||'', address: {} });
+  const [form, setForm] = useState({ name: user?.name || '', email: user?.email || '', address: {} });
 
   // Load user profile including address when component mounts or user changes
   useEffect(() => {
@@ -72,74 +72,74 @@ function AccountPage(){
     loadProfile();
   }, [user?._id]);
 
-  useEffect(()=>{
-    if(tab==='orders' && user?._id){
-      (async()=>{
-        try{ const { data } = await api.get(`/orders/user/${user._id}`); setOrders(data||[]); }catch{}
+  useEffect(() => {
+    if (tab === 'orders' && user?._id) {
+      (async () => {
+        try { const { data } = await api.get(`/orders/user/${user._id}`); setOrders(data || []); } catch { }
       })();
     }
-    if(tab==='payments' && user?._id){
-      (async()=>{
-        try{ const { data } = await api.get(`/payments/user/${user._id}`); setPayments(data||[]); }catch{}
+    if (tab === 'payments' && user?._id) {
+      (async () => {
+        try { const { data } = await api.get(`/payments/user/${user._id}`); setPayments(data || []); } catch { }
       })();
     }
-  },[tab,user?._id]);
+  }, [tab, user?._id]);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState('');
 
   const saveProfile = async () => {
-    try{
+    try {
       setSaving(true); setMessage('');
       const { data } = await api.put(`/users/${user._id}`, { name: form.name, email: form.email, address: form.address });
       setAddress(data.address || {});
       setMessage('Saved successfully');
       // Update user in AuthContext if needed (it will be handled by AuthContext refresh)
-    }catch(e){ setMessage(e?.response?.data?.message||'Failed to save'); }
-    finally{ setSaving(false); }
+    } catch (e) { setMessage(e?.response?.data?.message || 'Failed to save'); }
+    finally { setSaving(false); }
   };
 
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-3xl font-bold mb-6">Account</h1>
       <div className="flex gap-3 border-b mb-6">
-        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='profile'?'border-b-2 border-black':''}`} onClick={()=>setTab('profile')}>Profile</button>
-        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='orders'?'border-b-2 border-black':''}`} onClick={()=>setTab('orders')}>Orders</button>
-        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab==='payments'?'border-b-2 border-black':''}`} onClick={()=>setTab('payments')}>Payments</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab === 'profile' ? 'border-b-2 border-black' : ''}`} onClick={() => setTab('profile')}>Profile</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab === 'orders' ? 'border-b-2 border-black' : ''}`} onClick={() => setTab('orders')}>Orders</button>
+        <button className={`px-3 py-2 hover:bg-[#95C5F4] ${tab === 'payments' ? 'border-b-2 border-black' : ''}`} onClick={() => setTab('payments')}>Payments</button>
       </div>
 
-      {tab==='profile' && (
+      {tab === 'profile' && (
         <div className="space-y-3 max-w-xl">
           <div>
             <label className="block text-sm font-medium">Name</label>
-            <input value={form.name} onChange={e=>setForm({...form, name:e.target.value})} className="border p-2 rounded w-full" />
+            <input value={form.name} onChange={e => setForm({ ...form, name: e.target.value })} className="border p-2 rounded w-full" />
           </div>
           <div>
             <label className="block text-sm font-medium">Email</label>
-            <input value={form.email} onChange={e=>setForm({...form, email:e.target.value})} className="border p-2 rounded w-full" />
+            <input value={form.email} onChange={e => setForm({ ...form, email: e.target.value })} className="border p-2 rounded w-full" />
           </div>
           <div>
             <h3 className="font-semibold">Address</h3>
             <div className="grid grid-cols-1 gap-2">
-              <input placeholder="Full Name" value={form.address.name||''} onChange={e=>setForm({...form, address:{...form.address, name:e.target.value}})} className="border p-2 rounded" />
-              <input placeholder="Street" value={form.address.street||''} onChange={e=>setForm({...form, address:{...form.address, street:e.target.value}})} className="border p-2 rounded" />
+              <input placeholder="Full Name" value={form.address.name || ''} onChange={e => setForm({ ...form, address: { ...form.address, name: e.target.value } })} className="border p-2 rounded" />
+              <input placeholder="Street" value={form.address.street || ''} onChange={e => setForm({ ...form, address: { ...form.address, street: e.target.value } })} className="border p-2 rounded" />
               <div className="grid grid-cols-2 gap-2">
-                <input placeholder="City" value={form.address.city||''} onChange={e=>setForm({...form, address:{...form.address, city:e.target.value}})} className="border p-2 rounded" />
-                <input placeholder="ZIP" value={form.address.zip||''} onChange={e=>setForm({...form, address:{...form.address, zip:e.target.value}})} className="border p-2 rounded" />
+                <input placeholder="City" value={form.address.city || ''} onChange={e => setForm({ ...form, address: { ...form.address, city: e.target.value } })} className="border p-2 rounded" />
+                <input placeholder="ZIP" value={form.address.zip || ''} onChange={e => setForm({ ...form, address: { ...form.address, zip: e.target.value } })} className="border p-2 rounded" />
               </div>
               <div className="grid grid-cols-2 gap-2">
-                <input placeholder="Country" value={form.address.country||''} onChange={e=>setForm({...form, address:{...form.address, country:e.target.value}})} className="border p-2 rounded" />
-                <input placeholder="Phone" value={form.address.phone||''} onChange={e=>setForm({...form, address:{...form.address, phone:e.target.value}})} className="border p-2 rounded" />
+                <input placeholder="Country" value={form.address.country || ''} onChange={e => setForm({ ...form, address: { ...form.address, country: e.target.value } })} className="border p-2 rounded" />
+                <input placeholder="Phone" value={form.address.phone || ''} onChange={e => setForm({ ...form, address: { ...form.address, phone: e.target.value } })} className="border p-2 rounded" />
               </div>
             </div>
           </div>
           {message && <div className="text-sm text-gray-600">{message}</div>}
           <button disabled={saving} onClick={saveProfile} className="px-4 py-2 bg-black text-white rounded hover:bg-[#95C5F4]">
-            {saving? 'Saving...' : 'Save'}
+            {saving ? 'Saving...' : 'Save'}
           </button>
         </div>
       )}
 
-      {tab==='orders' && (
+      {tab === 'orders' && (
         <div className="space-y-6">
           {orders.length === 0 ? (
             <div className="text-center py-12">
@@ -164,13 +164,12 @@ function AccountPage(){
                   </div>
                   <div className="text-right">
                     <div className="text-xl font-bold text-gray-900">Rs. {order.totalAmount}</div>
-                    <div className={`text-sm px-3 py-1 rounded-full font-medium ${
-                      order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                      order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                      order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
-                      order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
-                      'bg-gray-100 text-gray-800'
-                    }`}>
+                    <div className={`text-sm px-3 py-1 rounded-full font-medium ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                        order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                          order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                            order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
+                              'bg-gray-100 text-gray-800'
+                      }`}>
                       {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
                     </div>
                   </div>
@@ -182,28 +181,28 @@ function AccountPage(){
                   <div className="space-y-3">
                     {order.products.map((product, index) => (
                       <div key={index} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
-                        <div 
+                        <div
                           className="w-16 h-16 rounded-lg overflow-hidden cursor-pointer hover:opacity-80 transition-opacity"
-                          onClick={() => navigate(`/products/${product.productId._id}`)}
+                          onClick={() => product.productId && navigate(`/products/${product.productId._id}`)}
                         >
                           <img
-                            src={getImageUrl(product.productId.image) || "https://placehold.co/200x200?text=No+Image"}
-                            alt={product.productId.name}
+                            src={product.productId?.image ? getImageUrl(product.productId.image) : "https://placehold.co/200x200?text=No+Image"}
+                            alt={product.productId?.name || "Product not available"}
                             className="w-full h-full object-cover"
                           />
                         </div>
                         <div className="flex-1">
-                          <h5 
-                            className="font-medium text-gray-900 cursor-pointer hover:text-green-600 transition-colors"
-                            onClick={() => navigate(`/products/${product.productId._id}`)}
+                          <h5
+                            className={`font-medium text-gray-900 ${product.productId ? 'cursor-pointer hover:text-green-600' : ''} transition-colors`}
+                            onClick={() => product.productId && navigate(`/products/${product.productId._id}`)}
                           >
-                            {product.productId.name}
+                            {product.productId?.name || "Product no longer available"}
                           </h5>
                           <p className="text-sm text-gray-600">Quantity: {product.quantity}</p>
-                          <p className="text-sm font-medium text-gray-900">Rs. {product.productId.price}</p>
+                          <p className="text-sm font-medium text-gray-900">Rs. {product.productId?.price || 0}</p>
                         </div>
                         <div className="text-right">
-                          <p className="font-medium text-gray-900">Rs. {product.productId.price * product.quantity}</p>
+                          <p className="font-medium text-gray-900">Rs. {(product.productId?.price || 0) * product.quantity}</p>
                         </div>
                       </div>
                     ))}
@@ -221,7 +220,7 @@ function AccountPage(){
                 {/* Payment Information */}
                 <div className="flex justify-between items-center pt-4 border-t border-gray-100">
                   <div className="text-sm text-gray-600">
-                    <span className="font-medium">Payment:</span> {order.payment?.status || 'pending'} 
+                    <span className="font-medium">Payment:</span> {order.payment?.status || 'pending'}
                     {order.payment?.method && ` via ${order.payment.method}`}
                   </div>
                   <div className="text-sm text-gray-600">
@@ -236,7 +235,7 @@ function AccountPage(){
         </div>
       )}
 
-      {tab==='payments' && (
+      {tab === 'payments' && (
         <div className="space-y-4">
           {payments.length === 0 ? (
             <div className="text-center py-8">
@@ -254,16 +253,15 @@ function AccountPage(){
                   </div>
                   <div className="text-right">
                     <div className="text-xl font-bold text-green-600">Rs. {payment.amount}</div>
-                    <div className={`text-sm px-2 py-1 rounded-full ${
-                      payment.status === 'paid' ? 'bg-green-100 text-green-800' : 
-                      payment.status === 'failed' ? 'bg-red-100 text-red-800' : 
-                      'bg-yellow-100 text-yellow-800'
-                    }`}>
+                    <div className={`text-sm px-2 py-1 rounded-full ${payment.status === 'paid' ? 'bg-green-100 text-green-800' :
+                        payment.status === 'failed' ? 'bg-red-100 text-red-800' :
+                          'bg-yellow-100 text-yellow-800'
+                      }`}>
                       {payment.status.toUpperCase()}
                     </div>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                   <div>
                     <h4 className="font-medium text-gray-900 mb-2">Payment Details</h4>
@@ -278,7 +276,7 @@ function AccountPage(){
                     <p className="text-sm text-gray-600">{payment.shippingAddress}</p>
                   </div>
                 </div>
-                
+
                 {payment.items && payment.items.length > 0 && (
                   <div>
                     <h4 className="font-medium text-gray-900 mb-2">Items Purchased</h4>

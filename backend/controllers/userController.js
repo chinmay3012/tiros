@@ -5,9 +5,9 @@ import User from "../models/user.js";
 export const getAllUsers = async (req, res) => {
   try {
     const { search, page = 1, limit = 10, blocked } = req.query;
-    
+
     let query = {};
-    
+
     // Search filter
     if (search) {
       query.$or = [
@@ -15,24 +15,24 @@ export const getAllUsers = async (req, res) => {
         { email: { $regex: search, $options: "i" } }
       ];
     }
-    
+
     // Blocked filter
     if (blocked !== undefined) {
       query.isBlocked = blocked === "true";
     }
-    
+
     const pageNum = parseInt(page);
     const limitNum = parseInt(limit);
     const skip = (pageNum - 1) * limitNum;
-    
+
     const users = await User.find(query)
       .select("-password")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limitNum);
-    
+
     const total = await User.countDocuments(query);
-    
+
     res.json({
       users,
       pagination: {
@@ -53,11 +53,11 @@ export const getAllUsers = async (req, res) => {
 export const getUserById = async (req, res) => {
   try {
     const user = await User.findById(req.params.id).select("-password");
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
+
     res.json(user);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -69,16 +69,16 @@ export const getUserById = async (req, res) => {
 export const toggleUserBlock = async (req, res) => {
   try {
     const { isBlocked } = req.body;
-    
+
     const user = await User.findById(req.params.id);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
+
     user.isBlocked = isBlocked;
     await user.save();
-    
+
     res.json({
       message: `User ${isBlocked ? "blocked" : "unblocked"} successfully`,
       user: {
@@ -93,19 +93,21 @@ export const toggleUserBlock = async (req, res) => {
   }
 };
 
-// @desc   Delete user
+// @desc   Delete user (Soft Delete)
 // @route  DELETE /api/admin/users/:id
 export const deleteUser = async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
-    
+
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    
-    await User.findByIdAndDelete(req.params.id);
-    
-    res.json({ message: "User deleted successfully" });
+
+    // Soft delete: set isActive to false
+    user.isActive = false;
+    await user.save();
+
+    res.json({ message: "User deactivated successfully" });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
