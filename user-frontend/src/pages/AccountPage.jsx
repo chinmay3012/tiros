@@ -157,20 +157,20 @@ function AccountPage() {
             orders.map(order => (
               <div key={order._id} className="border rounded-lg p-6 bg-white shadow-sm">
                 {/* Order Header */}
-                <div className="flex justify-between items-start mb-4 pb-4 border-b border-gray-100">
-                  <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Order #{order._id.slice(-8).toUpperCase()}</h3>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4 pb-4 border-b border-gray-100">
+                  <div className="w-full sm:w-auto">
+                    <h3 className="text-lg font-bold text-gray-900">Order #{order._id.slice(-8).toUpperCase()}</h3>
                     <p className="text-sm text-gray-500">Placed on {new Date(order.createdAt).toLocaleDateString()}</p>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xl font-bold text-gray-900">Rs. {order.totalAmount}</div>
-                    <div className={`text-sm px-3 py-1 rounded-full font-medium ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                  <div className="w-full sm:w-auto flex justify-between sm:flex-col sm:items-end items-center">
+                    <div className="text-xl font-black text-gray-900">Rs. {order.totalAmount}</div>
+                    <div className={`text-[10px] px-3 py-1 rounded-full font-black uppercase tracking-wider ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
                         order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
                           order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
                             order.status === 'cancelled' ? 'bg-red-100 text-red-800' :
                               'bg-gray-100 text-gray-800'
                       }`}>
-                      {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      {order.status}
                     </div>
                   </div>
                 </div>
@@ -254,8 +254,8 @@ function AccountPage() {
                   <div className="text-right">
                     <div className="text-xl font-bold text-green-600">Rs. {payment.amount}</div>
                     <div className={`text-sm px-2 py-1 rounded-full ${payment.status === 'paid' ? 'bg-green-100 text-green-800' :
-                        payment.status === 'failed' ? 'bg-red-100 text-red-800' :
-                          'bg-yellow-100 text-yellow-800'
+                      payment.status === 'failed' ? 'bg-red-100 text-red-800' :
+                        'bg-yellow-100 text-yellow-800'
                       }`}>
                       {payment.status.toUpperCase()}
                     </div>
