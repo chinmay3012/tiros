@@ -9,7 +9,7 @@ export default function AllOrders() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await api.get("/api/admin/orders");
+        const { data } = await api.get("/admin/orders");
         setOrders(data.orders || data); // depends on backend shape
       } catch (err) {
         console.error(err);
@@ -19,7 +19,7 @@ export default function AllOrders() {
 
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await api.put(`/api/admin/orders/${orderId}/status`, { status: newStatus });
+      await api.put(`/admin/orders/${orderId}/status`, { status: newStatus });
       setOrders((prev) => prev.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
     } catch (err) {
       console.error(err);
@@ -30,7 +30,7 @@ export default function AllOrders() {
   const deleteOrder = async (orderId) => {
     if (!window.confirm("Are you sure you want to delete this order?")) return;
     try {
-      await api.delete(`/api/admin/orders/${orderId}`);
+      await api.delete(`/admin/orders/${orderId}`);
       setOrders((prev) => prev.filter(o => o._id !== orderId));
     } catch (err) {
       console.error(err);
