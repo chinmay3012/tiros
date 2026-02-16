@@ -27,6 +27,17 @@ export default function AllOrders() {
     }
   };
 
+  const deleteOrder = async (orderId) => {
+    if (!window.confirm("Are you sure you want to delete this order?")) return;
+    try {
+      await api.delete(`/admin/orders/${orderId}`);
+      setOrders((prev) => prev.filter(o => o._id !== orderId));
+    } catch (err) {
+      console.error(err);
+      alert(err?.response?.data?.message || "Delete failed");
+    }
+  };
+
   if (loading) return <div>Loading orders...</div>;
 
   return (
@@ -61,13 +72,20 @@ export default function AllOrders() {
                   </div>
                 </td>
                 <td className="p-2 text-center">
-                  <select value={order.status} onChange={(e) => updateStatus(order._id, e.target.value)}
-                    className="p-1 border rounded">
-                    <option value="pending">pending</option>
-                    <option value="shipped">shipped</option>
-                    <option value="delivered">delivered</option>
-                    <option value="issue">issue</option>
-                  </select>
+                  <div className="flex items-center space-x-2 justify-center">
+                    <select value={order.status} onChange={(e) => updateStatus(order._id, e.target.value)}
+                      className="p-1 border rounded text-xs">
+                      <option value="pending">pending</option>
+                      <option value="shipped">shipped</option>
+                      <option value="delivered">delivered</option>
+                      <option value="issue">issue</option>
+                    </select>
+                    <button onClick={() => deleteOrder(order._id)} className="text-red-500 hover:text-red-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}

@@ -5,7 +5,8 @@ import {
   EyeIcon,
   CheckIcon,
   TruckIcon,
-  XMarkIcon
+  XMarkIcon,
+  TrashIcon
 } from '@heroicons/react/24/outline';
 
 export default function Orders() {
@@ -65,6 +66,22 @@ export default function Orders() {
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update order status');
+    }
+  };
+
+  const handleDeleteOrder = async (orderId) => {
+    if (!window.confirm('Are you sure you want to delete this order? This action cannot be undone.')) {
+      return;
+    }
+    try {
+      await api.delete(`/admin/orders/${orderId}`);
+      fetchOrders();
+      if (selectedOrder && selectedOrder._id === orderId) {
+        setShowOrderModal(false);
+        setSelectedOrder(null);
+      }
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to delete order');
     }
   };
 
@@ -228,6 +245,12 @@ export default function Orders() {
                         <XMarkIcon className="h-4 w-4" />
                       </button>
                     )}
+                    <button
+                      onClick={() => handleDeleteOrder(order._id)}
+                      className="text-red-600 hover:text-red-900"
+                    >
+                      <TrashIcon className="h-4 w-4" />
+                    </button>
                   </td>
                 </tr>
               ))}
