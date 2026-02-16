@@ -35,7 +35,7 @@ export default function Orders() {
       if (searchTerm) params.append('search', searchTerm);
       if (statusFilter) params.append('status', statusFilter);
 
-      const response = await api.get(`/admin/orders?${params}`);
+      const response = await api.get(`/api/admin/orders?${params}`);
       setOrders(response.data.orders);
       setTotalPages(response.data.pagination.totalPages);
     } catch (err) {
@@ -47,7 +47,7 @@ export default function Orders() {
 
   const handleViewOrder = async (orderId) => {
     try {
-      const response = await api.get(`/admin/orders/${orderId}`);
+      const response = await api.get(`/api/admin/orders/${orderId}`);
       setSelectedOrder(response.data);
       setShowOrderModal(true);
     } catch (err) {
@@ -57,7 +57,7 @@ export default function Orders() {
 
   const handleUpdateStatus = async (orderId, newStatus) => {
     try {
-      await api.put(`/admin/orders/${orderId}/status`, {
+      await api.put(`/api/admin/orders/${orderId}/status`, {
         status: newStatus
       });
       fetchOrders(); // Refresh the list
@@ -74,7 +74,7 @@ export default function Orders() {
       return;
     }
     try {
-      await api.delete(`/admin/orders/${orderId}`);
+      await api.delete(`/api/admin/orders/${orderId}`);
       fetchOrders();
       if (selectedOrder && selectedOrder._id === orderId) {
         setShowOrderModal(false);
