@@ -11,59 +11,59 @@ export const getDashboardSummary = async (req, res) => {
     const days = parseInt(period);
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
-    
+
     // Get counts
     const totalUsers = await User.countDocuments();
     const totalProducts = await Product.countDocuments({ isActive: true });
     const totalCategories = await Category.countDocuments({ isActive: true });
     const totalOrders = await Order.countDocuments();
-    
+
     // Get recent counts (within period)
-    const recentUsers = await User.countDocuments({ 
-      createdAt: { $gte: startDate } 
+    const recentUsers = await User.countDocuments({
+      createdAt: { $gte: startDate }
     });
-    const recentOrders = await Order.countDocuments({ 
-      createdAt: { $gte: startDate } 
+    const recentOrders = await Order.countDocuments({
+      createdAt: { $gte: startDate }
     });
-    
+
     // Calculate revenue
     const revenueData = await Order.aggregate([
       { $match: { status: { $in: ["delivered", "shipped"] } } },
       { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
     ]);
-    
+
     const totalRevenue = revenueData.length > 0 ? revenueData[0].totalRevenue : 0;
-    
+
     // Recent revenue
     const recentRevenueData = await Order.aggregate([
-      { 
-        $match: { 
+      {
+        $match: {
           status: { $in: ["delivered", "shipped"] },
           createdAt: { $gte: startDate }
-        } 
+        }
       },
       { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
     ]);
-    
+
     const recentRevenue = recentRevenueData.length > 0 ? recentRevenueData[0].totalRevenue : 0;
-    
+
     // Order status breakdown
     const orderStatusBreakdown = await Order.aggregate([
       { $group: { _id: "$status", count: { $sum: 1 } } }
     ]);
-    
+
     // Low stock products
-    const lowStockProducts = await Product.countDocuments({ 
-      stock: { $lte: 10 }, 
-      isActive: true 
+    const lowStockProducts = await Product.countDocuments({
+      stock: { $lte: 10 },
+      isActive: true
     });
-    
+
     // Recent orders (last 5)
     const recentOrdersList = await Order.find()
-      .populate("userId", "name email")
+      .populate("userId", "name email address")
       .sort({ createdAt: -1 })
       .limit(5);
-    
+
     res.json({
       summary: {
         totalUsers,
@@ -92,16 +92,16 @@ export const getDashboardSummary = async (req, res) => {
 export const getSalesReport = async (req, res) => {
   try {
     const { startDate, endDate, groupBy = "day" } = req.query;
-    
+
     let matchQuery = { status: { $in: ["delivered", "shipped"] } };
-    
+
     if (startDate && endDate) {
       matchQuery.createdAt = {
         $gte: new Date(startDate),
         $lte: new Date(endDate)
       };
     }
-    
+
     let groupFormat;
     switch (groupBy) {
       case "hour":
@@ -137,7 +137,7 @@ export const getSalesReport = async (req, res) => {
           day: { $dayOfMonth: "$createdAt" }
         };
     }
-    
+
     const salesData = await Order.aggregate([
       { $match: matchQuery },
       {
@@ -150,7 +150,7 @@ export const getSalesReport = async (req, res) => {
       },
       { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1, "_id.hour": 1 } }
     ]);
-    
+
     // Calculate totals
     const totals = await Order.aggregate([
       { $match: matchQuery },
@@ -163,7 +163,7 @@ export const getSalesReport = async (req, res) => {
         }
       }
     ]);
-    
+
     res.json({
       salesData,
       totals: totals.length > 0 ? totals[0] : {
@@ -187,16 +187,16 @@ export const getSalesReport = async (req, res) => {
 export const getUsersReport = async (req, res) => {
   try {
     const { startDate, endDate, groupBy = "day" } = req.query;
-    
+
     let matchQuery = {};
-    
+
     if (startDate && endDate) {
       matchQuery.createdAt = {
         $gte: new Date(startDate),
         $lte: new Date(endDate)
       };
     }
-    
+
     let groupFormat;
     switch (groupBy) {
       case "day":
@@ -224,7 +224,7 @@ export const getUsersReport = async (req, res) => {
           day: { $dayOfMonth: "$createdAt" }
         };
     }
-    
+
     const userGrowthData = await User.aggregate([
       { $match: matchQuery },
       {
@@ -235,7 +235,7 @@ export const getUsersReport = async (req, res) => {
       },
       { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1 } }
     ]);
-    
+
     // Get user statistics
     const userStats = await User.aggregate([
       {
@@ -247,13 +247,13 @@ export const getUsersReport = async (req, res) => {
         }
       }
     ]);
-    
+
     // Get recent users
     const recentUsers = await User.find()
       .select("name email createdAt isBlocked")
       .sort({ createdAt: -1 })
       .limit(10);
-    
+
     res.json({
       userGrowthData,
       userStats: userStats.length > 0 ? userStats[0] : {

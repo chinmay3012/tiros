@@ -30,7 +30,7 @@ export default function Orders() {
         page: currentPage.toString(),
         limit: '10'
       });
-      
+
       if (searchTerm) params.append('search', searchTerm);
       if (statusFilter) params.append('status', statusFilter);
 
@@ -61,7 +61,7 @@ export default function Orders() {
       });
       fetchOrders(); // Refresh the list
       if (selectedOrder && selectedOrder._id === orderId) {
-        setSelectedOrder({...selectedOrder, status: newStatus});
+        setSelectedOrder({ ...selectedOrder, status: newStatus });
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to update order status');
@@ -187,6 +187,9 @@ export default function Orders() {
                       <div className="text-sm text-gray-500">
                         {order.userId?.email || 'N/A'}
                       </div>
+                      <div className="text-sm text-gray-500">
+                        {order.userId?.address?.phone || 'No Phone'}
+                      </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -293,13 +296,14 @@ export default function Orders() {
                     <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
                       Order Details - #{selectedOrder._id.slice(-8)}
                     </h3>
-                    
+
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       {/* Customer Info */}
                       <div>
                         <h4 className="text-md font-medium text-gray-900 mb-3">Customer Information</h4>
                         <div className="space-y-2">
                           <p><span className="font-medium">Name:</span> {selectedOrder.userId?.name || 'N/A'}</p>
+                          <p><span className="font-medium">Phone:</span> {selectedOrder.userId?.address?.phone || 'N/A'}</p>
                           <p><span className="font-medium">Email:</span> {selectedOrder.userId?.email || 'N/A'}</p>
                           <p><span className="font-medium">Shipping Address:</span> {selectedOrder.shippingAddress || 'N/A'}</p>
                           <p><span className="font-medium">Payment Method:</span> {selectedOrder.paymentMethod || 'N/A'}</p>
@@ -310,7 +314,7 @@ export default function Orders() {
                       <div>
                         <h4 className="text-md font-medium text-gray-900 mb-3">Order Information</h4>
                         <div className="space-y-2">
-                          <p><span className="font-medium">Status:</span> 
+                          <p><span className="font-medium">Status:</span>
                             <span className={`ml-2 inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(selectedOrder.status)}`}>
                               {selectedOrder.status}
                             </span>

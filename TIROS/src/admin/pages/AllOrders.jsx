@@ -2,16 +2,16 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
 
-export default function AllOrders(){
+export default function AllOrders() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(()=>{
-    (async ()=>{
+  useEffect(() => {
+    (async () => {
       try {
         const { data } = await api.get("/admin/orders");
         setOrders(data.orders || data); // depends on backend shape
-      } catch(err){
+      } catch (err) {
         console.error(err);
       } finally { setLoading(false); }
     })();
@@ -20,8 +20,8 @@ export default function AllOrders(){
   const updateStatus = async (orderId, newStatus) => {
     try {
       await api.put(`/admin/orders/${orderId}/status`, { status: newStatus });
-      setOrders((prev) => prev.map(o => o._id === orderId ? {...o, status: newStatus} : o));
-    } catch(err){
+      setOrders((prev) => prev.map(o => o._id === orderId ? { ...o, status: newStatus } : o));
+    } catch (err) {
       console.error(err);
       alert(err?.response?.data?.message || "Update failed");
     }
@@ -48,12 +48,20 @@ export default function AllOrders(){
             {orders.map(order => (
               <tr key={order._id} className="border-t">
                 <td className="p-2">{order.serialNo ?? order._id.slice(-6)}</td>
-                <td className="p-2">{order.shippingAddress?.name ?? order.userId?.name ?? "—"}</td>
-                <td className="p-2">{order.shippingAddress?.addressLine1 ?? "—"}</td>
+                <td className="p-2">{order.userId?.name || "—"}</td>
+                <td className="p-2">
+                  <div className="text-xs max-w-xs">{order.shippingAddress || "—"}</div>
+                  <div className="text-xs text-gray-500">{order.userId?.address?.phone || ""}</div>
+                </td>
                 <td className="p-2 text-center">₹{order.totalAmount}</td>
-                <td className="p-2 text-center">{order.status}</td>
+                <td className="p-2 text-center text-xs">
+                  {new Date(order.createdAt).toLocaleDateString()}
+                  <div className={`mt-1 font-semibold ${order.status === 'delivered' ? 'text-green-600' : 'text-orange-600'}`}>
+                    {order.status}
+                  </div>
+                </td>
                 <td className="p-2 text-center">
-                  <select value={order.status} onChange={(e)=>updateStatus(order._id, e.target.value)}
+                  <select value={order.status} onChange={(e) => updateStatus(order._id, e.target.value)}
                     className="p-1 border rounded">
                     <option value="pending">pending</option>
                     <option value="shipped">shipped</option>

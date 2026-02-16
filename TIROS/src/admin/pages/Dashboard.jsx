@@ -127,10 +127,9 @@ export default function Dashboard() {
                         {stat.value}
                       </div>
                       {stat.change > 0 && (
-                        <div className={`ml-2 flex items-baseline text-sm font-semibold ${
-                          stat.changeType === 'increase' ? 'text-green-600' : 
-                          stat.changeType === 'decrease' ? 'text-red-600' : 'text-gray-500'
-                        }`}>
+                        <div className={`ml-2 flex items-baseline text-sm font-semibold ${stat.changeType === 'increase' ? 'text-green-600' :
+                            stat.changeType === 'decrease' ? 'text-red-600' : 'text-gray-500'
+                          }`}>
                           {stat.changeType === 'increase' ? (
                             <ArrowUpIcon className="h-4 w-4 flex-shrink-0 self-center" />
                           ) : stat.changeType === 'decrease' ? (
@@ -186,18 +185,18 @@ export default function Dashboard() {
                         {order._id.slice(-8)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {order.userId?.name || 'N/A'}
+                        <div>{order.userId?.name || 'N/A'}</div>
+                        <div className="text-xs text-gray-400">{order.userId?.address?.phone || ''}</div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      ₹{order.totalAmount}
+                        ₹{order.totalAmount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                          order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                          order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                          order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
-                          'bg-gray-100 text-gray-800'
-                        }`}>
+                        <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
+                            order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                              order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                                'bg-gray-100 text-gray-800'
+                          }`}>
                           {order.status}
                         </span>
                       </td>
