@@ -128,7 +128,7 @@ export default function Dashboard() {
                       </div>
                       {stat.change > 0 && (
                         <div className={`ml-2 flex items-baseline text-sm font-semibold ${stat.changeType === 'increase' ? 'text-green-600' :
-                            stat.changeType === 'decrease' ? 'text-red-600' : 'text-gray-500'
+                          stat.changeType === 'decrease' ? 'text-red-600' : 'text-gray-500'
                           }`}>
                           {stat.changeType === 'increase' ? (
                             <ArrowUpIcon className="h-4 w-4 flex-shrink-0 self-center" />
@@ -182,20 +182,23 @@ export default function Dashboard() {
                   {dashboardData.recentOrders.map((order) => (
                     <tr key={order._id}>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {order._id.slice(-8)}
+                        #{order.serialNo || (order._id ? String(order._id).slice(-8).toUpperCase() : 'N/A')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         <div>{order.userId?.name || 'N/A'}</div>
                         <div className="text-xs text-gray-400">{order.userId?.address?.phone || ''}</div>
+                        {order.payment?.paymentId && (
+                          <div className="text-[10px] text-blue-600 font-mono mt-1">PID: {order.payment.paymentId}</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         ₹{order.totalAmount}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${order.status === 'delivered' ? 'bg-green-100 text-green-800' :
-                            order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
-                              order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-gray-100 text-gray-800'
+                          order.status === 'shipped' ? 'bg-blue-100 text-blue-800' :
+                            order.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-gray-100 text-gray-800'
                           }`}>
                           {order.status}
                         </span>
@@ -215,23 +218,25 @@ export default function Dashboard() {
       </div>
 
       {/* Order Status Breakdown */}
-      {dashboardData?.orderStatusBreakdown?.length > 0 && (
-        <div className="bg-white shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
-              Order Status Breakdown
-            </h3>
-            <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
-              {dashboardData.orderStatusBreakdown.map((status) => (
-                <div key={status._id} className="text-center">
-                  <div className="text-2xl font-bold text-gray-900">{status.count}</div>
-                  <div className="text-sm text-gray-500 capitalize">{status._id}</div>
-                </div>
-              ))}
+      {
+        dashboardData?.orderStatusBreakdown?.length > 0 && (
+          <div className="bg-white shadow rounded-lg">
+            <div className="px-4 py-5 sm:p-6">
+              <h3 className="text-lg leading-6 font-medium text-gray-900 mb-4">
+                Order Status Breakdown
+              </h3>
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
+                {dashboardData.orderStatusBreakdown.map((status) => (
+                  <div key={status._id} className="text-center">
+                    <div className="text-2xl font-bold text-gray-900">{status.count}</div>
+                    <div className="text-sm text-gray-500 capitalize">{status._id}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )
+      }
+    </div >
   );
 }

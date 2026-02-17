@@ -35,12 +35,15 @@ export default function PendingOrders() {
         {orders.map(o => (
           <div key={o._id} className="p-4 bg-white rounded shadow">
             <div className="font-semibold mb-2 flex justify-between">
-              <span>#{o.serialNo ?? o._id.slice(-6)}</span>
+              <span>#{o.serialNo || (o._id ? String(o._id).slice(-8).toUpperCase() : 'N/A')}</span>
               <span className="text-xs text-gray-400">{new Date(o.createdAt).toLocaleDateString()}</span>
             </div>
             <div className="mb-1 text-sm font-medium">Customer: {o.userId?.name || "—"}</div>
             <div className="mb-1 text-xs text-gray-600">Phone: {o.userId?.address?.phone || "—"}</div>
             <div className="mb-2 text-xs text-gray-500 line-clamp-2">Address: {o.shippingAddress || "—"}</div>
+            {o.payment?.paymentId && (
+              <div className="mb-2 text-[10px] text-blue-600 font-mono">PID: {o.payment.paymentId}</div>
+            )}
             <div className="mb-1 text-sm">Amount: ₹{o.totalAmount}</div>
             <div className="mb-3 text-sm">Items: {o.products?.length}</div>
             <div className="flex justify-between items-center">

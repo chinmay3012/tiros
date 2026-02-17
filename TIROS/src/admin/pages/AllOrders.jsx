@@ -47,7 +47,8 @@ export default function AllOrders() {
         <table className="min-w-full">
           <thead className="bg-gray-50">
             <tr>
-              <th className="p-2 text-left">Serial</th>
+              <th className="p-2 text-left">Order ID</th>
+              <th className="p-2 text-left">Payment ID</th>
               <th className="p-2 text-left">Name</th>
               <th className="p-2 text-left">Address</th>
               <th className="p-2">Amount</th>
@@ -58,11 +59,15 @@ export default function AllOrders() {
           <tbody>
             {orders.map(order => (
               <tr key={order._id} className="border-t">
-                <td className="p-2">{order.serialNo ?? order._id.slice(-6)}</td>
+                <td className="p-2">#{order.serialNo || (order._id ? String(order._id).slice(-8).toUpperCase() : 'N/A')}</td>
+                <td className="p-2 text-xs font-mono text-gray-500">{order.payment?.paymentId || "—"}</td>
                 <td className="p-2">{order.userId?.name || "—"}</td>
                 <td className="p-2">
                   <div className="text-xs max-w-xs">{order.shippingAddress || "—"}</div>
                   <div className="text-xs text-gray-500">{order.userId?.address?.phone || ""}</div>
+                  {order.payment?.paymentId && (
+                    <div className="text-[10px] text-blue-600 font-mono mt-1">PID: {order.payment.paymentId}</div>
+                  )}
                 </td>
                 <td className="p-2 text-center">₹{order.totalAmount}</td>
                 <td className="p-2 text-center text-xs">
