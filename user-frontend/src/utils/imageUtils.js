@@ -22,5 +22,5 @@ export const getImageUrl = (imageUrl) => {
   // Base URL: localhost during local dev, production otherwise
   const base = isLocalhost ? 'http://localhost:3001' : productionBackend;
 
-  return `${base}/${cleanImageUrl}`;
+  return encodeURI(`${base}/${cleanImageUrl}`);
 };
