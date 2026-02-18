@@ -218,7 +218,7 @@ function ProductPage() {
                   } bg-transparent`}
               >
                 <img
-                  src={getImageUrl("uploads/BUTTON-9.png")}
+                  src={getImageUrl("uploads/products/BUTTON-9 copy.png")}
                   alt={isDisabled ? "Unavailable" : "Add to Cart"}
                   className="pointer-events-none h-full w-full object-contain"
                   style={{ transform: "translateY(1px)" }}
@@ -260,7 +260,7 @@ function ProductPage() {
                 />
               ) : (
                 <img
-                  src={getImageUrl("uploads/BUTTON-10.png")}
+                  src={getImageUrl("uploads/products/BUTTON-10 copy.png")}
                   alt="Buy Now"
                   className="pointer-events-none h-full w-full object-contain"
                   style={{ transform: "translateY(1px)" }}
