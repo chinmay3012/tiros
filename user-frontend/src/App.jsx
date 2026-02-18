@@ -2,6 +2,7 @@ import React from "react";
 import { Routes, Route, useNavigate, Navigate, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 import HomePage from "./pages/HomePage.jsx";
 import AboutPage from "./pages/AboutPage.jsx";
@@ -17,13 +18,13 @@ import ShippingPolicy from "./pages/ShippingPolicy.jsx";
 import { useAuth } from "./context/AuthContext";
 
 // Placeholder pages for auth
-const LoginPage = React.lazy(()=> import('./pages/LoginPage'));
-const RegisterPage = React.lazy(()=> import('./pages/RegisterPage'));
-const OrdersPage = React.lazy(()=> import('./pages/OrdersPage'));
-const CategoryPage = React.lazy(()=> import('./pages/CategoryPage'));
-const SubcategoryPage = React.lazy(()=> import('./pages/SubcategoryPage'));
-const AccountPage = React.lazy(()=> import('./pages/AccountPage'));
-const WishlistPage = React.lazy(()=> import('./pages/WishlistPage'));
+const LoginPage = React.lazy(() => import('./pages/LoginPage'));
+const RegisterPage = React.lazy(() => import('./pages/RegisterPage'));
+const OrdersPage = React.lazy(() => import('./pages/OrdersPage'));
+const CategoryPage = React.lazy(() => import('./pages/CategoryPage'));
+const SubcategoryPage = React.lazy(() => import('./pages/SubcategoryPage'));
+const AccountPage = React.lazy(() => import('./pages/AccountPage'));
+const WishlistPage = React.lazy(() => import('./pages/WishlistPage'));
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuth();
@@ -36,9 +37,10 @@ const ProtectedRoute = ({ children }) => {
 function App() {
   return (
     <div className="min-h-screen">
+      <ScrollToTop />
       <Navbar />
 
-        <React.Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
+      <React.Suspense fallback={<div className="p-4 text-center">Loading...</div>}>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/home" element={<HomePage />} />
@@ -61,10 +63,10 @@ function App() {
           <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
-        </React.Suspense>
+      </React.Suspense>
 
-        <Footer />
-      </div>
+      <Footer />
+    </div>
   );
 }
 

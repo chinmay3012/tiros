@@ -6,7 +6,7 @@ import ProductsCard from "../components/ProductsCard";
 import api from "../api/axios";
 import { getImageUrl } from "../utils/imageUtils";
 
-function ProductPage(){
+function ProductPage() {
   const { id } = useParams();
   const { addToCart, clearCart } = useCart();
   const { isAuthenticated } = useAuth();
@@ -21,23 +21,23 @@ function ProductPage(){
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
   // Load product details
-  useEffect(()=>{
+  useEffect(() => {
     let isMounted = true;
-    (async ()=>{
-      try{
+    (async () => {
+      try {
         const res = await api.get(`/products/${id}`);
-        if(isMounted){ 
+        if (isMounted) {
           setProduct(res.data);
           setSelectedImageIndex(0); // Reset to first image when product changes
         }
-      }catch(err){
+      } catch (err) {
         setError("Failed to load product");
-      }finally{
-        if(isMounted) setLoading(false);
+      } finally {
+        if (isMounted) setLoading(false);
       }
     })();
-    return ()=>{ isMounted = false };
-  },[id]);
+    return () => { isMounted = false };
+  }, [id]);
 
   // Load suggested products
   useEffect(() => {
@@ -47,14 +47,14 @@ function ProductPage(){
         const res = await api.get('/products');
         if (isMounted) {
           const allProducts = Array.isArray(res.data) ? res.data : (res.data?.products || []);
-          
+
           // Filter out current product and get random suggestions
           const otherProducts = allProducts.filter(p => p._id !== id);
-          
+
           // Shuffle array and take first 4 products
           const shuffled = otherProducts.sort(() => 0.5 - Math.random());
           const suggestions = shuffled.slice(0, 4);
-          
+
           setSuggestedProducts(suggestions);
         }
       } catch (err) {
@@ -69,16 +69,16 @@ function ProductPage(){
   const handleAddToCart = () => {
     // Ensure product exists before accessing its properties
     if (!product) return;
-    
+
     // Disable for non-available products
     if (product.status !== 'available') return;
-    
-    addToCart({ 
-      id: product._id, 
-      image: getImageUrl(product.image), 
-      alt: product.name, 
-      title: product.name, 
-      price: `Rs. ${product.price}` 
+
+    addToCart({
+      id: product._id,
+      image: getImageUrl(product.image),
+      alt: product.name,
+      title: product.name,
+      price: `Rs. ${product.price}`
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
@@ -87,10 +87,10 @@ function ProductPage(){
   const handleBuyNow = async () => {
     // Ensure product exists before accessing its properties
     if (!product) return;
-    
+
     // Disable for non-available products
     if (product.status !== 'available') return;
-    
+
     // Check if user is authenticated
     if (!isAuthenticated) {
       navigate('/login');
@@ -98,18 +98,18 @@ function ProductPage(){
     }
 
     setBuyNowLoading(true);
-    
+
     try {
       // Clear existing cart and add only this item
       clearCart();
-      addToCart({ 
-        id: product._id, 
-        image: getImageUrl(product.image), 
-        alt: product.name, 
-        title: product.name, 
-        price: `Rs. ${product.price}` 
+      addToCart({
+        id: product._id,
+        image: getImageUrl(product.image),
+        alt: product.name,
+        title: product.name,
+        price: `Rs. ${product.price}`
       });
-      
+
       // Navigate to checkout
       navigate('/checkout');
     } catch (error) {
@@ -119,17 +119,17 @@ function ProductPage(){
     }
   };
 
-  if(loading) return <div className="p-8 text-center">Loading...</div>;
-  if(error) return <div className="p-8 text-center text-red-600">{error}</div>;
-  if(!product) return null;
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
+  if (error) return <div className="p-8 text-center text-red-600">{error}</div>;
+  if (!product) return null;
 
   const isDisabled = product.status && product.status !== 'available';
-  
+
   // Get all product images (support both images array and legacy image field)
-  const productImages = product.images && product.images.length > 0 
-    ? product.images 
+  const productImages = product.images && product.images.length > 0
+    ? product.images
     : (product.image ? [product.image] : []);
-  
+
   const currentImage = productImages[selectedImageIndex] || product.image || "https://placehold.co/600x600";
 
   return (
@@ -139,9 +139,9 @@ function ProductPage(){
         <div className="relative">
           {/* Main Image Display */}
           <div className="relative flex items-center justify-center p-4 md:p-6 mb-4">
-            <img 
-              src={getImageUrl(currentImage)} 
-              alt={product.name} 
+            <img
+              src={getImageUrl(currentImage)}
+              alt={product.name}
               className="w-full max-w-md object-contain transition-opacity duration-300 ease-out"
               style={{ imageRendering: 'auto' }}
             />
@@ -154,7 +154,7 @@ function ProductPage(){
               </div>
             )}
           </div>
-          
+
           {/* Image Gallery Thumbnails */}
           {productImages.length > 1 && (
             <div className="flex gap-3 px-4 overflow-x-auto pb-2" style={{ scrollSnapType: 'x mandatory' }}>
@@ -162,11 +162,10 @@ function ProductPage(){
                 <button
                   key={index}
                   onClick={() => setSelectedImageIndex(index)}
-                  className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-all flex-shrink-0 ${
-                    selectedImageIndex === index 
-                      ? 'border-blue-500 ring-2 ring-blue-200' 
-                      : 'border-gray-200 hover:border-gray-400'
-                  }`}
+                  className={`relative w-20 h-20 rounded-lg border-2 overflow-hidden transition-all flex-shrink-0 ${selectedImageIndex === index
+                    ? 'border-blue-500 ring-2 ring-blue-200'
+                    : 'border-gray-200 hover:border-gray-400'
+                    }`}
                   style={{ scrollSnapAlign: 'center' }}
                 >
                   <img
@@ -189,7 +188,7 @@ function ProductPage(){
               </span>
             )}
           </div>
-          
+
           {/* Product Features */}
           <div className="mb-6">
             <div className="flex items-center mb-2">
@@ -205,45 +204,44 @@ function ProductPage(){
               <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Secure payment</span>
             </div>
           </div>
-          
-          {/* Action Buttons - single CTA group; tighter gap on larger screens */}
-          <div className="flex flex-col gap-2 sm:gap-1">
-            <div className="flex flex-col gap-2">
+
+          {/* Action Buttons */}
+          <div className="flex flex-col gap-2 mt-6">
+            <div className="w-full">
               <button
                 type="button"
                 onClick={handleAddToCart}
                 disabled={addedToCart || isDisabled}
-                className={`h-12 w-full rounded-lg flex items-center justify-center overflow-hidden transition-opacity ${
-                  addedToCart || isDisabled
-                    ? "opacity-50 cursor-not-allowed"
-                    : "hover:opacity-90 active:opacity-80 cursor-pointer"
-                } bg-transparent`}
+                className={`h-10 w-full py-1 rounded-lg flex items-center justify-center overflow-hidden transition-opacity ${addedToCart || isDisabled
+                  ? "opacity-50 cursor-not-allowed"
+                  : "hover:opacity-90 active:opacity-80 cursor-pointer"
+                  } bg-transparent`}
               >
                 <img
-                  src="/images/BUTTON-7-AddToCard.png"
+                  src={getImageUrl("uploads/products/BUTTON-9.png")}
                   alt={isDisabled ? "Unavailable" : "Add to Cart"}
-                  className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+                  className="pointer-events-none h-full w-full object-contain"
                   style={{ transform: "translateY(1px)" }}
                 />
               </button>
               {addedToCart && (
                 <p
-                  className="text-center text-green-600 text-sm font-medium"
+                  className="text-center text-green-600 text-sm font-medium mt-1"
                   style={{ fontFamily: 'Poppins, sans-serif' }}
                 >
                   Added to cart!
                 </p>
               )}
             </div>
+
             <button
               type="button"
               onClick={handleBuyNow}
               disabled={buyNowLoading || addedToCart || isDisabled}
-              className={`h-12 w-full rounded-lg flex items-center justify-center overflow-hidden transition-opacity ${
-                buyNowLoading || addedToCart || isDisabled
-                  ? "opacity-50 cursor-not-allowed"
-                  : "hover:opacity-90 active:opacity-80 cursor-pointer"
-              } bg-transparent`}
+              className={`h-10 w-full rounded-lg flex items-center justify-center overflow-hidden transition-opacity ${buyNowLoading || addedToCart || isDisabled
+                ? "opacity-50 cursor-not-allowed"
+                : "hover:opacity-90 active:opacity-80 cursor-pointer"
+                } bg-transparent`}
             >
               {buyNowLoading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -257,14 +255,14 @@ function ProductPage(){
                 <img
                   src="/images/BUTTON-5 copy.png"
                   alt="Sold Out"
-                  className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+                  className="pointer-events-none h-full w-full object-contain"
                   style={{ transform: "translateY(1px)" }}
                 />
               ) : (
                 <img
-                  src="/images/BUTTON-8-BuyNow.png"
+                  src={getImageUrl("uploads/products/BUTTON-10.png")}
                   alt="Buy Now"
-                  className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
+                  className="pointer-events-none h-full w-full object-contain"
                   style={{ transform: "translateY(1px)" }}
                 />
               )}
@@ -287,7 +285,7 @@ function ProductPage(){
             <h2 className="text-2xl font-bold text-gray-900 mb-2">You Might Also Like</h2>
             <p className="text-gray-600">Discover more products you might be interested in</p>
           </div>
-          
+
           {suggestionsLoading ? (
             <div className="text-center py-8">
               <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
@@ -297,7 +295,7 @@ function ProductPage(){
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
               {suggestedProducts.map((suggestedProduct) => (
                 <div key={suggestedProduct._id}>
-                  <ProductsCard 
+                  <ProductsCard
                     id={suggestedProduct._id}
                     image={suggestedProduct.image}
                     images={suggestedProduct.images}

@@ -27,7 +27,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     e.stopPropagation();
     // Disable for coming_soon and sold_out items
     if (status === 'coming_soon' || status === 'sold_out') return;
-    
+
     addToCart({ id, image: primaryImagePath, alt, title, price, status });
     setAdded(true);
     setTimeout(() => {
@@ -39,17 +39,17 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     e.stopPropagation();
     // Only allow for coming_soon and sold_out items
     if (status !== 'coming_soon' && status !== 'sold_out') return;
-    
+
     addToWishlist({ id, image: primaryImagePath, alt, title, price, status });
     setShowWishlistNotification(true);
   };
 
   const handleBuyNow = async (e) => {
     e.stopPropagation();
-    
+
     // Disable for non-available products
     if (status !== 'available') return;
-    
+
     // Check if user is authenticated
     if (!isAuthenticated) {
       navigate('/login');
@@ -57,12 +57,12 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     }
 
     setBuyNowLoading(true);
-    
+
     try {
       // Clear existing cart and add only this item
       clearCart();
       addToCart({ id, image: primaryImagePath, alt, title, price, status });
-      
+
       // Navigate to checkout
       navigate('/checkout');
     } catch (error) {
@@ -80,7 +80,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
   const isDisabled = status === 'coming_soon' || status === 'sold_out';
 
   return (
-    <div 
+    <div
       onClick={handleCardClick}
       className="group relative flex flex-col h-full cursor-pointer overflow-hidden rounded-xl bg-transparent transition-all duration-300 ease-out hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(15,23,42,0.12)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/10"
     >
@@ -144,9 +144,8 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
           <button
             onClick={handleMoveToWishlist}
             disabled={isInWishlist(id)}
-            className={`h-12 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${
-              isInWishlist(id) ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
-            } bg-transparent`}
+            className={`h-10 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${isInWishlist(id) ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
+              } bg-transparent`}
           >
             <img
               src="/images/BUTTON-2 copy.png"
@@ -159,27 +158,25 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
           <button
             onClick={handleAddToCart}
             disabled={added || isDisabled}
-            className={`h-12 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${
-              added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
-            } bg-transparent`}
+            className={`h-10 w-full rounded-t-lg flex items-center justify-center overflow-hidden transition-opacity ${added || isDisabled ? "opacity-50 cursor-not-allowed" : "hover:opacity-90 active:opacity-80 cursor-pointer"
+              } bg-transparent`}
           >
             <img
-              src="/images/BUTTON-7-AddToCard.png"
+              src={getImageUrl("uploads/products/BUTTON-9.png")}
               alt="Add to Cart"
               className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
               style={{ transform: "translateY(1px)" }}
             />
           </button>
         )}
-        
+
         <button
           onClick={handleBuyNow}
           disabled={buyNowLoading || added || isDisabled}
-          className={`h-12 w-full rounded-b-lg flex items-center justify-center overflow-hidden transition-opacity text-sm font-medium ${
-            buyNowLoading || added || isDisabled
-              ? "opacity-50 cursor-not-allowed" 
-              : "hover:opacity-90 active:opacity-80 cursor-pointer"
-          } bg-transparent`}
+          className={`h-10 w-full rounded-b-lg flex items-center justify-center overflow-hidden transition-opacity text-sm font-medium ${buyNowLoading || added || isDisabled
+            ? "opacity-50 cursor-not-allowed"
+            : "hover:opacity-90 active:opacity-80 cursor-pointer"
+            } bg-transparent`}
         >
           {buyNowLoading ? (
             <span className="flex items-center justify-center gap-2">
@@ -198,7 +195,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
             />
           ) : (
             <img
-              src="/images/BUTTON-8-BuyNow.png"
+              src={getImageUrl("uploads/products/BUTTON-10.png")}
               alt="Buy Now"
               className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
               style={{ transform: "translateY(1px)" }}
