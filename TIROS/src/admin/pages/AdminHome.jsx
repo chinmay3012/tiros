@@ -2,17 +2,17 @@
 import React, { useEffect, useState } from "react";
 import api from "../../api/axios";
 
-export default function AdminHome(){
+export default function AdminHome() {
   const [summary, setSummary] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(()=>{
-    (async ()=>{
+  useEffect(() => {
+    (async () => {
       try {
         const { data } = await api.get("/admin/dashboard/summary");
         setSummary(data);
-      } catch(err){
+      } catch (err) {
         setError(err?.response?.data?.message || err.message);
       } finally { setLoading(false); }
     })();
@@ -27,15 +27,15 @@ export default function AdminHome(){
       <div className="grid grid-cols-3 gap-4">
         <div className="p-4 bg-white rounded shadow">
           <div className="text-sm text-gray-500">Total Sales</div>
-          <div className="text-2xl font-bold">₹{summary?.totalSales ?? 0}</div>
+          <div className="text-2xl font-bold">₹{summary?.summary?.totalRevenue ?? 0}</div>
         </div>
         <div className="p-4 bg-white rounded shadow">
           <div className="text-sm text-gray-500">Total Orders</div>
-          <div className="text-2xl font-bold">{summary?.orderCount ?? 0}</div>
+          <div className="text-2xl font-bold">{summary?.summary?.totalOrders ?? 0}</div>
         </div>
         <div className="p-4 bg-white rounded shadow">
           <div className="text-sm text-gray-500">Total Users</div>
-          <div className="text-2xl font-bold">{summary?.userCount ?? 0}</div>
+          <div className="text-2xl font-bold">{summary?.summary?.totalUsers ?? 0}</div>
         </div>
       </div>
     </div>

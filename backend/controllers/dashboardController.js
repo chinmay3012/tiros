@@ -29,7 +29,7 @@ export const getDashboardSummary = async (req, res) => {
     // Calculate revenue
     const revenueData = await Order.aggregate([
       { $match: { status: { $in: ["delivered", "shipped"] } } },
-      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
+      { $group: { _id: null, totalRevenue: { $sum: { $ifNull: ["$finalAmount", "$totalAmount"] } } } }
     ]);
 
     const totalRevenue = revenueData.length > 0 ? revenueData[0].totalRevenue : 0;
@@ -42,7 +42,7 @@ export const getDashboardSummary = async (req, res) => {
           createdAt: { $gte: startDate }
         }
       },
-      { $group: { _id: null, totalRevenue: { $sum: "$totalAmount" } } }
+      { $group: { _id: null, totalRevenue: { $sum: { $ifNull: ["$finalAmount", "$totalAmount"] } } } }
     ]);
 
     const recentRevenue = recentRevenueData.length > 0 ? recentRevenueData[0].totalRevenue : 0;
@@ -143,9 +143,9 @@ export const getSalesReport = async (req, res) => {
       {
         $group: {
           _id: groupFormat,
-          totalSales: { $sum: "$totalAmount" },
+          totalSales: { $sum: { $ifNull: ["$finalAmount", "$totalAmount"] } },
           orderCount: { $sum: 1 },
-          averageOrderValue: { $avg: "$totalAmount" }
+          averageOrderValue: { $avg: { $ifNull: ["$finalAmount", "$totalAmount"] } }
         }
       },
       { $sort: { "_id.year": 1, "_id.month": 1, "_id.day": 1, "_id.hour": 1 } }
@@ -157,9 +157,9 @@ export const getSalesReport = async (req, res) => {
       {
         $group: {
           _id: null,
-          totalSales: { $sum: "$totalAmount" },
+          totalSales: { $sum: { $ifNull: ["$finalAmount", "$totalAmount"] } },
           totalOrders: { $sum: 1 },
-          averageOrderValue: { $avg: "$totalAmount" }
+          averageOrderValue: { $avg: { $ifNull: ["$finalAmount", "$totalAmount"] } }
         }
       }
     ]);

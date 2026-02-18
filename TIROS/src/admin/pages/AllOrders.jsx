@@ -51,7 +51,9 @@ export default function AllOrders() {
               <th className="p-2 text-left">Payment ID</th>
               <th className="p-2 text-left">Name</th>
               <th className="p-2 text-left">Address</th>
-              <th className="p-2">Amount</th>
+              <th className="p-2">Price</th>
+              <th className="p-2">Paid</th>
+              <th className="p-2">Coupon</th>
               <th className="p-2">Status</th>
               <th className="p-2">Action</th>
             </tr>
@@ -69,7 +71,15 @@ export default function AllOrders() {
                     <div className="text-[10px] text-blue-600 font-mono mt-1">PID: {order.payment.paymentId}</div>
                   )}
                 </td>
-                <td className="p-2 text-center">₹{order.totalAmount}</td>
+                <td className="p-2 text-center text-sm text-gray-500">₹{order.totalAmount}</td>
+                <td className="p-2 text-center font-semibold">₹{order.finalAmount || order.totalAmount}</td>
+                <td className="p-2 text-center text-xs">
+                  {order.coupon?.code ? (
+                    <span className="bg-blue-50 text-blue-700 px-1 py-0.5 rounded border border-blue-200">{order.coupon.code}</span>
+                  ) : (
+                    <span className="text-gray-400">None</span>
+                  )}
+                </td>
                 <td className="p-2 text-center text-xs">
                   {new Date(order.createdAt).toLocaleDateString()}
                   <div className={`mt-1 font-semibold ${order.status === 'delivered' ? 'text-green-600' : 'text-orange-600'}`}>

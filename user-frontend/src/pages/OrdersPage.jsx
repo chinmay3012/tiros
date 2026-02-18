@@ -48,8 +48,8 @@ function OrdersPage() {
                       {new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                     <span className={`text-[10px] px-3 py-1.5 rounded-full font-black uppercase tracking-wider shadow-sm ${o.status === 'delivered' ? 'bg-green-500 text-white' :
-                        o.status === 'shipped' ? 'bg-blue-500 text-white' :
-                          o.status === 'confirmed' ? 'bg-orange-500 text-white' : 'bg-gray-900 text-white'
+                      o.status === 'shipped' ? 'bg-blue-500 text-white' :
+                        o.status === 'confirmed' ? 'bg-orange-500 text-white' : 'bg-gray-900 text-white'
                       }`}>
                       {o.status || 'Processing'}
                     </span>
@@ -60,8 +60,13 @@ function OrdersPage() {
                   <p className="text-[10px] font-black text-gray-400 md:text-gray-400 uppercase tracking-[0.2em] mb-1">Total Value</p>
                   <p className="text-2xl md:text-4xl font-black text-gray-900 md:text-gray-900">
                     <span className="text-xs md:text-lg font-medium mr-1 text-gray-400 md:text-gray-500">Rs.</span>
-                    {o.totalAmount}
+                    {o.finalAmount || o.totalAmount}
                   </p>
+                  {o.coupon?.code && (
+                    <p className="text-[10px] font-bold text-blue-600 mt-1">
+                      Coupon Applied: {o.coupon.code}
+                    </p>
+                  )}
                 </div>
               </div>
 

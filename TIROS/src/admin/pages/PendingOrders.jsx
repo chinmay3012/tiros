@@ -44,8 +44,23 @@ export default function PendingOrders() {
             {o.payment?.paymentId && (
               <div className="mb-2 text-[10px] text-blue-600 font-mono">PID: {o.payment.paymentId}</div>
             )}
-            <div className="mb-1 text-sm">Amount: ₹{o.totalAmount}</div>
-            <div className="mb-3 text-sm">Items: {o.products?.length}</div>
+            <div className="flex flex-col mb-1 border-t pt-2">
+              <div className="flex justify-between text-xs text-gray-500">
+                <span>Original Price:</span>
+                <span>₹{o.totalAmount}</span>
+              </div>
+              <div className="flex justify-between text-sm font-bold text-gray-900">
+                <span>Paid Amount:</span>
+                <span>₹{o.finalAmount || o.totalAmount}</span>
+              </div>
+              {o.coupon?.code && (
+                <div className="flex justify-between text-[10px] text-blue-600 font-medium italic mt-1">
+                  <span>Coupon: {o.coupon.code}</span>
+                  <span>-₹{o.coupon.discountAmount}</span>
+                </div>
+              )}
+            </div>
+            <div className="mb-3 text-sm text-gray-600">Items: {o.products?.length}</div>
             <div className="flex justify-between items-center">
               <label className="inline-flex items-center">
                 <input type="checkbox" onChange={() => markShipped(o._id)} className="mr-2" />

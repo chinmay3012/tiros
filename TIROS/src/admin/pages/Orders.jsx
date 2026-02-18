@@ -177,7 +177,13 @@ export default function Orders() {
                   Customer
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Amount
+                  Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Paid
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Coupon
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Status
@@ -215,7 +221,19 @@ export default function Orders() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    ${order.totalAmount}
+                    ₹{order.totalAmount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-semibold">
+                    ₹{order.finalAmount || order.totalAmount}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm">
+                    {order.coupon?.code ? (
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-blue-100 text-blue-800">
+                        {order.coupon.code}
+                      </span>
+                    ) : (
+                      <span className="text-gray-400">None</span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${getStatusColor(order.status)}`}>
@@ -347,8 +365,15 @@ export default function Orders() {
                               {selectedOrder.status}
                             </span>
                           </p>
-                          <p><span className="font-medium">Total Amount:</span> ${selectedOrder.totalAmount}</p>
-                          <p><span className="font-medium">Order Date:</span> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
+                          <p><span className="font-medium">Original Price:</span> ₹{selectedOrder.totalAmount}</p>
+                          {selectedOrder.coupon?.code && (
+                            <>
+                              <p><span className="font-medium">Coupon:</span> <span className="text-blue-600">{selectedOrder.coupon.code}</span></p>
+                              <p><span className="font-medium">Discount:</span> <span className="text-red-600">-₹{selectedOrder.coupon.discountAmount}</span></p>
+                            </>
+                          )}
+                          <p><span className="font-medium text-lg text-gray-900 border-t pt-2 block mt-2">Paid Amount: ₹{selectedOrder.finalAmount || selectedOrder.totalAmount}</span></p>
+                          <p className="mt-2"><span className="font-medium">Order Date:</span> {new Date(selectedOrder.createdAt).toLocaleString()}</p>
                           {selectedOrder.payment?.paymentId && (
                             <p><span className="font-medium">Payment ID:</span> <span className="text-blue-600 font-mono text-sm">{selectedOrder.payment.paymentId}</span></p>
                           )}
@@ -387,13 +412,13 @@ export default function Orders() {
                                   </div>
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  ${item.productId?.price || 0}
+                                  ₹{item.productId?.price || 0}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                   {item.quantity}
                                 </td>
                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                  ${(item.productId?.price || 0) * item.quantity}
+                                  ₹{(item.productId?.price || 0) * item.quantity}
                                 </td>
                               </tr>
                             ))}
