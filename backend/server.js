@@ -14,6 +14,12 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
 import dropSignupRoutes from "./routes/dropSignupRoutes.js";
 import adminDropSignupRoutes from "./routes/adminDropSignupRoutes.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 connectDB();
 
@@ -67,8 +73,8 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve uploaded files
-app.use('/uploads', express.static('uploads'));
+// Serve uploaded files - look in root uploads directory
+app.use('/uploads', express.static(path.join(__dirname, '..', 'uploads')));
 
 // Admin Routes
 app.use("/api/admin", adminRoutes);

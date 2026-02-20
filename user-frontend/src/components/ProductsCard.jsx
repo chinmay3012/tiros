@@ -162,7 +162,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
               } bg-transparent`}
           >
             <img
-              src={getImageUrl("uploads/products/BUTTON-9_copy.png")}
+              src="/images/BUTTON-9_copy.png"
               alt="Add to Cart"
               className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
               style={{ transform: "translateY(1px)" }}
@@ -195,7 +195,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
             />
           ) : (
             <img
-              src={getImageUrl("uploads/products/BUTTON-10_copy.png")}
+              src="/images/BUTTON-10_copy.png"
               alt="Buy Now"
               className="pointer-events-none h-full w-auto max-w-full object-contain object-center"
               style={{ transform: "translateY(1px)" }}
