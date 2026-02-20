@@ -197,11 +197,11 @@ function ProductPage() {
             </div>
             <div className="flex items-center mb-2">
               <span className="text-green-600 mr-2">✓</span>
-              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Easy returns within 7 days</span>
+              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Pan India Delivery</span>
             </div>
             <div className="flex items-center mb-4">
               <span className="text-green-600 mr-2">✓</span>
-              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>Secure payment</span>
+              <span className="text-sm text-gray-600" style={{ fontFamily: 'Poppins, sans-serif' }}>100% Carbon</span>
             </div>
           </div>
 
