@@ -5,9 +5,14 @@ const signToken = (id) => jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: 
 
 export const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const name = typeof req.body.name === "string" ? req.body.name.trim() : "";
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
+    const password = typeof req.body.password === "string" ? req.body.password : "";
     if (!name || !email || !password) {
       return res.status(400).json({ message: "Name, email, and password are required" });
+    }
+    if (password.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
     }
     const existing = await User.findOne({ email });
     if (existing) {
@@ -28,7 +33,8 @@ export const registerUser = async (req, res) => {
 
 export const loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const email = typeof req.body.email === "string" ? req.body.email.trim().toLowerCase() : "";
+    const password = typeof req.body.password === "string" ? req.body.password : "";
     if (!email || !password) {
       return res.status(400).json({ message: "Email and password are required" });
     }
@@ -42,6 +48,9 @@ export const loginUser = async (req, res) => {
     }
     if (user.isBlocked) {
       return res.status(403).json({ message: "Account blocked" });
+    }
+    if (user.isActive === false) {
+      return res.status(403).json({ message: "Account is deactivated. Please contact support." });
     }
     const token = signToken(user._id);
     return res.json({
@@ -71,12 +80,17 @@ export const getProfile = async (req, res) => {
 export const updateProfile = async (req, res) => {
   try {
     const { name, email, address } = req.body;
-    const user = await User.findById(req.params.id);
+    const updates = {};
+    if (name !== undefined) updates.name = name;
+    if (email !== undefined) updates.email = typeof email === "string" ? email.trim().toLowerCase() : email;
+    if (address !== undefined) updates.address = address;
+
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: updates },
+      { new: true, runValidators: true }
+    ).select("-password");
     if (!user) return res.status(404).json({ message: 'User not found' });
-    if (name !== undefined) user.name = name;
-    if (email !== undefined) user.email = email;
-    if (address !== undefined) user.address = address;
-    await user.save();
     return res.json({ _id: user._id, name: user.name, email: user.email, address: user.address || null });
   } catch (error) { return res.status(500).json({ message: error.message }); }
 };
@@ -95,10 +109,12 @@ export const getCart = async (req, res) => {
 export const updateCart = async (req, res) => {
   try {
     const { cart } = req.body;
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { cart: cart || [] } },
+      { new: true }
+    ).select("cart");
     if (!user) return res.status(404).json({ message: 'User not found' });
-    user.cart = cart || [];
-    await user.save();
     return res.json({ cart: user.cart });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -119,10 +135,12 @@ export const getWishlist = async (req, res) => {
 export const updateWishlist = async (req, res) => {
   try {
     const { wishlist } = req.body;
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { wishlist: wishlist || [] } },
+      { new: true }
+    ).select("wishlist");
     if (!user) return res.status(404).json({ message: 'User not found' });
-    user.wishlist = wishlist || [];
-    await user.save();
     return res.json({ wishlist: user.wishlist });
   } catch (error) {
     return res.status(500).json({ message: error.message });
@@ -133,10 +151,12 @@ export const updateWishlist = async (req, res) => {
 export const updateAddress = async (req, res) => {
   try {
     const { address } = req.body;
-    const user = await User.findById(req.params.id);
+    const user = await User.findByIdAndUpdate(
+      req.params.id,
+      { $set: { address: address || {} } },
+      { new: true }
+    ).select("address");
     if (!user) return res.status(404).json({ message: 'User not found' });
-    user.address = address || {};
-    await user.save();
     return res.json({ address: user.address || null });
   } catch (error) {
     return res.status(500).json({ message: error.message });

@@ -40,7 +40,10 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
     setIsLoading(true);
     try {
-      const res = await api.post("/users/login", { email, password });
+      const res = await api.post("/users/login", {
+        email: String(email || "").trim().toLowerCase(),
+        password: String(password || ""),
+      });
       // Expecting { token, user }
       setToken(res.data?.token || "");
       // Store only essential user info (cart/wishlist will be loaded by their contexts)
@@ -69,7 +72,12 @@ export const AuthProvider = ({ children }) => {
   const register = async (payload) => {
     setIsLoading(true);
     try {
-      await api.post("/users/register", payload);
+      await api.post("/users/register", {
+        ...payload,
+        name: String(payload?.name || "").trim(),
+        email: String(payload?.email || "").trim().toLowerCase(),
+        password: String(payload?.password || ""),
+      });
       return { success: true };
     } catch (error) {
       return { success: false, message: error?.response?.data?.message || "Registration failed" };
