@@ -1,17 +1,36 @@
 import { useEffect, useState, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import HeroSection from "../components/HeroSection";
 import ProductsCard from "../components/ProductsCard";
 import SEO from "../components/SEO";
 import SignUpForDrops from "../components/SignUpForDrops";
 import api from "../api/axios";
+import { getProducts, peekProducts } from "../utils/productsCache";
+
+function ProductSkeletonGrid() {
+    return (
+        <div className="mb-12">
+            <div className="h-8 w-56 bg-gray-200 rounded mx-auto mb-8 animate-pulse" />
+            <div className="flex gap-6 overflow-hidden pb-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                    <div key={i} className="flex-shrink-0 w-[280px] sm:w-[300px]">
+                        <div className="aspect-[4/5] bg-gray-200 rounded-xl animate-pulse" />
+                        <div className="mt-3 h-4 bg-gray-200 rounded animate-pulse" />
+                        <div className="mt-2 h-4 w-1/2 bg-gray-200 rounded animate-pulse" />
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+}
 
 function HomePage() {
-    const [products, setProducts] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
-    const navigate = useNavigate();
     const [params] = useSearchParams();
+    const initialQ = (params.get('q') || '').toLowerCase();
+    const initialCached = peekProducts({ search: initialQ || undefined, limit: 30 });
+    const [products, setProducts] = useState(initialCached || []);
+    const [loading, setLoading] = useState(!initialCached);
+    const [error, setError] = useState("");
     const scrollRefs = useRef({});
 
     // Group products by section (fallback to homepage_top if no section)
@@ -24,28 +43,22 @@ function HomePage() {
         (async () => {
             try {
                 const q = (params.get('q') || '').toLowerCase();
-                // Reduce limit to 30 for faster loading on free Render tier
-                const res = await api.get("/products", { params: { search: q || undefined, limit: 30 } });
+                const { products: list } = await getProducts(api, {
+                    search: q || undefined,
+                    limit: 30,
+                });
                 if (isMounted) {
-                    const data = res.data;
-                    const list = Array.isArray(data) ? data : (data?.products || []);
                     setProducts(list);
+                    setError("");
                 }
             } catch (err) {
-                setError("Failed to load products");
+                if (isMounted) setError("Failed to load products");
             } finally {
                 if (isMounted) setLoading(false);
             }
         })();
         return () => { isMounted = false };
     }, [params]);
-
-    // Helper function to highlight search terms
-    const highlightSearchTerm = (text, searchTerm) => {
-        if (!searchTerm) return text;
-        const regex = new RegExp(`(${searchTerm})`, 'gi');
-        return text.replace(regex, '<mark class="bg-yellow-200 px-1 rounded">$1</mark>');
-    };
 
     // Helper function to render product grid with horizontal scrolling
     const renderProductGrid = (productList, title) => {
@@ -88,7 +101,6 @@ function HomePage() {
                     )}
                 </div>
                 <div className="relative">
-                    {/* Arrow buttons - same style for all screens */}
                     {productList.length > 1 && (
                         <>
                             <button
@@ -96,18 +108,17 @@ function HomePage() {
                                 onClick={handlePrev}
                                 aria-label="Previous"
                             >
-                                <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-10 h-10 hover:opacity-80 transition-opacity" />
+                                <img src="/images/Frame 1000003999 copy.png" alt="Prev" className="w-10 h-10 hover:opacity-80 transition-opacity" loading="lazy" decoding="async" />
                             </button>
                             <button
                                 className="absolute right-0 top-1/2 -translate-y-1/2 z-10"
                                 onClick={handleNext}
                                 aria-label="Next"
                             >
-                                <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-10 h-10 hover:opacity-80 transition-opacity" />
+                                <img src="/images/Frame 1000003998 copy.png" alt="Next" className="w-10 h-10 hover:opacity-80 transition-opacity" loading="lazy" decoding="async" />
                             </button>
                         </>
                     )}
-                    {/* Horizontal scrolling container */}
                     <div
                         ref={(el) => scrollRefs.current[sectionKey] = el}
                         className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 scroll-smooth"
@@ -152,21 +163,21 @@ function HomePage() {
             <div>
                 <HeroSection />
 
-                {/* Vector Image Section */}
                 <section className="w-full flex justify-center py-4 md:py-8 px-4">
                     <img
                         src="/images/Vector 699 copy.png"
                         alt="Vector Image"
                         className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
+                        loading="lazy"
+                        decoding="async"
                     />
                 </section>
 
                 <section className="container mx-auto px-4 py-12">
-                    {loading && <p className="text-center">Loading...</p>}
+                    {loading && <ProductSkeletonGrid />}
                     {error && <p className="text-center text-red-600">{error}</p>}
                     {!loading && !error && (
                         <>
-                            {/* Search Results */}
                             {params.get('q') && (
                                 <>
                                     {products.length > 0 ? (
@@ -192,19 +203,11 @@ function HomePage() {
                                 </>
                             )}
 
-                            {/* Regular Product Sections (only show when not searching) */}
                             {!params.get('q') && (
                                 <>
-                                    {/* Top Section Products */}
                                     {renderProductGrid(topProducts, "FEATURED PRODUCTS")}
-
-                                    {/* Middle Section Products */}
                                     {renderProductGrid(midProducts, "NEW ARRIVALS")}
-
-                                    {/* Bottom Section Products */}
                                     {renderProductGrid(bottomProducts, "BEST SELLERS")}
-
-                                    {/* Fallback: Show all products if no sections have products */}
                                     {topProducts.length === 0 && midProducts.length === 0 && bottomProducts.length === 0 && products.length > 0 && (
                                         renderProductGrid(products, "ALL PRODUCTS")
                                     )}
@@ -213,12 +216,13 @@ function HomePage() {
                         </>
                     )}
 
-                    {/* Vector 704 Image Section - Mobile Only */}
                     <div id="about-us-section" className="w-full mt-6 md:mt-8 md:hidden relative">
                         <img
-                            src="/images/Vector 704 copy.png"
+                            src="/images/optimized/vector-704.jpg"
                             alt="Vector 704 Image"
                             className="w-full h-auto object-cover"
+                            loading="lazy"
+                            decoding="async"
                         />
                         <div className="absolute inset-0 flex items-center justify-center p-6" style={{ zIndex: 10 }}>
                             <p
@@ -235,21 +239,18 @@ function HomePage() {
                         </div>
                     </div>
 
-                    {/* Content sections hidden on mobile - desktop-only storytelling sections */}
                     <div className="hidden md:block">
-
-                        {/* Desktop Frame Image above remaining desktop sections */}
                         <div className="w-full">
                             <img
-                                src="/images/Frame 1686553383 copy.png"
+                                src="/images/optimized/frame-desktop.jpg"
                                 alt="Frame Image - Desktop"
                                 className="w-full h-auto"
+                                loading="lazy"
+                                decoding="async"
                             />
                         </div>
 
-                        {/* Frame 140 Section */}
                         <div className="mt-16 md:mt-20">
-                            {/* Frame 113 */}
                             <div className="flex flex-col items-center">
                                 <p
                                     className="text-center"
@@ -288,27 +289,22 @@ function HomePage() {
 
                         <div className="text-center mt-12">
                             <button className="text-blue-600 hover:text-blue-800 transition-colors font-medium">DISCOVER MORE &gt;</button>
-                            {/* TODO: UI polish */}
                         </div>
-
                     </div>
-                    {/* End of content hidden on mobile */}
-
                 </section>
 
-                {/* Full-width Frame Image - Mobile Only */}
                 <div className="w-full md:hidden">
                     <img
-                        src="/images/Frame 1686553383-2 copy.png"
+                        src="/images/optimized/frame-mobile.jpg"
                         alt="Frame Image - Mobile"
                         className="w-full h-auto"
+                        loading="lazy"
+                        decoding="async"
                     />
                 </div>
-
             </div>
 
             <SignUpForDrops />
-
         </>
     )
 }

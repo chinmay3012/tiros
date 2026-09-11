@@ -64,10 +64,23 @@ function HeroSection() {
         };
     }, []);
 
-    const desktopHeroSrc = "/images/Frame 1000004003-2 copy.png";
-    const mobileHeroSrc = "/images/Frame 1686553400 copy.png";
+    const desktopHeroSrc = "/images/optimized/hero-desktop.jpg";
+    const mobileHeroSrc = "/images/optimized/hero-mobile.jpg";
     const encodedDesktopHeroSrc = encodeURI(desktopHeroSrc);
     const encodedMobileHeroSrc = encodeURI(mobileHeroSrc);
+
+    // Preload the active hero so LCP isn't blocked by the split-pane backgrounds
+    useEffect(() => {
+        const href = isMobile ? encodedMobileHeroSrc : encodedDesktopHeroSrc;
+        const link = document.createElement("link");
+        link.rel = "preload";
+        link.as = "image";
+        link.href = href;
+        document.head.appendChild(link);
+        return () => {
+            link.remove();
+        };
+    }, [isMobile, encodedDesktopHeroSrc, encodedMobileHeroSrc]);
 
     const splitBaseStyleDesktop = {
         backgroundImage: `url("${encodedDesktopHeroSrc}")`,

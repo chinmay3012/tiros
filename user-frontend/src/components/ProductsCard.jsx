@@ -20,8 +20,8 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
   const uniqueImages = [...new Set(resolvedImages)];
   const primaryImagePath = uniqueImages[0] || null;
   const hoverImagePath = uniqueImages[1] || null;
-  const primaryImageSrc = getImageUrl(primaryImagePath) || "https://placehold.co/400x533";
-  const hoverImageSrc = hoverImagePath ? getImageUrl(hoverImagePath) : null;
+  const primaryImageSrc = getImageUrl(primaryImagePath, { width: 600 }) || "https://placehold.co/400x533";
+  const hoverImageSrc = hoverImagePath ? getImageUrl(hoverImagePath, { width: 600 }) : null;
 
   const handleAddToCart = (e) => {
     e.stopPropagation();
@@ -88,12 +88,20 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
         <img
           src={primaryImageSrc}
           alt={alt}
+          width={600}
+          height={750}
+          loading="lazy"
+          decoding="async"
           className={`absolute inset-0 w-full h-full object-contain transition-all duration-700 ease-out ${hoverImageSrc ? "opacity-100 group-hover:opacity-0" : ""} group-hover:scale-105`}
         />
         {hoverImageSrc && (
           <img
             src={hoverImageSrc}
             alt={alt}
+            width={600}
+            height={750}
+            loading="lazy"
+            decoding="async"
             className="absolute inset-0 w-full h-full object-contain opacity-0 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-105"
           />
         )}

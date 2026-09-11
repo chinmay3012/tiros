@@ -22,15 +22,23 @@ function Navbar(){
     const { wishlistItems } = useWishlist();
     const navigate = useNavigate();
 
-  useEffect(()=>{
-    (async()=>{
-      try{
-        const productsRes = await api.get('/products');
-        const productsList = Array.isArray(productsRes.data) ? productsRes.data : (productsRes.data?.products || []);
-        setAllProducts(productsList);
-      }catch(e){ /* ignore */ }
+  // Load product list only when search opens (avoids competing with homepage on first paint)
+  useEffect(() => {
+    if (!searchQuery || allProducts.length > 0) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { getProducts } = await import("../utils/productsCache");
+        const { products } = await getProducts(api, { limit: 30 });
+        if (!cancelled) setAllProducts(products);
+      } catch {
+        /* ignore */
+      }
     })();
-  } , [])
+    return () => {
+      cancelled = true;
+    };
+  }, [searchQuery, allProducts.length]);
 
   // Search suggestions effect
   useEffect(() => {
@@ -197,8 +205,12 @@ function Navbar(){
                       className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0 flex items-center space-x-3"
                     >
                       <img 
-                        src={getImageUrl(product.image) || "https://placehold.co/50x50"} 
+                        src={getImageUrl(product.image, { width: 80 }) || "https://placehold.co/50x50"} 
                         alt={product.name}
+                        width={40}
+                        height={40}
+                        loading="lazy"
+                        decoding="async"
                         className="w-10 h-10 object-cover rounded"
                       />
                       <div className="flex-1">

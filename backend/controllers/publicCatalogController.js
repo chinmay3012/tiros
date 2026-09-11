@@ -26,8 +26,8 @@ export const listProducts = async (req, res) => {
       .limit(limitNum)
       .lean();
 
-    // Set cache headers for better performance
-    res.set('Cache-Control', 'public, max-age=60'); // 1 minute cache
+    // Browser/CDN cache — homepage can reuse responses while scrolling/revisiting
+    res.set('Cache-Control', 'public, max-age=300, stale-while-revalidate=600');
     res.json(products);
   } catch (error) {
     res.status(500).json({ message: error.message });
