@@ -28,7 +28,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     // Disable for coming_soon and sold_out items
     if (status === 'coming_soon' || status === 'sold_out') return;
 
-    addToCart({ id, image: primaryImagePath, alt, title, price, status });
+    addToCart({ id: String(id), image: primaryImagePath, alt, title, price, status });
     setAdded(true);
     setTimeout(() => {
       setAdded(false);
@@ -40,7 +40,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     // Only allow for coming_soon and sold_out items
     if (status !== 'coming_soon' && status !== 'sold_out') return;
 
-    addToWishlist({ id, image: primaryImagePath, alt, title, price, status });
+    addToWishlist({ id: String(id), image: primaryImagePath, alt, title, price, status });
     setShowWishlistNotification(true);
   };
 
@@ -61,7 +61,7 @@ function ProductsCard({ id, image, images = [], alt, title, price, status = 'ava
     try {
       // Clear existing cart and add only this item
       clearCart();
-      addToCart({ id, image: primaryImagePath, alt, title, price, status });
+      addToCart({ id: String(id), image: primaryImagePath, alt, title, price, status });
 
       // Navigate to checkout
       navigate('/checkout');

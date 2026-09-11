@@ -74,11 +74,12 @@ function ProductPage() {
     if (product.status !== 'available') return;
 
     addToCart({
-      id: product._id,
-      image: getImageUrl(product.image),
+      id: String(product._id),
+      image: product.image || product.images?.[0] || "",
       alt: product.name,
       title: product.name,
-      price: `Rs. ${product.price}`
+      price: `Rs. ${product.price}`,
+      status: product.status || "available",
     });
     setAddedToCart(true);
     setTimeout(() => setAddedToCart(false), 2000);
@@ -103,11 +104,12 @@ function ProductPage() {
       // Clear existing cart and add only this item
       clearCart();
       addToCart({
-        id: product._id,
-        image: getImageUrl(product.image),
+        id: String(product._id),
+        image: product.image || product.images?.[0] || "",
         alt: product.name,
         title: product.name,
-        price: `Rs. ${product.price}`
+        price: `Rs. ${product.price}`,
+        status: product.status || "available",
       });
 
       // Navigate to checkout

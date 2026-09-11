@@ -69,7 +69,7 @@ function WishlistPage() {
   const handleMoveToCart = (item) => {
     // Only move if item is available
     if (item.status === 'available') {
-      addToCart({ id: item.id, image: item.image, alt: item.alt, title: item.title, price: item.price, status: item.status });
+      addToCart({ id: String(item.id), image: item.image, alt: item.alt, title: item.title, price: item.price, status: item.status });
       // Remove from wishlist when moved to cart
       removeFromWishlist(item.id);
       setNotificationMessage("Moved to Cart!");

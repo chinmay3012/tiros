@@ -6,7 +6,7 @@ import OrderConfirmationPopup from "../components/OrderConfirmationPopup";
 import api from "../api/axios";
 
 function CheckoutPage() {
-  const { cartItems, checkout, syncCartWithProducts } = useCart();
+  const { cartItems, checkout, syncCartWithProducts, loading: cartLoading } = useCart();
   const { user } = useAuth();
   const navigate = useNavigate();
   const [placing, setPlacing] = useState(false);
@@ -14,13 +14,12 @@ function CheckoutPage() {
   const [showOrderConfirmation, setShowOrderConfirmation] = useState(false);
   const [syncing, setSyncing] = useState(false);
 
-  // Sync cart with current product data when page loads
+  // Sync cart with current product data once cart is ready
   useEffect(() => {
-    if (cartItems.length > 0) {
-      setSyncing(true);
-      syncCartWithProducts().finally(() => setSyncing(false));
-    }
-  }, []); // Only run on mount
+    if (cartLoading || cartItems.length === 0) return;
+    setSyncing(true);
+    syncCartWithProducts().finally(() => setSyncing(false));
+  }, [cartLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [address, setAddress] = useState({ name:"", street:"", city:"", zip:"", country:"", phone:"" });
   const [loadingAddress, setLoadingAddress] = useState(true);
@@ -222,10 +221,12 @@ function CheckoutPage() {
   };
 
   useEffect(() => {
+    // Wait until cart has hydrated so refresh doesn't bounce to home
+    if (cartLoading) return;
     if (cartItems.length === 0) {
       navigate("/");
     }
-  }, [cartItems, navigate]);
+  }, [cartItems, cartLoading, navigate]);
 
   return (
     <div className="min-h-screen p-8">

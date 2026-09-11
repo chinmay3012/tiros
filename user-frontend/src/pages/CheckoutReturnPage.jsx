@@ -73,7 +73,7 @@ export default function CheckoutReturnPage() {
     return () => {
       if (pollRef.current) clearInterval(pollRef.current);
     };
-  }, [searchParams, navigate]);
+  }, [searchParams, navigate, clearCart]);
 
   if (status === "error") {
     return (

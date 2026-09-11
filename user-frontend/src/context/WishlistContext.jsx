@@ -1,138 +1,146 @@
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 import api from "../api/axios";
 import { useAuth } from "./AuthContext";
 
 const WishlistContext = createContext();
+const LOCAL_KEY = "wishlistItems";
+
+function readLocalWishlist() {
+  try {
+    const raw = window.localStorage.getItem(LOCAL_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeLocalWishlist(items) {
+  try {
+    window.localStorage.setItem(LOCAL_KEY, JSON.stringify(items || []));
+  } catch {
+    // ignore
+  }
+}
+
+function mergeWishlists(dbWishlist = [], localWishlist = []) {
+  const merged = Array.isArray(dbWishlist) ? [...dbWishlist] : [];
+  const ids = new Set(merged.map((item) => String(item.id)));
+  (localWishlist || []).forEach((localItem) => {
+    if (!localItem?.id) return;
+    if (!ids.has(String(localItem.id))) {
+      merged.push({ ...localItem, id: String(localItem.id) });
+      ids.add(String(localItem.id));
+    }
+  });
+  return merged;
+}
 
 export const WishlistProvider = ({ children }) => {
   const { user } = useAuth();
-  const [wishlistItems, setWishlistItems] = useState([]);
+  const [wishlistItems, setWishlistItems] = useState(() => readLocalWishlist());
   const [loading, setLoading] = useState(true);
-  const isInitialLoad = useRef(true);
+  const hydratedRef = useRef(false);
+  const saveTimerRef = useRef(null);
+  const userId = user?._id || null;
 
-  // Load wishlist from API when user logs in, or from localStorage if not logged in
+  const persistWishlist = useCallback(async (items, uid) => {
+    writeLocalWishlist(items);
+    if (!uid) return;
+    try {
+      await api.put(`/users/${uid}/wishlist`, { wishlist: items });
+    } catch (error) {
+      console.error("Error saving wishlist to API:", error);
+    }
+  }, []);
+
   useEffect(() => {
+    let cancelled = false;
+    hydratedRef.current = false;
+
     const loadWishlist = async () => {
       setLoading(true);
+      const localWishlist = readLocalWishlist();
+
       try {
-        if (user?._id) {
-          // User is logged in - load from API
-          const response = await api.get(`/users/${user._id}/wishlist`);
-          const dbWishlist = response.data.wishlist || [];
-          
-          // Check if there's a localStorage wishlist to merge
-          try {
-            const localData = window.localStorage.getItem("wishlistItems");
-            const localWishlist = localData ? JSON.parse(localData) : [];
-            
+        if (userId) {
+          const response = await api.get(`/users/${userId}/wishlist`);
+          const dbWishlist = response.data?.wishlist || [];
+          const merged = mergeWishlists(dbWishlist, localWishlist);
+
+          if (!cancelled) {
+            setWishlistItems(merged);
+            writeLocalWishlist(merged);
             if (localWishlist.length > 0) {
-              // Merge localStorage wishlist with database wishlist (avoid duplicates)
-              const mergedWishlist = [...dbWishlist];
-              const dbIds = new Set(dbWishlist.map(item => item.id));
-              
-              localWishlist.forEach((localItem) => {
-                if (!dbIds.has(localItem.id)) {
-                  mergedWishlist.push(localItem);
-                }
-              });
-              
-              setWishlistItems(mergedWishlist);
-              // Save merged wishlist to database
-              await api.put(`/users/${user._id}/wishlist`, { wishlist: mergedWishlist });
-              // Clear localStorage wishlist after merge
-              window.localStorage.removeItem("wishlistItems");
-            } else {
-              setWishlistItems(dbWishlist);
+              await api.put(`/users/${userId}/wishlist`, { wishlist: merged }).catch(() => {});
             }
-          } catch (localError) {
-            // If localStorage merge fails, just use database wishlist
-            setWishlistItems(dbWishlist);
           }
-        } else {
-          // User not logged in - load from localStorage
-          try {
-            const localData = window.localStorage.getItem("wishlistItems");
-            setWishlistItems(localData ? JSON.parse(localData) : []);
-          } catch (error) {
-            console.error("Error retrieving wishlist from local storage", error);
-            setWishlistItems([]);
-          }
+        } else if (!cancelled) {
+          setWishlistItems(localWishlist);
         }
       } catch (error) {
         console.error("Error loading wishlist:", error);
-        // Fallback to localStorage on error
-        try {
-          const localData = window.localStorage.getItem("wishlistItems");
-          setWishlistItems(localData ? JSON.parse(localData) : []);
-        } catch (e) {
-          setWishlistItems([]);
-        }
+        if (!cancelled) setWishlistItems(localWishlist);
       } finally {
-        setLoading(false);
-        isInitialLoad.current = false;
+        if (!cancelled) {
+          hydratedRef.current = true;
+          setLoading(false);
+        }
       }
     };
 
     loadWishlist();
-  }, [user?._id]); // Reload when user changes
-
-  // Save wishlist to API (if logged in) or localStorage (if not logged in) whenever it changes
-  useEffect(() => {
-    // Skip saving on initial load
-    if (isInitialLoad.current) return;
-
-    const saveWishlist = async () => {
-      try {
-        if (user?._id) {
-          // User is logged in - save to API
-          await api.put(`/users/${user._id}/wishlist`, { wishlist: wishlistItems });
-        } else {
-          // User not logged in - save to localStorage
-          window.localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
-        }
-      } catch (error) {
-        console.error("Error saving wishlist:", error);
-        // Fallback to localStorage on error
-        try {
-          window.localStorage.setItem("wishlistItems", JSON.stringify(wishlistItems));
-        } catch (e) {
-          console.error("Error saving to localStorage:", e);
-        }
-      }
+    return () => {
+      cancelled = true;
     };
+  }, [userId]);
 
-    saveWishlist();
-  }, [wishlistItems, user?._id]);
+  useEffect(() => {
+    if (!hydratedRef.current) return;
+    if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    saveTimerRef.current = setTimeout(() => {
+      persistWishlist(wishlistItems, userId);
+    }, 250);
+    return () => {
+      if (saveTimerRef.current) clearTimeout(saveTimerRef.current);
+    };
+  }, [wishlistItems, userId, persistWishlist]);
 
   const addToWishlist = (product) => {
+    if (!product?.id) return;
     setWishlistItems((prev) => {
-      // Check if item already exists in wishlist
-      const existingItem = prev.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prev; // Don't add duplicates
-      }
-      return [...prev, product];
+      if (prev.some((item) => String(item.id) === String(product.id))) return prev;
+      const next = [...prev, { ...product, id: String(product.id) }];
+      writeLocalWishlist(next);
+      return next;
     });
   };
 
   const removeFromWishlist = (productId) => {
-    setWishlistItems((prev) => prev.filter((item) => item.id !== productId));
+    setWishlistItems((prev) => {
+      const next = prev.filter((item) => String(item.id) !== String(productId));
+      writeLocalWishlist(next);
+      return next;
+    });
   };
 
-  const isInWishlist = (productId) => {
-    return wishlistItems.some((item) => item.id === productId);
-  };
+  const isInWishlist = (productId) =>
+    wishlistItems.some((item) => String(item.id) === String(productId));
 
-  const clearWishlist = () => setWishlistItems([]);
+  const clearWishlist = () => {
+    writeLocalWishlist([]);
+    setWishlistItems([]);
+  };
 
   return (
-    <WishlistContext.Provider 
-      value={{ 
-        wishlistItems, 
-        addToWishlist, 
-        removeFromWishlist, 
+    <WishlistContext.Provider
+      value={{
+        wishlistItems,
+        loading,
+        addToWishlist,
+        removeFromWishlist,
         isInWishlist,
-        clearWishlist 
+        clearWishlist,
       }}
     >
       {children}

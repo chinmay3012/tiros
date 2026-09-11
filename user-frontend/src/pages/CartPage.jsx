@@ -6,18 +6,17 @@ import { getImageUrl } from "../utils/imageUtils";
 
 
 function CartPage() {
-  const { cartItems, addToCart, removeFromCart, syncCartWithProducts } = useCart();
+  const { cartItems, addToCart, removeFromCart, syncCartWithProducts, loading: cartLoading } = useCart();
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [syncing, setSyncing] = useState(false);
 
-  // Sync cart with current product data when page loads
+  // Sync after cart hydrates (not on the empty first paint)
   useEffect(() => {
-    if (cartItems.length > 0) {
-      setSyncing(true);
-      syncCartWithProducts().finally(() => setSyncing(false));
-    }
-  }, []); // Only run on mount
+    if (cartLoading || cartItems.length === 0) return;
+    setSyncing(true);
+    syncCartWithProducts().finally(() => setSyncing(false));
+  }, [cartLoading]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Also sync when page becomes visible (user switches back to tab)
   useEffect(() => {
