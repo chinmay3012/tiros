@@ -1,6 +1,5 @@
 import { useEffect, useState, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
-import HeroSection from "../components/HeroSection";
 import ProductsCard from "../components/ProductsCard";
 import SEO from "../components/SEO";
 import SignUpForDrops from "../components/SignUpForDrops";
@@ -161,19 +160,7 @@ function HomePage() {
                 ogUrl="https://topshot.co/"
             />
             <div>
-                <HeroSection />
-
-                <section className="w-full flex justify-center py-4 md:py-8 px-4">
-                    <img
-                        src="/images/Vector 699 copy.png"
-                        alt="Vector Image"
-                        className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl h-auto object-contain"
-                        loading="lazy"
-                        decoding="async"
-                    />
-                </section>
-
-                <section className="container mx-auto px-4 py-12">
+                <section className="container mx-auto px-4 pt-8 pb-12">
                     {loading && <ProductSkeletonGrid />}
                     {error && <p className="text-center text-red-600">{error}</p>}
                     {!loading && !error && (
